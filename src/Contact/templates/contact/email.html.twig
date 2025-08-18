@@ -1,0 +1,25 @@
+<table style="background-color: #F7F7F7; border-collapse: collapse; width: 600px; margin: auto; font-family: Trebuchet MS; table-layout: fixed;">
+    <tr>
+        <td>
+            <img src="{{ config.application.url }}/images/app/logo.png" style="width: 150px; display: block; margin: 30px auto;" alt="Logo">
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 0 15px;">
+            <h2 style="text-align: center; font-weight: bold; margin: 0 0 20px;">{{ config.application.name }} contact message</h2>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 0 15px 20px;">
+            <h3 style="margin-bottom: 0; ">Hello, {{ message.name }}
+                (<span style="font-size: 12px; color: #C60B31;">{{ message.email }}</span>)
+            </h3>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding: 0 15px 20px">
+            <p style="line-height: 24px; margin: 0">{{ message.message }}</p>
+        </td>
+    </tr>
+</table>

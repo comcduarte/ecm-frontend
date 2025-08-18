@@ -1,0 +1,45 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block page_title %}{% endblock %}
+
+{% block body_class %}user-form{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="sign-in-block">
+                    <h3>Log in to your account</h3>
+
+                    {{ messagesPartial('partial::alerts', {}, null, 'user-login') }}
+
+                    {{ form().openTag(form)|raw }}
+
+                    {{ formElement(form.get('identity')) }}
+
+                    {{ formElement(form.get('password')) }}
+
+                    <div class="checkbox remember-me-checkbox">
+                        <label>
+                            {{ formElement(form.get('rememberMe')) }}
+                            Remember me
+                        </label>
+                    </div>
+
+                    {{ formElement(form.get('userLoginCsrf')) }}
+
+                    {{ formSubmit(form.get('submit')) }}
+
+                    {{ form().closeTag()|raw }}
+
+                    <hr>
+
+                    <p class="forgot-password"><a href="{{ path('account', {action: 'request-reset-password'}) }}" class="text-decoration-none">Forgot password</a></p>
+                    <p>You don't have an account?<a href="{{ path('user', {action: 'register'}) }}" class="text-decoration-none">Register</a>!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

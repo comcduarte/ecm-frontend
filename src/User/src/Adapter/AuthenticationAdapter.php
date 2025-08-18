@@ -1,0 +1,118 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Frontend\User\Adapter;
+
+use Doctrine\ORM\EntityRepository;
+use Frontend\App\Common\Message;
+use Frontend\User\Entity\UserIdentity;
+use Frontend\User\Exception\AuthenticationAdapterException;
+use Laminas\Authentication\Adapter\AbstractAdapter;
+use Laminas\Authentication\Adapter\AdapterInterface;
+use Laminas\Authentication\Result;
+
+use function array_key_exists;
+use function class_exists;
+use function method_exists;
+use function password_verify;
+use function ucfirst;
+
+class AuthenticationAdapter extends AbstractAdapter implements AdapterInterface
+{
+    public function __construct(private readonly EntityRepository $entityRepository, private readonly array $config)
+    {
+    }
+
+    public function authenticate(): Result
+    {
+        $this->validateConfig();
+
+        $identityClass = $this->entityRepository->findOneBy([
+            $this->config['identity_property'] => $this->getIdentity(),
+        ]);
+
+        if (null === $identityClass) {
+            return new Result(
+                Result::FAILURE_IDENTITY_NOT_FOUND,
+                null,
+                [$this->config['messages']['not_found']]
+            );
+        }
+
+        $methodName = 'isDeleted';
+        $this->checkMethod($identityClass, $methodName);
+        if ($identityClass->$methodName()) {
+            return new Result(
+                Result::FAILURE_IDENTITY_NOT_FOUND,
+                null,
+                [Message::ACCOUNT_NOT_FOUND]
+            );
+        }
+
+        $getCredential = 'get' . ucfirst($this->config['credential_property']);
+
+        $this->checkMethod($identityClass, $getCredential);
+
+        if (false === password_verify($this->getCredential(), $identityClass->$getCredential())) {
+            return new Result(
+                Result::FAILURE_CREDENTIAL_INVALID,
+                null,
+                [$this->config['messages']['invalid_credential']]
+            );
+        }
+
+        if (! empty($this->config['options'])) {
+            foreach ($this->config['options'] as $property => $option) {
+                $methodName = 'get' . ucfirst($property);
+
+                $this->checkMethod($identityClass, $methodName);
+
+                if (! array_key_exists('value', $option)) {
+                    throw AuthenticationAdapterException::invalidOptionValue('value', $property);
+                }
+
+                if (empty($option['message'])) {
+                    throw AuthenticationAdapterException::invalidOptionValue('message', $property);
+                }
+
+                if ($identityClass->$methodName() !== $option['value']) {
+                    return new Result(
+                        Result::FAILURE,
+                        null,
+                        [$option['message']]
+                    );
+                }
+            }
+        }
+
+        return new Result(
+            Result::SUCCESS,
+            UserIdentity::fromEntity($identityClass),
+            [$this->config['messages']['success']]
+        );
+    }
+
+    private function validateConfig(): void
+    {
+        if (! isset($this->config['identity_class']) || ! class_exists($this->config['identity_class'])) {
+            throw AuthenticationAdapterException::invalidParam('identity_class');
+        }
+        if (! isset($this->config['identity_property'])) {
+            throw AuthenticationAdapterException::invalidParam('identity_property');
+        }
+        if (! isset($this->config['credential_property'])) {
+            throw AuthenticationAdapterException::invalidParam('credential_property');
+        }
+        if (empty($this->identity) || empty($this->credential)) {
+            throw AuthenticationAdapterException::noCredentialsProvided();
+        }
+    }
+
+    private function checkMethod(object $identityClass, string $methodName): void
+    {
+        if (! method_exists($identityClass, $methodName)) {
+            throw AuthenticationAdapterException::methodNotExists($methodName, $identityClass::class);
+        }
+    }
+}

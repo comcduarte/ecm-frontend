@@ -1,0 +1,67 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Contact Us{% endblock %}
+{% block page_title %}{% endblock %}
+
+{% block body_class %}user-form{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="contact-block">
+                    <h3>Contact Us</h3>
+                    <p>Any issues or good feedback?<br /><br />Leave us a note. We will get in touch with you as soon as possible.</p>
+                    <hr />
+                    {{ messagesPartial('partial::alerts') }}
+                    <div id="contactUsErrors" class="alert alert-danger contactUsFormErrors" role="alert" {% if recaptchaSiteKey != '' %}style="display:none"{% endif %}>
+                        <ul>
+                            <li id="contactUsEmptyName" class="contactUsFormErrors" style="display:none">Name is empty.</li>
+                            <li id="contactUsEmptyEmail" class="contactUsFormErrors" style="display:none">E-mail is empty.</li>
+                            <li id="contactUsEmptyText" class="contactUsFormErrors" style="display:none">Message is empty.</li>
+                            <li id="recaptchaSiteKeyEmpty" class="contactUsFormErrors" {% if recaptchaSiteKey != '' %}style="display:none"{% endif %}>reCAPTCHA is empty.</li>
+                        </ul>
+                    </div>
+
+                    {{ form().openTag(form)|raw }}
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ formElement(form.get('email')) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ formElement(form.get('name')) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ formElement(form.get('subject')) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ formElement(form.get('message')) }}
+                        </div>
+                    </div>
+
+                    <div class="g-recaptcha" data-sitekey="{{ recaptchaSiteKey }}"
+                         data-callback="submitContactUsForm"
+                         data-size="invisible">
+                    </div>
+
+                    {{ formElement(form.get('contactCsrf')) }}
+
+                    <input type="submit" id="recaptcha-submit" value="Send message" onclick="validateContactUsForm()">
+
+                    {{ form().closeTag()|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}

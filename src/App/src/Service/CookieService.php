@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Frontend\App\Service;
+
+use Dot\DependencyInjection\Attribute\Inject;
+use Laminas\Session\Config\ConfigInterface;
+use Laminas\Session\Config\SameSiteCookieCapableInterface;
+use Laminas\Session\SessionManager;
+
+use function setcookie;
+use function time;
+
+class CookieService implements CookieServiceInterface
+{
+    private ConfigInterface|SameSiteCookieCapableInterface $sessionConfig;
+
+    #[Inject(SessionManager::class)]
+    public function __construct(SessionManager $sessionManager)
+    {
+        $this->sessionConfig = $sessionManager->getConfig();
+    }
+
+    public function setCookie(string $name, mixed $value, ?array $options = []): bool
+    {
+        if (! $this->sessionConfig->getUseCookies()) {
+            return false;
+        }
+
+        return setcookie($name, $value, $this->getMergedOptions($options));
+    }
+
+    public function expireCookie(string $name): bool
+    {
+        return setcookie($name, '', $this->getMergedOptions([
+            'expires' => time() - 86400,
+        ]));
+    }
+
+    private function getMergedOptions(?array $options = []): array
+    {
+        return [
+            'expires'  => $options['expires'] ?? $this->getCookieLifetime(),
+            'domain'   => $options['domain'] ?? $this->sessionConfig->getCookieDomain(),
+            'httponly' => $options['httponly'] ?? $this->sessionConfig->getCookieHttpOnly(),
+            'path'     => $options['path'] ?? $this->sessionConfig->getCookiePath(),
+            'samesite' => $options['samesite'] ?? $this->sessionConfig->getCookieSameSite(),
+            'secure'   => $options['secure'] ?? $this->sessionConfig->getCookieSecure(),
+        ];
+    }
+
+    private function getCookieLifetime(): int
+    {
+        return time() + $this->sessionConfig->getCookieLifetime();
+    }
+}

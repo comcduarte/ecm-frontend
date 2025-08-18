@@ -1,0 +1,17 @@
+<h3>Update details</h3>
+<span class="sub-title"></span>
+
+{{ messagesPartial('partial::alerts', {}, null, 'profile-details') }}
+
+{{ form().openTag(form)|raw }}
+
+{% set details = form.get('detail') %}
+{{ formElement(details.get('firstName')) }}
+
+{{ formElement(details.get('lastName')) }}
+
+{{ formElement(form.get('userDetailsCsrf')) }}
+
+{{ formSubmit(form.get('submit')) }}
+
+{{ form().closeTag()|raw }}

@@ -1,0 +1,78 @@
+<?php
+
+declare(strict_types=1);
+
+namespace FrontendTest\Unit\App;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Frontend\App\ConfigProvider;
+use Frontend\App\Resolver\EntityListenerResolver;
+use Frontend\App\Service\CookieService;
+use Frontend\App\Service\CookieServiceInterface;
+use Frontend\App\Service\RecaptchaService;
+use PHPUnit\Framework\TestCase;
+
+class ConfigProviderTest extends TestCase
+{
+    protected array $config = [];
+
+    protected function setup(): void
+    {
+        parent::setUp();
+
+        $this->config = (new ConfigProvider())();
+    }
+
+    public function testConfigHasDependencies(): void
+    {
+        $this->assertArrayHasKey('dependencies', $this->config);
+    }
+
+    public function testConfigHasDoctrine(): void
+    {
+        $this->assertArrayHasKey('doctrine', $this->config);
+    }
+
+    public function testConfigHasTemplates(): void
+    {
+        $this->assertArrayHasKey('templates', $this->config);
+    }
+
+    public function testDependenciesHasFactories(): void
+    {
+        $this->assertArrayHasKey('factories', $this->config['dependencies']);
+        $this->assertIsArray($this->config['dependencies']['factories']);
+        $this->assertArrayHasKey('doctrine.entity_manager.orm_default', $this->config['dependencies']['factories']);
+        $this->assertArrayHasKey(EntityListenerResolver::class, $this->config['dependencies']['factories']);
+        $this->assertArrayHasKey(RecaptchaService::class, $this->config['dependencies']['factories']);
+        $this->assertArrayHasKey(CookieService::class, $this->config['dependencies']['factories']);
+    }
+
+    public function testDependenciesHasAliases(): void
+    {
+        $this->assertArrayHasKey('aliases', $this->config['dependencies']);
+        $this->assertIsArray($this->config['dependencies']['aliases']);
+        $this->assertArrayHasKey(EntityManager::class, $this->config['dependencies']['aliases']);
+        $this->assertArrayHasKey(EntityManagerInterface::class, $this->config['dependencies']['aliases']);
+        $this->assertArrayHasKey(CookieServiceInterface::class, $this->config['dependencies']['aliases']);
+    }
+
+    public function testGetDoctrineConfig(): void
+    {
+        $this->assertArrayHasKey('driver', $this->config['doctrine']);
+        $this->assertIsArray($this->config['doctrine']['driver']);
+        $this->assertArrayHasKey('orm_default', $this->config['doctrine']['driver']);
+        $this->assertIsArray($this->config['doctrine']['driver']['orm_default']);
+    }
+
+    public function testGetTemplates(): void
+    {
+        $this->assertArrayHasKey('paths', $this->config['templates']);
+        $this->assertIsArray($this->config['templates']['paths']);
+        $this->assertArrayHasKey('app', $this->config['templates']['paths']);
+        $this->assertArrayHasKey('error', $this->config['templates']['paths']);
+        $this->assertArrayHasKey('layout', $this->config['templates']['paths']);
+        $this->assertArrayHasKey('partial', $this->config['templates']['paths']);
+    }
+}

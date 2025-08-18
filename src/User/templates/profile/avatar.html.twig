@@ -1,0 +1,16 @@
+<h3>Avatar</h3>
+<span class="sub-title"></span>
+
+{{ messagesPartial('partial::alerts', {}, null, 'profile-avatar') }}
+
+{{ form().openTag(form)|raw }}
+
+{% set imageInput = form.get('avatar') %}
+
+{{ formElement(imageInput.get('image')) }}
+
+{{ formElement(form.get('userAvatarCsrf')) }}
+
+{{ formSubmit(form.get('submit')) }}
+
+{{ form().closeTag()|raw }}
