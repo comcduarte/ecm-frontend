@@ -24,6 +24,13 @@ class RoutesDelegator
             [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_POST],
             'page'
         );
+        
+        $app->route(
+            '/workflow[/{action}]', 
+            [Controller\WorkflowPageController::class],
+            [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_POST],
+            'workflow'
+        );
 
         return $app;
     }

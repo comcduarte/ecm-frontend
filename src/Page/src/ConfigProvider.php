@@ -6,6 +6,7 @@ namespace Frontend\Page;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\Page\Controller\PageController;
+use Frontend\Page\Controller\WorkflowPageController;
 use Frontend\Page\Service\PageService;
 use Frontend\Page\Service\PageServiceInterface;
 use Mezzio\Application;
@@ -31,6 +32,7 @@ class ConfigProvider
             'factories'  => [
                 PageController::class => AttributedServiceFactory::class,
                 PageService::class    => AttributedServiceFactory::class,
+                WorkflowPageController::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
                 PageServiceInterface::class => PageService::class,
@@ -43,6 +45,7 @@ class ConfigProvider
         return [
             'paths' => [
                 'page' => [__DIR__ . '/../templates/page'],
+                'workflow' => [__DIR__ . '/../templates/workflow'],
             ],
         ];
     }
