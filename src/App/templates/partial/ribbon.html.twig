@@ -1,0 +1,174 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="file-tab" data-bs-toggle="tab"
+			data-bs-target="#file-tab-pane" type="button" role="tab"
+			aria-controls="file-tab-pane" aria-selected="false">File</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+			data-bs-target="#home-tab-pane" type="button" role="tab"
+			aria-controls="home-tab-pane" aria-selected="true">Home</button>
+	</li>
+
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="workflow-tab" data-bs-toggle="tab"
+			data-bs-target="#workflow-tab-pane" type="button" role="tab"
+			aria-controls="workflow-tab-pane" aria-selected="false">Workflow</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="document-tab" data-bs-toggle="tab"
+			data-bs-target="#document-tab-pane" type="button" role="tab"
+			aria-controls="document-tab-pane" aria-selected="false">Document</button>
+	</li>
+</ul>
+<div class="tab-content" id="myTabContent">
+	<!-- FILE RIBBON -->
+	<div class="tab-pane fade" id="file-tab-pane" role="tabpanel"
+		aria-labelledby="file-tab" tabindex="0"></div>
+
+	<!-- HOME RIBBON -->
+	<div class="tab-pane fade show active ribbon" id="home-tab-pane"
+		role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+		<div class="card-group">
+
+			<!--  FAVORITES CARD -->
+			<div class="card" style="flex: unset;">
+				<div class="card-body">
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-house fa-2x"></i>
+						<span>Home</span>
+					</button>
+				</div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">Favorites</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-caret-down"
+							style="color: lightgrey; transform: translateY(50%) translateX(100%) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+
+			<!-- DOCUMENTS CARD -->
+			<div class="card" style="flex: unset;">
+				<div class="card-body">
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-search fa-2x"></i> <span>Search</span>
+					</button>
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-archive fa-2x"></i> <span>File Archive</span>
+					</button>
+				</div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">Documents</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-caret-down"
+							style="color: lightgrey; transform: translateY(50%) translateX(100%) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- CREATE CARD -->
+			<div class="card" style="flex: unset;">
+				<div class="card-body">
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-file fa-2x"></i> <span>Forms</span>
+					</button>
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-upload fa-2x"></i> <span>Import</span>
+					</button>
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-th-list fa-2x"></i> <span>Templates</span>
+					</button>
+				</div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">Create</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-caret-down"
+							style="color: lightgrey; transform: translateY(50%) translateX(100%) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+
+			<!-- TASKS CARD -->
+			<div class="card" style="flex: unset;">
+				<div class="card-body">
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-check-circle fa-2x"></i> <span>Approve</span>
+					</button>
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-times-circle fa-2x"></i> <span>Reject</span>
+					</button>
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-plus-circle fa-2x"></i> <span>Add
+							Supporting Documents</span>
+					</button>
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-question-circle fa-2x"></i> <span>COI
+							Needed from Dept Head or Vendor</span>
+					</button>
+				</div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">Tasks</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-caret-down"
+							style="color: lightgrey; transform: translateY(50%) translateX(100%) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+
+			<!-- END -->
+			<div class="card">
+				<div class="card-body"></div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">&nbsp;</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-thumbtack-slash"
+							style="transform: translateY(10px) translateX(10px) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- WORKFLOW RIBBON -->
+	<div class="tab-pane fade" id="workflow-tab-pane"
+		role="tabpanel" aria-labelledby="workflow-tab" tabindex="0">
+		<div class="card-group">
+			<div class="card" style="flex: unset;">
+				<div class="card-body">
+					<button class="btn d-inline-flex flex-column">
+						<i class="fas fa-right-left fa-2x"></i>
+						<span>Workflow</span>
+					</button>
+				</div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">Workflow</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-caret-down"
+							style="color: lightgrey; transform: translateY(50%) translateX(100%) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+		
+			<!-- END -->
+			<div class="card">
+				<div class="card-body"></div>
+				<div class="d-flex card-footer">
+					<span class="flex-grow-1">&nbsp;</span>
+					<div class="d-inline-flex">
+						<i class="fas fa-thumbtack-slash"
+							style="transform: translateY(10px) translateX(10px) rotate(-45deg);"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- DOCUMENT RIBBON -->
+	<div class="tab-pane fade" id="document-tab-pane" role="tabpanel"
+		aria-labelledby="document-tab" tabindex="0"></div>
+</div>
+
