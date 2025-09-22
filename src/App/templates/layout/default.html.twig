@@ -78,7 +78,7 @@
                     </div>
                 </nav>
 
-			{{ include('@partial/ribbon.html.twig') }}
+			{% include('@partial/ribbon.html.twig') with {'active': active|default('home')} %} 
             </header>
 
             <!-- Content Wrapper. Contains page content -->
