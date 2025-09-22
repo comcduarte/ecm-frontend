@@ -10,6 +10,7 @@ use Frontend\Page\Controller\WorkflowPageController;
 use Frontend\Page\Service\PageService;
 use Frontend\Page\Service\PageServiceInterface;
 use Mezzio\Application;
+use Frontend\Page\Controller\HomeController;
 
 class ConfigProvider
 {
@@ -30,6 +31,7 @@ class ConfigProvider
                 ],
             ],
             'factories'  => [
+                HomeController::class => AttributedServiceFactory::class,
                 PageController::class => AttributedServiceFactory::class,
                 PageService::class    => AttributedServiceFactory::class,
                 WorkflowPageController::class => AttributedServiceFactory::class,
@@ -46,6 +48,7 @@ class ConfigProvider
             'paths' => [
                 'page' => [__DIR__ . '/../templates/page'],
                 'workflow' => [__DIR__ . '/../templates/workflow'],
+                'home' => [__DIR__ . '/../templates/home'],
             ],
         ];
     }

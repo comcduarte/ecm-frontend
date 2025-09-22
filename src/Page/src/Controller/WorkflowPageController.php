@@ -25,6 +25,11 @@ class WorkflowPageController extends AbstractActionController
 
     public function indexAction(): ResponseInterface
     {
-        return new HtmlResponse($this->template->render('workflow::index'));
+        return new HtmlResponse($this->template->render(
+            'workflow::index', 
+            [
+                'active' => 'workflow',
+            ]
+            ));
     }
 }

@@ -36,7 +36,7 @@ class PageController extends AbstractActionController
     public function homeAction(): ResponseInterface
     {
         return new HtmlResponse(
-            $this->template->render('app::home', ['routeName' => 'home'])
+            $this->template->render('app::home', ['routeName' => 'index'])
         );
     }
 

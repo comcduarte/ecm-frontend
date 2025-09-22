@@ -16,7 +16,7 @@ class RoutesDelegator
         /** @var Application $app */
         $app = $callback();
 
-        $app->get('/', [PageController::class], 'home');
+        $app->get('/', [PageController::class], 'index');
 
         $app->route(
             '/page[/{action}]',
@@ -30,6 +30,13 @@ class RoutesDelegator
             [Controller\WorkflowPageController::class],
             [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_POST],
             'workflow'
+        );
+        
+        $app->route(
+            '/home[/{action}]',
+            [Controller\HomeController::class],
+            [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],
+            'home',
         );
 
         return $app;
