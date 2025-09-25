@@ -38,6 +38,13 @@ class RoutesDelegator
             [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],
             'home',
         );
+        
+        $app->route(
+            '/create[/{action}]',
+            [Controller\CreatePageController::class],
+            [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],
+            'create',
+            );
 
         return $app;
     }
