@@ -11,6 +11,8 @@ use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\App\Factory\EntityListenerResolverFactory;
 use Frontend\App\Middleware\RememberMeMiddleware;
 use Frontend\App\Resolver\EntityListenerResolver;
+use Frontend\App\Service\AccessTokenService;
+use Frontend\App\Service\AccessTokenServiceInterface;
 use Frontend\App\Service\CookieService;
 use Frontend\App\Service\CookieServiceInterface;
 use Frontend\App\Service\RecaptchaService;
@@ -32,6 +34,7 @@ class ConfigProvider
         return [
             'factories' => [
                 'doctrine.entity_manager.orm_default' => EntityManagerFactory::class,
+                AccessTokenService::class             => AttributedServiceFactory::class,
                 EntityListenerResolver::class         => EntityListenerResolverFactory::class,
                 RecaptchaService::class               => AttributedServiceFactory::class,
                 CookieService::class                  => AttributedServiceFactory::class,
@@ -41,6 +44,7 @@ class ConfigProvider
                 EntityManager::class          => 'doctrine.entity_manager.orm_default',
                 EntityManagerInterface::class => 'doctrine.entity_manager.orm_default',
                 CookieServiceInterface::class => CookieService::class,
+                AccessTokenServiceInterface::class => AccessTokenService::class,
             ],
         ];
     }

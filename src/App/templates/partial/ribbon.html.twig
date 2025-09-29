@@ -17,23 +17,23 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
 	<li class="nav-item" role="presentation">
-		<button class="nav-link {{ file_active }}" id="file-tab" data-bs-toggle="tab"
+		<button class="nav-link text-dark {{ file_active }}" id="file-tab" data-bs-toggle="tab"
 			data-bs-target="#file-tab-pane" type="button" role="tab"
 			aria-controls="file-tab-pane" aria-selected="false">File</button>
 	</li>
 	<li class="nav-item" role="presentation">
-		<button class="nav-link {{ home_active }}" id="home-tab" data-bs-toggle="tab"
+		<button class="nav-link text-dark {{ home_active }}" id="home-tab" data-bs-toggle="tab"
 			data-bs-target="#home-tab-pane" type="button" role="tab"
 			aria-controls="home-tab-pane" aria-selected="false">Home</button>
 	</li>
 
 	<li class="nav-item" role="presentation">
-		<button class="nav-link {{ workflow_active }}" id="workflow-tab" data-bs-toggle="tab"
+		<button class="nav-link text-dark {{ workflow_active }}" id="workflow-tab" data-bs-toggle="tab"
 			data-bs-target="#workflow-tab-pane" type="button" role="tab"
 			aria-controls="workflow-tab-pane" aria-selected="true">Workflow</button>
 	</li>
 	<li class="nav-item" role="presentation">
-		<button class="nav-link {{ document_active }}" id="document-tab" data-bs-toggle="tab"
+		<button class="nav-link text-dark {{ document_active }}" id="document-tab" data-bs-toggle="tab"
 			data-bs-target="#document-tab-pane" type="button" role="tab"
 			aria-controls="document-tab-pane" aria-selected="false">Document</button>
 	</li>
@@ -89,15 +89,15 @@
 			<!-- CREATE CARD -->
 			<div class="card" style="flex: unset;">
 				<div class="card-body">
-					<button class="btn d-inline-flex flex-column">
+					<a href="{{  url('create', {'action': 'forms'}) }}" class="btn d-inline-flex flex-column">
 						<i class="fas fa-file fa-2x"></i> <span>Forms</span>
-					</button>
-					<button class="btn d-inline-flex flex-column">
+					</a>
+					<a href="{{  url('create', {'action': 'import'}) }}" class="btn d-inline-flex flex-column">
 						<i class="fas fa-upload fa-2x"></i> <span>Import</span>
-					</button>
-					<button class="btn d-inline-flex flex-column">
+					</a>
+					<a href="{{  url('template', {'action': 'list'}) }}" class="btn d-inline-flex flex-column">
 						<i class="fas fa-th-list fa-2x"></i> <span>Templates</span>
-					</button>
+					</a>
 				</div>
 				<div class="d-flex card-footer">
 					<span class="flex-grow-1">Create</span>

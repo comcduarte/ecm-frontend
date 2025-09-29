@@ -35,6 +35,16 @@ return [
                                     ],
                                     'permissions' => ['premium'],
                                 ],
+                                [
+                                    'route' => 'template',
+                                    'actions' => [
+                                        'create',
+                                        'delete',
+                                        'edit',
+                                        'view',
+                                    ],
+                                    'permissions' => ['authenticated'],
+                                ],
                             ],
                         ],
                     ],
