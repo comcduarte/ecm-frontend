@@ -29,7 +29,8 @@ class TemplatePageHandler extends AbstractActionController
     
     public function createAction(): ResponseInterface
     {
-        $this->createTemplateForm->setAttribute('action', 'my-action.php');
+        $this->createTemplateForm
+        ->setAttribute('action', $this->router->generateUri('template', ['action' => 'create']));
         
         return new HtmlResponse(
             $this->template->render('template::create-template-form', [
