@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Frontend\Contract;
+
+use Core\App\ConfigProvider;
+use Dot\Router\RouteCollectorInterface;
+use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
+use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
+use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
+use Frontend\Contract\Handler\Contract\GetListContractHandler;
+use Frontend\Contract\Handler\Contract\GetViewContractHandler;
+use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
+use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
+use Frontend\Contract\Handler\Contract\PostEditContractHandler;
+use Mezzio\Application;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
+class RoutesDelegator
+{
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function __invoke(
+        ContainerInterface $container,
+        string $serviceName,
+        callable $callback,
+    ): Application {
+        $uuid = ConfigProvider::REGEXP_UUID;
+
+        /** @var RouteCollectorInterface $routeCollector */
+        $routeCollector = $container->get(RouteCollectorInterface::class);
+
+        $routeCollector
+            ->get('/create-contract', GetCreateContractFormHandler::class, 'contract::create-contract-form')
+            ->post('/create-contract', PostCreateContractHandler::class, 'contract::create-contract')
+            ->get('/delete-contract/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
+            ->post('/delete-contract/' . $uuid, PostDeleteContractHandler::class, 'contract::delete-contract')
+            ->get('/edit-contract/' . $uuid, GetEditContractFormHandler::class, 'contract::edit-contract-form')
+            ->post('/edit-contract/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
+            ->get('/list-contract', GetListContractHandler::class, 'contract::list-contract')
+            ->get('/view-contract/' . $uuid, GetViewContractHandler::class, 'contract::view-contract-form');
+
+        return $callback();
+    }
+}

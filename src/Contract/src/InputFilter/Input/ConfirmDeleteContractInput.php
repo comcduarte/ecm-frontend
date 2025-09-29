@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Frontend\Contract\InputFilter\Input;
+
+use Laminas\InputFilter\Input;
+use Laminas\Validator\InArray;
+use Laminas\Validator\NotEmpty;
+
+class ConfirmDeleteContractInput extends Input
+{
+    public function __construct(
+        ?string $name = null,
+        bool $isRequired = true,
+    ) {
+        parent::__construct($name);
+
+        $this->setRequired($isRequired);
+
+        $this->getValidatorChain()
+            ->attachByName(NotEmpty::class, [
+                'message' => 'Please confirm the Contract deletion.',
+            ], true)
+            ->attachByName(InArray::class, [
+                'message'  => 'Please confirm the Contract deletion.',
+                'haystack' => [
+                    'yes',
+                ],
+            ], true);
+    }
+}
