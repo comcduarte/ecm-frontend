@@ -71,7 +71,8 @@
 		"ramsey/uuid-doctrine" : "^2.1.0",
 		"roave/psr-container-doctrine" : "^5.2.2",
 		"comcduarte/laminas-box" : "dev-develop",
-		"dotkernel/dot-form" : "~4.2"
+		"dotkernel/dot-form" : "~4.2",
+		"dotkernel/dot-router" : "~1.0"
 	},
 	"require-dev" : {
 		"filp/whoops" : "^2.15.4",
@@ -91,11 +92,13 @@
 		"psr-4" : {
 			"Frontend\\App\\" : "src/App/src/",
 			"Frontend\\Contact\\" : "src/Contact/src/",
+			"Frontend\\Contract\\" : "src/Contract/src/",
 			"Frontend\\Page\\" : "src/Page/src/",
 			"Frontend\\Plugin\\" : "src/Plugin/src/",
 			"Frontend\\User\\" : "src/User/src/",
 			"Frontend\\Template\\" : "src/Template/src/",
 			"Core\\App\\" : "src/Core/src/App/src",
+			"Core\\Contract\\" : "src/Core/src/Contract/src",
 			"Core\\User\\" : "src/Core/src/User/src",
 			"Core\\Template\\" : "src/Core/src/Template/src"
 		}
@@ -112,6 +115,7 @@
 		"development-disable" : "laminas-development-mode disable",
 		"development-enable" : "laminas-development-mode enable",
 		"development-status" : "laminas-development-mode status",
+		"make" : "dot-maker",
 		"mezzio" : "mezzio --ansi",
 		"check" : [
 			"@cs-check",

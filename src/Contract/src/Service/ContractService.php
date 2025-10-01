@@ -11,6 +11,7 @@ use Core\Contract\Repository\ContractRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
+use Frontend\App\Service\AccessTokenService;
 
 use function in_array;
 
@@ -18,9 +19,13 @@ class ContractService implements ContractServiceInterface
 {
     #[Inject(
         ContractRepository::class,
+        AccessTokenService::class,
+        'config',
     )]
     public function __construct(
         protected ContractRepository $contractRepository,
+        protected AccessTokenService $accessTokenService,
+        protected array $config = [],
     ) {
     }
 
@@ -41,20 +46,25 @@ class ContractService implements ContractServiceInterface
     public function getContracts(
         array $params,
     ): array {
-        $filters = $params['filters'] ?? [];
-        $params  = Paginator::getParams($params, 'contract.created');
+//         $filters = $params['filters'] ?? [];
+//         $params  = Paginator::getParams($params, 'contract.created');
 
-        $sortableColumns = [
-            'contract.created',
-            'contract.updated',
+//         $sortableColumns = [
+//             'contract.created',
+//             'contract.updated',
+//         ];
+//         if (! in_array($params['sort'], $sortableColumns, true)) {
+//             $params['sort'] = 'contract.created';
+//         }
+
+//         $paginator = new DoctrinePaginator($this->contractRepository->getContracts($params, $filters)->getQuery());
+
+//         return Paginator::wrapper($paginator, $params, $filters);
+        $params = [
+            'application-folder' => $this->config['box-config']['application-folder'],
         ];
-        if (! in_array($params['sort'], $sortableColumns, true)) {
-            $params['sort'] = 'contract.created';
-        }
-
-        $paginator = new DoctrinePaginator($this->contractRepository->getContracts($params, $filters)->getQuery());
-
-        return Paginator::wrapper($paginator, $params, $filters);
+        
+        return $this->contractRepository->getContracts($params, $this->accessTokenService->getAccessToken());
     }
 
     /**

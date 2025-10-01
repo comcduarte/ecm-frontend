@@ -35,15 +35,18 @@ class RoutesDelegator
         /** @var RouteCollectorInterface $routeCollector */
         $routeCollector = $container->get(RouteCollectorInterface::class);
 
-        $routeCollector
-            ->get('/create-contract', GetCreateContractFormHandler::class, 'contract::create-contract-form')
-            ->post('/create-contract', PostCreateContractHandler::class, 'contract::create-contract')
-            ->get('/delete-contract/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
-            ->post('/delete-contract/' . $uuid, PostDeleteContractHandler::class, 'contract::delete-contract')
-            ->get('/edit-contract/' . $uuid, GetEditContractFormHandler::class, 'contract::edit-contract-form')
-            ->post('/edit-contract/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
-            ->get('/list-contract', GetListContractHandler::class, 'contract::list-contract')
-            ->get('/view-contract/' . $uuid, GetViewContractHandler::class, 'contract::view-contract-form');
+        $routeCollector->group('/contract')
+            ->get('/create', GetCreateContractFormHandler::class, 'contract::create-contract-form')
+            ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
+            
+            ->get('/delete/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
+            ->post('/delete/' . $uuid, PostDeleteContractHandler::class, 'contract::delete-contract')
+            
+            ->get('/edit/' . $uuid, GetEditContractFormHandler::class, 'contract::edit-contract-form')
+            ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
+            
+            ->get('/list', GetListContractHandler::class, 'contract::list-contract')
+            ->get('/view/' . $uuid, GetViewContractHandler::class, 'contract::view-contract-form');
 
         return $callback();
     }

@@ -1,1 +1,27 @@
-List Contracts template
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}List Contracts{% endblock %}
+
+{% block content %}
+	{% for type, type_array in cabinet %}
+		{{ type }}
+		<ul class="tree">
+        {% for year, year_array in type_array %}
+        	<li>
+        	<details>
+        		<summary>{{ year }}</summary>
+        		<ul>
+        		{% for contract in year_array %}
+        			<li>
+        			<details>
+        				<summary>{{ contract.project_name }}</summary>
+        				<li>id: {{ contract.folder_id }}
+        				<li> {{ dump(contract) }}
+        			</details>
+    			{% endfor %}
+        		</ul>
+        	</details>	
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}

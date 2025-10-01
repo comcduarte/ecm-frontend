@@ -45,6 +45,7 @@ $aggregator = new ConfigAggregator([
     \Dot\ResponseHeader\ConfigProvider::class,
     \Dot\DataFixtures\ConfigProvider::class,
     \Dot\Cache\ConfigProvider::class,
+    \Dot\Router\ConfigProvider::class,
 
     // Default App module config
     \Frontend\App\ConfigProvider::class,
@@ -54,7 +55,9 @@ $aggregator = new ConfigAggregator([
     \Frontend\User\ConfigProvider::class,
     
     // Application Modules
+    \Frontend\Contract\ConfigProvider::class,
     \Frontend\Template\ConfigProvider::class,
+    \Core\Contract\ConfigProvider::class,
     \Core\Template\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings

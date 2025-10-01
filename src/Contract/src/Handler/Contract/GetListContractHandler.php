@@ -29,7 +29,7 @@ class GetListContractHandler implements RequestHandlerInterface
     ): ResponseInterface {
         return new HtmlResponse(
             $this->template->render('contract::list-contract', [
-                'pagination' => $this->contractService->getContracts($request->getQueryParams()),
+                'cabinet' => $this->contractService->getContracts($request->getQueryParams()),
             ])
         );
     }

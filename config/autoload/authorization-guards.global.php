@@ -29,6 +29,16 @@ return [
                                     'permissions' => ['authenticated'],
                                 ],
                                 [
+                                    'route' => 'contract',
+                                    'actions' => [
+                                        'create',
+                                        'delete',
+                                        'edit',
+                                        'view'
+                                    ],
+                                    'permissions' => ['authenticated'],
+                                ],
+                                [
                                     'route'       => 'page',
                                     'actions'     => [
                                         'premium-content',
