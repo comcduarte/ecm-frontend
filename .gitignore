@@ -47,6 +47,7 @@ package-lock.json
 .project
 .buildpath
 .settings/
+.externalToolBuilders
 
 public/uploads/user/*
 !public/uploads/user/.gitkeep
