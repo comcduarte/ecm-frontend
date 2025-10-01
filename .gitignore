@@ -43,7 +43,7 @@ composer.lock
 /node_modules
 package-lock.json
 
-# ZendStudio project files
+# Eclipse Project Files
 .project
 .buildpath
 .settings/
