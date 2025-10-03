@@ -57,8 +57,10 @@ $aggregator = new ConfigAggregator([
     // Application Modules
     \Frontend\Contract\ConfigProvider::class,
     \Frontend\Template\ConfigProvider::class,
+    \Frontend\Workflow\ConfigProvider::class,
     \Core\Contract\ConfigProvider::class,
     \Core\Template\ConfigProvider::class,
+    \Core\Workflow\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
