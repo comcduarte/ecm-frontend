@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Frontend\Contract;
 
-use Core\App\ConfigProvider;
+use Core\Contract\ConfigProvider;
 use Dot\Router\RouteCollectorInterface;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
@@ -31,6 +31,7 @@ class RoutesDelegator
         callable $callback,
     ): Application {
         $uuid = ConfigProvider::REGEXP_UUID;
+        $folder_id = ConfigProvider::REGEXP_BOX_ID;
 
         /** @var RouteCollectorInterface $routeCollector */
         $routeCollector = $container->get(RouteCollectorInterface::class);
@@ -46,7 +47,7 @@ class RoutesDelegator
             ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
             
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
-            ->get('/view/' . $uuid, GetViewContractHandler::class, 'contract::view-contract-form');
+            ->get('/view/' . $folder_id, GetViewContractHandler::class, 'contract::view-contract-form');
 
         return $callback();
     }

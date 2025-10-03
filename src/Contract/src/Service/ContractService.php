@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Service;
 
-use Core\App\Helper\Paginator;
 use Core\App\Message;
 use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
 use Frontend\App\Service\AccessTokenService;
-
-use function in_array;
 
 class ContractService implements ContractServiceInterface
 {
@@ -89,7 +85,7 @@ class ContractService implements ContractServiceInterface
     public function findContract(
         string $uuid,
     ): Contract {
-        $contract = $this->contractRepository->find($uuid);
+        $contract = $this->contractRepository->find($uuid, $this->accessTokenService->getAccessToken());
         if (! $contract instanceof Contract) {
             throw new NotFoundException(Message::resourceNotFound('Contract'));
         }

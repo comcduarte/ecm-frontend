@@ -34,7 +34,7 @@ class GetViewContractHandler implements RequestHandlerInterface
         ServerRequestInterface $request,
     ): ResponseInterface {
         try {
-            $contract = $this->contractService->findContract($request->getAttribute('uuid'));
+            $contract = $this->contractService->findContract($request->getAttribute('id'));
         } catch (NotFoundException $exception) {
             $this->messenger->addError($exception->getMessage());
 

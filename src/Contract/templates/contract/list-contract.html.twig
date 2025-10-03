@@ -15,7 +15,7 @@
         			<li>
         			<details>
         				<summary>{{ contract.project_name }}</summary>
-        				<li>id: {{ contract.folder_id }}
+        				<li>id: <a href="{{ url('contract::view-contract-form', {'id': contract.folder_id}) }}">{{ contract.folder_id }}</a>
         				<li> {{ dump(contract) }}
         			</details>
     			{% endfor %}
