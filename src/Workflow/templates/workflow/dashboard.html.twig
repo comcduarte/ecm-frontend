@@ -1,0 +1,78 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}
+Workflow Dashboard
+{% endblock %}
+
+{% block content %}
+<main class="d-flex flex-nowrap">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col col-3">
+				<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+					<a href="/"
+						class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+						<svg class="bi pe-none me-2" width="40" height="32"
+							aria-hidden="true">
+						<span class="fs-4">Contract Approval Process</span>
+					</a>
+					<hr>
+					<ul class="nav nav-pills flex-column mb-auto">
+						<li class="nav-item"><a href="#" class="nav-link text-white"
+							aria-current="page"> <i class="fas fa-folder-open"></i>
+								Department Manager Review <span class="badge text-bg-secondary">4</span>
+						</a></li>
+						<li class="nav-item"><a href="#" class="nav-link text-white"
+							aria-current="page"> <i class="fas fa-gavel"></i> Legal
+								Review
+						</a></li>
+						<li class="nav-item"><a href="#" class="nav-link text-white"
+							aria-current="page"> <i class="fas fa-calculator"></i> Risk
+								Review
+						</a></li>
+						<li class="nav-item"><a href="#" class="nav-link text-white"
+							aria-current="page"> <i class="fas fa-handshake-slash"></i>
+								Department Reject Queue
+						</a></li>
+					</ul>
+					<hr>
+				</div>
+			</div>
+
+			<div class="bg-white col col-9">
+				<table class="table table-sm table-hover">
+					<thead>
+						<tr>
+							<th scope="col"></td>
+							<th scope="col">Contract Number</td>
+							<th scope="col">Project Name</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% set index = 1 %}
+						{% for contract in contracts %}
+						<tr>
+							<th scope="row">{{ index }}</th>
+							<td>{{ contract.folder_id }}</td>
+							<td>{{ contract.project_name }}</td>
+						</tr>
+						{% set index = index + 1 %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</main>
+
+<div class="page-intro">
+	<div class="container">
+		{% if isGranted %}
+		<h1 class="text-primary">Access: Granted</h1>
+		{% else %}
+		<h1 class="text-danger">Access: Denied</h1>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

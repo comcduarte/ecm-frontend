@@ -72,6 +72,7 @@ class ConfigProvider
                 EditWorkflowForm::class => ElementFactory::class,
                 WorkflowMiddleware::class => AttributedServiceFactory::class,
                 WorkflowService::class => AttributedServiceFactory::class,
+                Controller\WorkflowPageController::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
                 WorkflowServiceInterface::class => WorkflowService::class,

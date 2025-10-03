@@ -26,13 +26,6 @@ class RoutesDelegator
         );
         
         $app->route(
-            '/workflow[/{action}]', 
-            [Controller\WorkflowPageController::class],
-            [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_POST],
-            'workflow'
-        );
-        
-        $app->route(
             '/home[/{action}]',
             [Controller\HomeController::class],
             [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],

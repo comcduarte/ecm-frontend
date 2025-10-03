@@ -36,7 +36,6 @@ class ConfigProvider
                 HomeController::class => AttributedServiceFactory::class,
                 PageController::class => AttributedServiceFactory::class,
                 PageService::class    => AttributedServiceFactory::class,
-                WorkflowPageController::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
                 PageServiceInterface::class => PageService::class,
@@ -49,7 +48,6 @@ class ConfigProvider
         return [
             'paths' => [
                 'page' => [__DIR__ . '/../templates/page'],
-                'workflow' => [__DIR__ . '/../templates/workflow'],
                 'home' => [__DIR__ . '/../templates/home'],
                 'create' => [__DIR__ . '/../templates/create'],
             ],

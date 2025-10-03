@@ -35,16 +35,18 @@ class RoutesDelegator
         /** @var RouteCollectorInterface $routeCollector */
         $routeCollector = $container->get(RouteCollectorInterface::class);
 
-        $routeCollector
-            ->get('/create-workflow', GetCreateWorkflowFormHandler::class, 'workflow::create-workflow-form')
-            ->post('/create-workflow', PostCreateWorkflowHandler::class, 'workflow::create-workflow')
-            ->get('/delete-workflow/' . $uuid, GetDeleteWorkflowFormHandler::class, 'workflow::delete-workflow-form')
-            ->post('/delete-workflow/' . $uuid, PostDeleteWorkflowHandler::class, 'workflow::delete-workflow')
-            ->get('/edit-workflow/' . $uuid, GetEditWorkflowFormHandler::class, 'workflow::edit-workflow-form')
-            ->post('/edit-workflow/' . $uuid, PostEditWorkflowHandler::class, 'workflow::edit-workflow')
-            ->get('/list-workflow', GetListWorkflowHandler::class, 'workflow::list-workflow')
-            ->get('/view-workflow/' . $uuid, GetViewWorkflowHandler::class, 'workflow::view-workflow-form');
+        $routeCollector->group('/workflow')
+            ->get('/create', GetCreateWorkflowFormHandler::class, 'workflow::create-form')
+            ->post('/create', PostCreateWorkflowHandler::class, 'workflow::create')
+            ->get('/delete/' . $uuid, GetDeleteWorkflowFormHandler::class, 'workflow::delete-form')
+            ->post('/delete/' . $uuid, PostDeleteWorkflowHandler::class, 'workflow::delete')
+            ->get('/edit/' . $uuid, GetEditWorkflowFormHandler::class, 'workflow::edit-form')
+            ->post('/edit/' . $uuid, PostEditWorkflowHandler::class, 'workflow::edit')
+            ->get('/list', GetListWorkflowHandler::class, 'workflow::list')
+            ->get('/view/' . $uuid, GetViewWorkflowHandler::class, 'workflow::view-form')
 
+            ->get('/dashboard', Controller\WorkflowPageController::class, 'workflow::dashboard');
+        
         return $callback();
     }
 }
