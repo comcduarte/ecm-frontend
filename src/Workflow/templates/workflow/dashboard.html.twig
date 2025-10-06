@@ -1,15 +1,12 @@
 {% extends '@layout/default.html.twig' %}
-
-{% block title %}
-Workflow Dashboard
-{% endblock %}
+{% block title %}Workflow Dashboard{% endblock %}
+{% block body_class %}d-flex flex-column vh-100{% endblock %}
 
 {% block content %}
-<main class="d-flex flex-nowrap">
-	<div class="container-fluid">
-		<div class="row">
+	<div class="container-fluid p-0 h-100">
+		<div class="row h-100">
 			<div class="col col-3">
-				<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+				<div class="d-flex flex-column p-3 text-bg-dark h-100">
 					<a href="/"
 						class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 						<svg class="bi pe-none me-2" width="40" height="32"
@@ -44,7 +41,7 @@ Workflow Dashboard
 					<thead>
 						<tr>
 							<th scope="col"></td>
-							<th scope="col">Contract Number</td>
+							<th scope="col">Folder Id</td>
 							<th scope="col">Project Name</td>
 						</tr>
 					</thead>
@@ -64,15 +61,4 @@ Workflow Dashboard
 		</div>
 
 	</div>
-</main>
-
-<div class="page-intro">
-	<div class="container">
-		{% if isGranted %}
-		<h1 class="text-primary">Access: Granted</h1>
-		{% else %}
-		<h1 class="text-danger">Access: Denied</h1>
-		{% endif %}
-	</div>
-</div>
 {% endblock %}
