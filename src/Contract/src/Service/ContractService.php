@@ -85,11 +85,22 @@ class ContractService implements ContractServiceInterface
     public function findContract(
         string $uuid,
     ): Contract {
+//         return $this->contractRepository->search($this->accessTokenService->getAccessToken());
         $contract = $this->contractRepository->find($uuid, $this->accessTokenService->getAccessToken());
         if (! $contract instanceof Contract) {
             throw new NotFoundException(Message::resourceNotFound('Contract'));
         }
 
         return $contract;
+    }
+    
+    public function search(array $params): array
+    {
+        /**
+         * Check Parameters
+         */
+        
+        $access_token = $this->accessTokenService->getAccessToken();
+        return $this->contractRepository->search($params, $access_token);
     }
 }

@@ -11,7 +11,6 @@ use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
-use Core\Contract\Entity\Contract;
 
 class WorkflowPageController extends AbstractActionController
 {
@@ -34,24 +33,23 @@ class WorkflowPageController extends AbstractActionController
     {
         $isGranted = $this->authorizationService->isGranted('approve'); 
         
-        $result = $this->contractService->getContracts([]);
-        
-        $contracts = [];
-        foreach ($result as $contract) {
-            $a = new Contract();
-            $a->setProject_name('wHOSY WHATSIT');
-            $a->setFolder_id('12345');
-            
-            $contracts[] = $a;
-            unset($a);
-        }
+        $contracts = $this->contractService->search([
+            'ancestor_folder_id' => '336171795885',        //-- WORKFLOW > ONBASE > DEPT > IT
+            'template_key' => "ecm-application",
+            'field' => "dept",
+            'scope' => "enterprise_1328932288",
+            'query' => "contractnumber = :val",
+            'query_params' => [
+                'val' => '2017005',
+            ],
+        ]);
         
        return new HtmlResponse($this->template->render(
             'workflow::dashboard', 
             [
                 'active' => 'workflow',
                 'isGranted' => $isGranted,
-                'contracts' => $contracts,
+                'contracts' => $contracts[0],
             ]
             ));
     }

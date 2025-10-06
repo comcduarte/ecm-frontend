@@ -37,4 +37,6 @@ interface ContractServiceInterface
     public function findContract(
         string $uuid,
     ): Contract;
+    
+    public function search(array $params): array;
 }
