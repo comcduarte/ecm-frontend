@@ -11,12 +11,13 @@ use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
+use Core\Contract\Enum\QueueFolderEnum;
+use Laminas\Filter\ToString;
 
 class WorkflowPageController extends AbstractActionController
 {
-    #[Inject(
-        ContractServiceInterface::class,
-        PageServiceInterface::class, 
+
+    #[Inject(ContractServiceInterface::class, PageServiceInterface::class, 
         RouterInterface::class, 
         TemplateRendererInterface::class,
         AuthorizationInterface::class,
@@ -31,26 +32,103 @@ class WorkflowPageController extends AbstractActionController
 
     public function indexAction(): ResponseInterface
     {
-        $isGranted = $this->authorizationService->isGranted('approve'); 
-        
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::ECM_IT),
+            ],
+        );
+    }
+    
+    public function legalAction(): ResponseInterface
+    {
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::ECM_LEGAL),
+            ],
+        );
+    }
+    
+    public function riskAction(): ResponseInterface
+    {
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::ECM_RISK),
+            ],
+        );
+    }
+    
+    public function purchasingAction(): ResponseInterface
+    {
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::ECM_PURCHASING),
+            ],
+            );
+    }
+    
+    public function vendorAction(): ResponseInterface
+    {
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::ECM_VENDOR),
+            ],
+            );
+    }
+    
+    public function mayorAction(): ResponseInterface
+    {
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::ECM_MAYOR),
+            ],
+            );
+    }
+    
+    private function search(QueueFolderEnum $case)
+    {
         $contracts = $this->contractService->search([
-            'ancestor_folder_id' => '336171795885',        //-- WORKFLOW > ONBASE > DEPT > IT
+            'ancestor_folder_id' => '336171280120',
             'template_key' => "ecm-application",
-            'field' => "dept",
             'scope' => "enterprise_1328932288",
-            'query' => "contractnumber = :val",
+            'query' => "queue = :val",
             'query_params' => [
-                'val' => '2017005',
+                'val' => $case,
             ],
         ]);
         
-       return new HtmlResponse($this->template->render(
-            'workflow::dashboard', 
-            [
-                'active' => 'workflow',
-                'isGranted' => $isGranted,
-                'contracts' => $contracts[0],
-            ]
-            ));
+        return $contracts[0];
+    }
+    
+    private function render(string $template, array $params): ResponseInterface
+    {
+        /**
+         * Propagate all queue folder and permissions.
+         * @var array $queues
+         */
+        $queues = [];
+        
+        foreach (QueueFolderEnum::cases() as $queue) {
+            if ($this->authorizationService->isGranted($queue->name)) {
+                $queues[] = $queue->name;
+            }
+        }
+        
+        $params['queues'] = $queues;
+        
+        
+        
+        return new HtmlResponse($this->template->render($template, $params));
     }
 }

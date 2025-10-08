@@ -15,22 +15,46 @@
 					</a>
 					<hr>
 					<ul class="nav nav-pills flex-column mb-auto">
-						<li class="nav-item"><a href="#" class="nav-link text-white"
-							aria-current="page"> <i class="fas fa-folder-open"></i>
-								Department Manager Review <span class="badge text-bg-secondary">4</span>
-						</a></li>
-						<li class="nav-item"><a href="#" class="nav-link text-white"
-							aria-current="page"> <i class="fas fa-gavel"></i> Legal
-								Review
-						</a></li>
-						<li class="nav-item"><a href="#" class="nav-link text-white"
-							aria-current="page"> <i class="fas fa-calculator"></i> Risk
-								Review
-						</a></li>
-						<li class="nav-item"><a href="#" class="nav-link text-white"
-							aria-current="page"> <i class="fas fa-handshake-slash"></i>
+					    {% if 'ECM_IT' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'index'}) }}" class="nav-link text-white" aria-current="page"> 
+								<i class="fas fa-folder-open"></i>
+								Department Manager Review <span class="badge text-bg-secondary">{{ contracts|length }}</span>
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_LEGAL' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'legal'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-gavel"></i> 
+								Legal Review
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_RISK' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'risk'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-calculator"></i>
+								Risk Review
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_VENDOR' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'vendor'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-store"></i>
+								Vendor Queue
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_DEPARTMENT' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'reject'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-handshake-slash"></i>
 								Department Reject Queue
-						</a></li>
+							</a>
+						</li>
+						{% endif %}
 					</ul>
 					<hr>
 				</div>

@@ -45,7 +45,7 @@ class RoutesDelegator
             ->get('/list', GetListWorkflowHandler::class, 'workflow::list')
             ->get('/view/' . $uuid, GetViewWorkflowHandler::class, 'workflow::view-form')
 
-            ->get('/dashboard', Controller\WorkflowPageController::class, 'workflow::dashboard');
+            ->get('/dashboard/{action}', Controller\WorkflowPageController::class, 'workflow::dashboard');
         
         return $callback();
     }
