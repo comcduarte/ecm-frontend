@@ -1,0 +1,36 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+{% for tab in tabs  %}
+	<li class="nav-item" role="presentation">
+		<button class="nav-link text-dark {{ _context[tab.name ~ '_active'] }}" id="{{ tab.name }}-tab" data-bs-toggle="tab"
+			data-bs-target="#{{ tab.name }}-tab-pane" type="button" role="tab"
+			aria-controls="{{ tab.name }}-tab-pane" aria-selected="false">{{ tab.name|title }}</button>
+	</li>
+{% endfor %}
+</ul>
+
+<div class="tab-content" id="myTabContent">
+{% for tab in tabs  %}
+	<!-- {{ tab.name|upper }} RIBBON -->
+	<div class="tab-pane fade {{ _context[tab.name ~ '_active'] }}" id="{{ tab.name }}-tab-pane" role="tabpanel" aria-labelledby="{{ tab.name }}-tab" tabindex="0">
+	{% if tab.groups is defined %}
+    	<div class="card-group">
+    		{% for group in tab.groups %}
+    			{% include '@partial/ribbon/groups.html.twig' with { 'group': group } %}
+    		{% endfor %}
+    		
+    		<!-- END -->
+        	<div class="card">
+        		<div class="card-body"></div>
+        		<div class="d-flex card-footer">
+        			<span class="flex-grow-1">&nbsp;</span>
+        			<div class="d-inline-flex">
+        				<i class="fas fa-thumbtack-slash"
+        					style="transform: translateY(10px) translateX(10px) rotate(-45deg);"></i>
+        			</div>
+        		</div>
+        	</div>
+    	</div>
+	{% endif %}
+	</div>
+{% endfor %}	
+</div>
