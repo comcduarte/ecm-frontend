@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Frontend\Workflow\Controller;
 
+use Core\Contract\Enum\QueueFolderEnum;
 use Dot\Authorization\AuthorizationInterface;
 use Dot\Controller\AbstractActionController;
 use Dot\DependencyInjection\Attribute\Inject;
@@ -11,8 +12,6 @@ use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
-use Core\Contract\Enum\QueueFolderEnum;
-use Laminas\Filter\ToString;
 
 class WorkflowPageController extends AbstractActionController
 {
@@ -102,9 +101,9 @@ class WorkflowPageController extends AbstractActionController
             'ancestor_folder_id' => '336171280120',
             'template_key' => "ecm-application",
             'scope' => "enterprise_1328932288",
-            'query' => "queue = :val",
+            'query' => "queue <> :val",
             'query_params' => [
-                'val' => $case,
+                'val' => $case->value,
             ],
         ]);
         

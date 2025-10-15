@@ -19,7 +19,8 @@
 						<li class="nav-item">
 							<a href="{{ url('workflow::dashboard', {'action': 'index'}) }}" class="nav-link text-white" aria-current="page"> 
 								<i class="fas fa-folder-open"></i>
-								Department Manager Review <span class="badge text-bg-secondary">{{ contracts|length }}</span>
+{# 								Department Manager Review <span class="badge text-bg-secondary">{{ contracts|length }}</span>#}
+								Department Manager Review
 							</a>
 						</li>
 						{% endif %}
@@ -74,7 +75,7 @@
 						{% for contract in contracts %}
 						<tr>
 							<th scope="row">{{ index }}</th>
-							<td>{{ contract.folder_id }}</td>
+							<td><a href="{{ url('contract::view-contract-form', {'id': contract.folder_id}) }}">{{ contract.folder_id }}</a></td>
 							<td>{{ contract.project_name }}</td>
 						</tr>
 						{% set index = index + 1 %}
