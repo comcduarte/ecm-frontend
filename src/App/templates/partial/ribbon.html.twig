@@ -16,7 +16,9 @@
 {% endif %}
 
 {% set tabs = [
-	{'name': 'file'}, 
+	{
+		'name': 'file'
+	}, 
 	{
 		'name': 'home',
 		'groups': {
@@ -72,7 +74,55 @@
 		    }
 		}
 	},  
-	{'name': 'document'}, 
+	{
+		'name': 'document',
+		'groups': {
+		    'tasks': {
+		        'name': 'Tasks',
+		        'commands': {
+		            'legal': {
+		                'name': 'Route to Legal',
+		                'icon': 'share',
+		                'url': url('route::legal', {'id': id|default(0) })
+		            },
+		            'risk': {
+		                'name': 'Route to Risk',
+		                'icon': 'share',
+		                'url': url('route::risk', {'id': id|default(0) })
+		            },
+		            'purchasing': {
+		                'name': 'Route to Purchasing',
+		                'icon': 'share',
+		                'url': url('route::purchasing', {'id': id|default(0) })
+		            },
+		            'mayor': {
+		                'name': 'Route to Mayor',
+		                'icon': 'share',
+		                'url': url('route::mayor', {'id': id|default(0) })
+		            },
+					'vendor': {
+		                'name': 'Route to Vendor',
+		                'icon': 'envelope',
+		                'url': url('route::vendor', {'id': id|default(0) })
+		            },
+					'notes': {
+		                'name': 'Add Notes',
+		                'icon': 'note-sticky',
+		                'url': 'x'
+		            },
+					'support_docs': {
+		                'name': 'Add Supporting Documentation',
+		                'icon': 'folder-open',
+		                'url': 'x'
+		            },
+					'reject': {
+		                'name': 'Reject',
+		                'icon': 'square-xmark',
+		                'url': url('route::reject', {'id': id|default(0) })
+		            }
+		        }
+		    }
+		}
+	}, 
 ] %}
-
 {% include '@partial/ribbon/tabs.html.twig' %}
