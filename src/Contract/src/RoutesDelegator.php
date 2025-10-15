@@ -18,6 +18,7 @@ use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 
 class RoutesDelegator
 {
@@ -31,7 +32,7 @@ class RoutesDelegator
         callable $callback,
     ): Application {
         $uuid = ConfigProvider::REGEXP_UUID;
-        $folder_id = ConfigProvider::REGEXP_BOX_ID;
+        $box_id = ConfigProvider::REGEXP_BOX_ID;
 
         /** @var RouteCollectorInterface $routeCollector */
         $routeCollector = $container->get(RouteCollectorInterface::class);
@@ -47,8 +48,16 @@ class RoutesDelegator
             ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
             
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
-            ->get('/view/' . $folder_id, GetViewContractHandler::class, 'contract::view-contract-form');
+            ->get('/view/' . $box_id, GetViewContractHandler::class, 'contract::view-contract-form');
 
+        $routeCollector->group('/route')
+            ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
+            ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
+            ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
+            ->get('/mayor/' . $box_id , PostRouteContractHandler::class, 'route::mayor')
+            ->get('/vendor/' . $box_id , PostRouteContractHandler::class, 'route::vendor')
+            ->get('/reject/' . $box_id , PostRouteContractHandler::class, 'route::reject');
+            
         return $callback();
     }
 }

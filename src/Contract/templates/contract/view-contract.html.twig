@@ -1,7 +1,31 @@
 {% extends '@layout/default.html.twig' %}
 
 {% block title %}View Contract{% endblock %}
+{% block body_class %}vh-100{% endblock %}
+
+{% set id = id %}
 
 {% block content %}
-	{{ dump(contract) }}
+<div class="container-fluid p-0 h-100">
+	<div class="row h-100">
+		<div class="bg-white col col-9">
+			<object class="vh-100" data="data:application/pdf;base64,{{ image }}" type="application/pdf" width="100%">
+				<p>Your browser will not display PDFs</p>
+			</object>
+		</div>
+		<div class="col col-3">
+			<div class="d-flex flex-column p-3 text-bg-dark h-100">
+    			<a href="/"	class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+    				<svg class="bi pe-none me-2" width="40" height="32"	aria-hidden="true">
+    				<span class="fs-4">Metadata</span>
+    			</a>
+				<hr>
+				{% for instance in metadata_instances.entries %}
+					Queue: {{ instance.queue }}<br>
+					Contract ID: {{ instance.contractnumber }}<br>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

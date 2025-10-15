@@ -7,9 +7,11 @@ namespace Frontend\Contract\Service;
 use Core\App\Message;
 use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
+use Core\Metadata\Instance\EcmApplication;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
 use Frontend\App\Service\AccessTokenService;
+use comcduarte\Box\API\Resource\MetadataInstances;
 
 class ContractService implements ContractServiceInterface
 {
@@ -102,5 +104,29 @@ class ContractService implements ContractServiceInterface
         
         $access_token = $this->accessTokenService->getAccessToken();
         return $this->contractRepository->search($params, $access_token);
+    }
+    
+    public function move(string $source, string $destination): bool
+    {
+        $access_token = $this->accessTokenService->getAccessToken();
+        $this->contractRepository->move($source, $destination, $access_token);
+        return true;
+    }
+    
+    public function getMetadata(string $contract): MetadataInstances
+    {
+        $instances = new MetadataInstances();
+        $access_token = $this->accessTokenService->getAccessToken();
+        
+        $source = $contract;
+        $scope = 'enterprise';
+        $template_key = 'ecm-application';
+        
+        $metadata_instance = new EcmApplication($access_token);
+        $metadata_instance->get_metadata_instance_on_folder($source, $scope, $template_key);
+        
+        $instances->entries[] = $metadata_instance;
+        
+        return $instances;
     }
 }

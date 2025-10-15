@@ -41,9 +41,30 @@ class GetViewContractHandler implements RequestHandlerInterface
             return new EmptyResponse(StatusCodeInterface::STATUS_NOT_FOUND);
         }
 
+        $contract_file = $contract->getContract_file();
+        $data = $contract_file->download_file($contract_file->id);
+        
+        /**
+         * Populate Metadata
+         */
+        $metadata_instances = $this->contractService->getMetadata($contract->getContract_folder()->id);
+        //-- parse instances and display with PDF
+        
+//         $metadata = [
+//             'contract_file_id' => $contract->getContract_file()->id,
+//             'contract_folder_id' => $contract->getContract_folder()->id,
+//             'queue' => $contract->getContract_folder()->parent['id'],
+//         ];
+        
+        
+        
         return new HtmlResponse(
             $this->template->render('contract::view-contract', [
+                'active' => 'document',
                 'contract' => $contract,
+                'image' => base64_encode($data->getBody()),
+                'id' => $contract->getContract_folder()->id,
+                'metadata_instances' => $metadata_instances,
             ])
         );
     }

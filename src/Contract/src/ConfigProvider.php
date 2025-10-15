@@ -20,6 +20,7 @@ use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Mezzio\Application;
+use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 
 /**
  * @phpstan-type ConfigType array{
@@ -59,16 +60,20 @@ class ConfigProvider
             ],
             'factories' => [
                 GetCreateContractFormHandler::class => AttributedServiceFactory::class,
-                PostCreateContractHandler::class => AttributedServiceFactory::class,
+                PostCreateContractHandler::class    => AttributedServiceFactory::class,
                 GetDeleteContractFormHandler::class => AttributedServiceFactory::class,
-                PostDeleteContractHandler::class => AttributedServiceFactory::class,
-                GetEditContractFormHandler::class => AttributedServiceFactory::class,
-                PostEditContractHandler::class => AttributedServiceFactory::class,
-                GetListContractHandler::class => AttributedServiceFactory::class,
-                GetViewContractHandler::class => AttributedServiceFactory::class,
-                CreateContractForm::class => ElementFactory::class,
-                DeleteContractForm::class => ElementFactory::class,
-                EditContractForm::class => ElementFactory::class,
+                PostDeleteContractHandler::class    => AttributedServiceFactory::class,
+                GetEditContractFormHandler::class   => AttributedServiceFactory::class,
+                PostEditContractHandler::class      => AttributedServiceFactory::class,
+                GetListContractHandler::class       => AttributedServiceFactory::class,
+                GetViewContractHandler::class       => AttributedServiceFactory::class,
+                
+                PostRouteContractHandler::class => AttributedServiceFactory::class,
+                
+                CreateContractForm::class   => ElementFactory::class,
+                DeleteContractForm::class   => ElementFactory::class,
+                EditContractForm::class     => ElementFactory::class,
+                
                 ContractService::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
