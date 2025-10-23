@@ -17,7 +17,8 @@
 
 {% set tabs = [
 	{
-		'name': 'file'
+		'name': 'file',
+		'permission': 'all'
 	}, 
 	{
 		'name': 'home',
@@ -28,14 +29,17 @@
 		    	    'home': {
 		    	        'name': 'Home',
 		    	        'icon': 'house',
-		    			'url': url('home', {'action': 'dashboard'})
+		    			'url': url('home', {'action': 'dashboard'}),
+		    			'permission': 'all'
 		    	    },
 		    	    'search': {
 		    	        'name': 'Search',
 		    	        'icon': 'search',
-		    	        'url': url('contract::list-contract', {'action': 'list'})
+		    	        'url': url('contract::list-contract', {'action': 'list'}),
+		    	        'permission': 'authenticated'
 		    	    }
-		    	}
+		    	},
+		    	'permission': 'all'
             },
             'create': {
                 'name': 'Create',
@@ -43,21 +47,26 @@
                     'forms': {
                         'name': 'Forms',
                         'icon': 'file',
-                        'url': url('create', {'action': 'forms'})
+                        'url': url('create', {'action': 'forms'}),
+                        'permission': 'authenticated'
                     },
                     'import': {
                         'name': 'Import',
                         'icon': 'upload',
-                        'url': url('create', {'action': 'import'})
+                        'url': url('create', {'action': 'import'}),
+                        'permission': 'authenticated'
                     },
                     'template': {
                         'name': 'Templates',
                         'icon': 'th-list',
-                        'url': url('template', {'action': 'list'})
+                        'url': url('template', {'action': 'list'}),
+                        'permission': 'admin'
                     }
-                }
+                },
+		    	'permission': 'authenticated'
             }
-		}
+		},
+		'permission': 'all'
 	},  
 	{
 		'name': 'workflow',
@@ -68,11 +77,14 @@
 		            'workflow': {
 		                'name': 'Workflow',
 		                'icon': 'right-left',
-		                'url': url('workflow::dashboard', {'action': 'index'})
+		                'url': url('workflow::dashboard', {'action': 'index'}),
+		                'permission': 'ECM_DEPARTMENT'
 		            }
-		        }
+		        },
+		    	'permission': 'ECM_DEPARTMENT'
 		    }
-		}
+		},
+		'permission': 'ECM_DEPARTMENT'
 	},  
 	{
 		'name': 'document',
@@ -83,46 +95,56 @@
 		            'legal': {
 		                'name': 'Route to Legal',
 		                'icon': 'share',
-		                'url': url('route::legal', {'id': id|default(0) })
+		                'url': url('route::legal', {'id': id|default(0) }),
+		                'permission': 'ECM_RISK'
 		            },
 		            'risk': {
 		                'name': 'Route to Risk',
 		                'icon': 'share',
-		                'url': url('route::risk', {'id': id|default(0) })
+		                'url': url('route::risk', {'id': id|default(0) }),
+		                'permission': 'ECM_DEPARTMENT'
 		            },
 		            'purchasing': {
 		                'name': 'Route to Purchasing',
 		                'icon': 'share',
-		                'url': url('route::purchasing', {'id': id|default(0) })
+		                'url': url('route::purchasing', {'id': id|default(0) }),
+		                'permission': 'ECM_LEGAL'
 		            },
 		            'mayor': {
 		                'name': 'Route to Mayor',
 		                'icon': 'share',
-		                'url': url('route::mayor', {'id': id|default(0) })
+		                'url': url('route::mayor', {'id': id|default(0) }),
+		                'permission': 'ECM_PURCHASING'
 		            },
 					'vendor': {
 		                'name': 'Route to Vendor',
 		                'icon': 'envelope',
-		                'url': url('route::vendor', {'id': id|default(0) })
+		                'url': url('route::vendor', {'id': id|default(0) }),
+		                'permission': 'ECM_PURCHASING'
 		            },
 					'notes': {
 		                'name': 'Add Notes',
 		                'icon': 'note-sticky',
-		                'url': 'x'
+		                'url': 'x',
+		                'permission': 'authenticated'
 		            },
 					'support_docs': {
 		                'name': 'Add Supporting Documentation',
 		                'icon': 'folder-open',
-		                'url': 'x'
+		                'url': 'x',
+		                'permission': 'authenticated'
 		            },
 					'reject': {
 		                'name': 'Reject',
 		                'icon': 'square-xmark',
-		                'url': url('route::reject', {'id': id|default(0) })
+		                'url': url('route::reject', {'id': id|default(0) }),
+		                'permission': 'authenticated'
 		            }
-		        }
+		        },
+		    	'permission': 'authenticated'
 		    }
-		}
+		},
+		'permission': 'authenticated'
 	}, 
 ] %}
 {% include '@partial/ribbon/tabs.html.twig' %}
