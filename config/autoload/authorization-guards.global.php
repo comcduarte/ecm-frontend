@@ -39,6 +39,12 @@ return [
                                     'permissions' => ['authenticated'],
                                 ],
                                 [
+                                    'route' => 'route',
+                                    'permissions' => [
+                                        'authenticated',
+                                    ],
+                                ],
+                                [
                                     'route'       => 'page',
                                     'actions'     => [
                                         'premium-content',

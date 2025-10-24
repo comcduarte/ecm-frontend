@@ -7,6 +7,7 @@ namespace Frontend\Contract\Service;
 use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
 use Frontend\App\Exception\NotFoundException;
+use comcduarte\Box\API\Resource\Comments;
 use comcduarte\Box\API\Resource\MetadataInstances;
 
 interface ContractServiceInterface
@@ -44,4 +45,10 @@ interface ContractServiceInterface
     public function move(string $source, string $destination): bool;
     
     public function getMetadata(string $contract): MetadataInstances;
+    
+    /**
+     * 
+     * @see ContractService
+     */
+    public function getComments(string $file_id): Comments;
 }

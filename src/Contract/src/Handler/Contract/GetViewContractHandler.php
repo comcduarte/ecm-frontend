@@ -56,6 +56,10 @@ class GetViewContractHandler implements RequestHandlerInterface
 //             'queue' => $contract->getContract_folder()->parent['id'],
 //         ];
         
+        /**
+         * Populate Comments
+         */
+        $comments = $this->contractService->getComments($contract_file->id);
         
         
         return new HtmlResponse(
@@ -65,6 +69,7 @@ class GetViewContractHandler implements RequestHandlerInterface
                 'image' => base64_encode($data->getBody()),
                 'id' => $contract->getContract_folder()->id,
                 'metadata_instances' => $metadata_instances,
+                'comments' => $comments,
             ])
         );
     }

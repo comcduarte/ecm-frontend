@@ -15,15 +15,21 @@
 		</div>
 		<div class="col col-3">
 			<div class="d-flex flex-column p-3 text-bg-dark h-100">
-    			<a href="/"	class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-    				<svg class="bi pe-none me-2" width="40" height="32"	aria-hidden="true">
-    				<span class="fs-4">Metadata</span>
-    			</a>
-				<hr>
-				{% for instance in metadata_instances.entries %}
-					Queue: {{ instance.queue }}<br>
-					Contract ID: {{ instance.contractnumber }}<br>
-				{% endfor %}
+				<div class="h-50">
+    				<h3 class="text-bg-dark">Metadata</h3>
+    				<hr>
+    				{% for instance in metadata_instances.entries %}
+    					Queue: {{ instance.queue }}<br>
+    					Contract ID: {{ instance.contractnumber }}<br>
+    				{% endfor %}
+				</div>
+				<div class="h-50">
+    				<h3 class="text-bg-dark">Comments</h3>
+    				<hr>
+    				{% for comment in comments.entries %}
+    					- {{ comment.message }}<br>
+    				{% endfor %}
+				</div>
 			</div>
 		</div>
 	</div>

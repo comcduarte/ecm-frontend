@@ -11,6 +11,8 @@ use Core\Metadata\Instance\EcmApplication;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
 use Frontend\App\Service\AccessTokenService;
+use comcduarte\Box\API\Resource\Comment;
+use comcduarte\Box\API\Resource\Comments;
 use comcduarte\Box\API\Resource\MetadataInstances;
 
 class ContractService implements ContractServiceInterface
@@ -128,5 +130,19 @@ class ContractService implements ContractServiceInterface
         $instances->entries[] = $metadata_instance;
         
         return $instances;
+    }
+    
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Frontend\Contract\Service\ContractServiceInterface::getComments()
+     */
+    public function getComments(string $file_id): Comments
+    {
+        $access_token = $this->accessTokenService->getAccessToken();
+        
+        $comment = new Comment($access_token);
+        $comments = $comment->list_file_comments($file_id);
+        return $comments; 
     }
 }

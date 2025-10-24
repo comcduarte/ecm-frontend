@@ -97,10 +97,13 @@
 			"Frontend\\Plugin\\" : "src/Plugin/src/",
 			"Frontend\\User\\" : "src/User/src/",
 			"Frontend\\Template\\" : "src/Template/src/",
+			"Frontend\\Workflow\\": "src/Workflow/src/",
 			"Core\\App\\" : "src/Core/src/App/src",
 			"Core\\Contract\\" : "src/Core/src/Contract/src",
 			"Core\\User\\" : "src/Core/src/User/src",
-			"Core\\Template\\" : "src/Core/src/Template/src"
+			"Core\\Template\\" : "src/Core/src/Template/src",
+			"Core\\Workflow\\": "src/Core/src/Workflow/src/",
+			"Core\\Metadata\\": "src/Core/src/Metadata/src/"
 		}
 	},
 	"autoload-dev" : {

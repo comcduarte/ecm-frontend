@@ -32,11 +32,13 @@ return [
                         'permissions' => [
                             'authenticated',
                             'premium',
+                            'all'
                         ],
                     ],
                     'guest' => [
                         'permissions' => [
                             'unauthenticated',
+                            'all'
                         ],
                     ],
                 ],
