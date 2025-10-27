@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Frontend\Page;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
+use Frontend\Page\Controller\CreatePageController;
+use Frontend\Page\Controller\HomeController;
 use Frontend\Page\Controller\PageController;
-use Frontend\Page\Controller\WorkflowPageController;
 use Frontend\Page\Service\PageService;
 use Frontend\Page\Service\PageServiceInterface;
 use Mezzio\Application;
-use Frontend\Page\Controller\HomeController;
-use Frontend\Page\Controller\CreatePageController;
 
 class ConfigProvider
 {
