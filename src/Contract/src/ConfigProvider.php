@@ -8,6 +8,7 @@ use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
+use Frontend\Contract\Form\Factory\CreateContractFormFactory;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -16,11 +17,11 @@ use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
+use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Mezzio\Application;
-use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 
 /**
  * @phpstan-type ConfigType array{
@@ -70,7 +71,7 @@ class ConfigProvider
                 
                 PostRouteContractHandler::class => AttributedServiceFactory::class,
                 
-                CreateContractForm::class   => ElementFactory::class,
+                CreateContractForm::class   => CreateContractFormFactory::class,
                 DeleteContractForm::class   => ElementFactory::class,
                 EditContractForm::class     => ElementFactory::class,
                 

@@ -12,8 +12,8 @@ use Fig\Http\Message\StatusCodeInterface;
 use Frontend\App\Exception\ConflictException;
 use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Contract\Service\ContractServiceInterface;
-use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -52,10 +52,11 @@ class PostCreateContractHandler implements RequestHandlerInterface
             $this->createContractForm->setData($data);
             if ($this->createContractForm->isValid()) {
                 $data = $this->createContractForm->getData();
-                $this->contractService->saveContract($data);
-                $this->messenger->addSuccess(Message::CONTRACT_CREATED);
-
-                return new EmptyResponse(StatusCodeInterface::STATUS_CREATED);
+                $this->contractService->createContract($data);
+                $this->messenger->addSuccess('Contract Created');
+                
+                return new JsonResponse($data);
+//                 return new EmptyResponse(StatusCodeInterface::STATUS_CREATED);
             }
 
             return new HtmlResponse(
