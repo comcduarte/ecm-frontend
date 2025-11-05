@@ -1,6 +1,11 @@
 {% if command.permission is defined %}
     {% if isGranted(command.permission) %}
-<a href="{{ command.url }}" class="btn d-inline-flex flex-column" id="{{ command.name }}">
+<a href="{{ command.url }}" class="btn d-inline-flex flex-column"
+{% if command.attributes is defined %} {{ command.attributes }} {% endif %}
+>
+    
+    
+<!-- <a href="{{ command.url }}" class="btn d-inline-flex flex-column" id="{{ command.name }}"> -->
 	<i class="fas fa-{{ command.icon }} fa-2x"></i> <span>{{ command.name }}</span>
 </a>
     {% endif %}

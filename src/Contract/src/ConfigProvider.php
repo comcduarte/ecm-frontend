@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Frontend\Contract;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
+use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
@@ -17,11 +18,13 @@ use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
+use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Mezzio\Application;
+use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 
 /**
  * @phpstan-type ConfigType array{
@@ -69,6 +72,11 @@ class ConfigProvider
                 GetListContractHandler::class       => AttributedServiceFactory::class,
                 GetViewContractHandler::class       => AttributedServiceFactory::class,
                 
+                GetViewDocumentHandler::class       => AttributedServiceFactory::class,
+                PostCreateCommentHandler::class     => AttributedServiceFactory::class,
+                
+                CreateCommentForm::class            => ElementFactory::class,
+                
                 PostRouteContractHandler::class => AttributedServiceFactory::class,
                 
                 CreateContractForm::class   => CreateContractFormFactory::class,
@@ -91,6 +99,7 @@ class ConfigProvider
         return [
             'paths' => [
                 'contract' => [__DIR__ . '/../templates/contract'],
+                'document' => [__DIR__ . '/../templates/document'],
             ],
         ];
     }

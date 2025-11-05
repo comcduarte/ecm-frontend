@@ -47,7 +47,7 @@
                     'forms': {
                         'name': 'Forms',
                         'icon': 'file',
-                        'url': url('create', {'action': 'forms'}),
+                        'url': url('contract::create-contract-form', {'action': 'create'}),
                         'permission': 'authenticated'
                     },
                     'import': {
@@ -125,13 +125,15 @@
 					'notes': {
 		                'name': 'Add Notes',
 		                'icon': 'note-sticky',
-		                'url': 'x',
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalAddComment ',
 		                'permission': 'authenticated'
 		            },
 					'support_docs': {
 		                'name': 'Add Supporting Documentation',
 		                'icon': 'folder-open',
-		                'url': 'x',
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalAddSupportingDocumentation ',
 		                'permission': 'authenticated'
 		            },
 					'reject': {

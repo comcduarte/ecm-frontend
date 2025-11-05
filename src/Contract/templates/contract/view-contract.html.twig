@@ -30,6 +30,13 @@
     					- {{ comment.message }}<br>
     				{% endfor %}
 				</div>
+				<div class="h-50">
+    				<h3 class="text-bg-dark">Supporting Documentation</h3>
+    				<hr>
+    				{% for document in supporting_documentation.entries %}
+    					- {{ document.name }}<br>
+    				{% endfor %}
+				</div>
 			</div>
 		</div>
 	</div>

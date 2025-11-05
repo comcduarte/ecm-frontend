@@ -16,6 +16,7 @@ use comcduarte\Box\API\Resource\BaseResource;
 use comcduarte\Box\API\Resource\ClientError;
 use comcduarte\Box\API\Resource\Comment;
 use comcduarte\Box\API\Resource\Comments;
+use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
 
@@ -91,10 +92,31 @@ class ContractService implements ContractServiceInterface
     {
         /**
          * Create Contract Object Folder Structure
-         * @var \comcduarte\Box\API\AccessToken $access_token
          */
         $access_token = $this->accessTokenService->getAccessToken();
         $contract = $this->contractRepository->createContract($data, $access_token);
+        
+        if ($contract instanceof ClientError) {
+            throw new ClientErrorException("Unable to create contract object structure.");
+        }
+        
+        /**
+         * Assign Metadata Tags to Structure
+         */
+        $folder_id = $contract->getFolder_id();
+        $scope = 'enterprise';
+        $template_key = 'ecm-application';
+        
+        $metadata_instance = new EcmApplication($access_token);
+        $instance = [
+            'project-name' => $contract->getProject_name(),
+            'queue' => $data['parent'],
+        ];
+        $result = $metadata_instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
+        
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException("Unable to assign metadata template to folder.");
+        }
         
         $destination_folder = new BaseResource();
         $destination_folder->setId($contract->getFolder_id());
@@ -189,6 +211,22 @@ class ContractService implements ContractServiceInterface
         
         $comment = new Comment($access_token);
         $comments = $comment->list_file_comments($file_id);
+        
+        if ($comments instanceof ClientError)
+        {
+            throw new ClientErrorException($comments->message);
+        }
+    
         return $comments; 
+    }
+
+    public function getSupportingDocumentation(string $folder_id): Items
+    {
+        $access_token = $this->accessTokenService->getAccessToken();
+        $params = [
+            'contract-folder' => $folder_id,
+        ];
+        
+        return $this->contractRepository->getSupportingDocumentation($params, $access_token);
     }
 }

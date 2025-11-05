@@ -61,6 +61,10 @@ class GetViewContractHandler implements RequestHandlerInterface
          */
         $comments = $this->contractService->getComments($contract_file->id);
         
+        /**
+         * Supporting Documentation
+         */
+        $supporting_documentation = $this->contractService->getSupportingDocumentation($contract->getContract_folder()->id);
         
         return new HtmlResponse(
             $this->template->render('contract::view-contract', [
@@ -70,6 +74,7 @@ class GetViewContractHandler implements RequestHandlerInterface
                 'id' => $contract->getContract_folder()->id,
                 'metadata_instances' => $metadata_instances,
                 'comments' => $comments,
+                'supporting_documentation' => $supporting_documentation,
             ])
         );
     }

@@ -8,6 +8,7 @@ use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
 use Frontend\App\Exception\NotFoundException;
 use comcduarte\Box\API\Resource\Comments;
+use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataInstances;
 
 interface ContractServiceInterface
@@ -53,4 +54,6 @@ interface ContractServiceInterface
      * @see ContractService
      */
     public function getComments(string $file_id): Comments;
+
+    public function getSupportingDocumentation(string $folder_id): Items;
 }

@@ -1,0 +1,56 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}View Document{% endblock %}
+{% block body_class %}vh-100{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 h-100">
+	<div class="row h-100">
+		<div class="bg-white col col-9">
+			<object class="vh-100" data="data:application/pdf;base64,{{ image }}" type="application/pdf" width="100%">
+				<p>Your browser will not display PDFs</p>
+			</object>
+		</div>
+		<div class="col col-3">
+			<div class="d-flex flex-column p-3 text-bg-dark h-100">
+				<div class="h-50">
+    				<h3 class="text-bg-dark">Metadata</h3>
+    				<hr>
+                    {% for instance in metadata_instances.entries %}
+    					<h4 class='text-bg-dark'>Template:</h4><br>
+    					{% for key,value in instance %}
+    						{% if "$" not in key %}
+    							- {{ key }}: {{ value }}<br>
+    						{% endif %}
+    					{% endfor %}
+    				{% endfor %}
+				</div>
+				<div class="h-50">
+    				<h3 class="text-bg-dark">Comments</h3>
+    				<hr>
+    				{% for comment in comments.entries %}
+    					- {{ comment.message }}<br>
+    				{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<a href="" class="btn btn-primary btn-rounded" data-bs-toggle="modal" data-bs-target="#modalAddComment">Add Comment</a>
+<div class="modal fade" id="modalAddComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+    		<div class="card mb-4">
+            	<div class="card-header d-flex justify-content-between">
+            		<div>
+            			<b>Add Comment</b>
+            		</div>
+            	</div>
+            	<div class="card-body">
+            	{{ form(form, {'method': 'GET'}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
