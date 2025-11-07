@@ -7,7 +7,9 @@ use Dot\DependencyInjection\Attribute\Inject;
 use Dot\FlashMessenger\FlashMessengerInterface;
 use Frontend\App\Service\AccessTokenService;
 use Frontend\Contract\Form\CreateCommentForm;
+use Frontend\Contract\Form\UploadFileForm;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,12 +27,16 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         TemplateRendererInterface::class,
         FlashMessengerInterface::class,
         CreateCommentForm::class,
+        UploadFileForm::class,
+        RouterInterface::class,
         )]
     public function __construct(
         protected AccessTokenService $accessTokenService,
         protected TemplateRendererInterface $template,
         protected FlashMessengerInterface $messenger,
         protected CreateCommentForm $addCommentForm,
+        protected UploadFileForm $uploadFileForm,
+        protected RouterInterface $router,
         ){}
     
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -69,6 +75,12 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $instance = new MetadataInstance($access_token);
         $instances = $instance->list_metadata_instances_on_file($file_id);
         
+        /**
+         * Upload File Form
+         */
+        $this->uploadFileForm->setAttribute('action', $this->router->generateUri('document::upload-file', $request->getAttributes()));
+        $this->uploadFileForm->prepare();
+        
         return new HtmlResponse(
             $this->template->render('document::view-document', [
                 'active' => 'document',
@@ -76,6 +88,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'comments' => $comments,
                 'metadata_instances' => $instances,
                 'form' => $this->addCommentForm->prepare(),
+                'uploadform' => $this->uploadFileForm,
             ])
         );
     }

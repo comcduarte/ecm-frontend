@@ -36,7 +36,6 @@
 		</div>
 	</div>
 </div>
-<a href="" class="btn btn-primary btn-rounded" data-bs-toggle="modal" data-bs-target="#modalAddComment">Add Comment</a>
 <div class="modal fade" id="modalAddComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -48,6 +47,22 @@
             	</div>
             	<div class="card-body">
             	{{ form(form, {'method': 'GET'}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalAddSupportingDocumentation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+    		<div class="card mb-4">
+            	<div class="card-header d-flex justify-content-between">
+            		<div>
+            			<b>Upload Supporting Documentation</b>
+            		</div>
+            	</div>
+            	<div class="card-body">
+            	{{ form(uploadform, {'method': 'GET'}) }}
 				</div>
 			</div>
 		</div>

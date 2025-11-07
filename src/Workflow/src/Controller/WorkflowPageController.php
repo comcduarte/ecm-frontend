@@ -101,7 +101,7 @@ class WorkflowPageController extends AbstractActionController
             'ancestor_folder_id' => '336171280120',
             'template_key' => "ecm-application",
             'scope' => "enterprise_1328932288",
-            'query' => "queue <> :val",
+            'query' => "queue = :val",
             'query_params' => [
                 'val' => $case->value,
             ],

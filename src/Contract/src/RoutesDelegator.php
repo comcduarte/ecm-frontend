@@ -21,6 +21,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
+use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 
 class RoutesDelegator
 {
@@ -63,6 +64,7 @@ class RoutesDelegator
         $routeCollector->group('/document')
             ->get('/view/' . $box_id, GetViewDocumentHandler::class, 'document::view-document')
             ->post('/view/' . $box_id, PostCreateCommentHandler::class, 'document::create-comment')
+            ->post('/upload/' . $box_id, PostUploadFileHandler::class, 'document::upload-file')
         ;
         
         return $callback();
