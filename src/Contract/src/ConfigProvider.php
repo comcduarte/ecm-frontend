@@ -19,14 +19,15 @@ use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
+use Frontend\Contract\Handler\Contract\PostImportContractHandler;
 use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
+use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Mezzio\Application;
-use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 
 /**
  * @phpstan-type ConfigType array{
@@ -77,6 +78,7 @@ class ConfigProvider
                 GetViewDocumentHandler::class       => AttributedServiceFactory::class,
                 PostCreateCommentHandler::class     => AttributedServiceFactory::class,
                 PostUploadFileHandler::class        => AttributedServiceFactory::class,
+                PostImportContractHandler::class    => AttributedServiceFactory::class,
                 
                 CreateCommentForm::class            => ElementFactory::class,
                 UploadFileForm::class               => ElementFactory::class,

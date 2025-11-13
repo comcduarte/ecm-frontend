@@ -13,7 +13,7 @@ use Frontend\App\Exception\ConflictException;
 use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
-use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -52,11 +52,11 @@ class PostCreateContractHandler implements RequestHandlerInterface
             $this->createContractForm->setData($data);
             if ($this->createContractForm->isValid()) {
                 $data = $this->createContractForm->getData();
-                $this->contractService->createContract($data);
+                $contract = $this->contractService->createContract($data);
+                $this->contractService->generateContract($data, $contract);
                 $this->messenger->addSuccess('Contract Created');
                 
-                return new JsonResponse($data);
-//                 return new EmptyResponse(StatusCodeInterface::STATUS_CREATED);
+                return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'index']));
             }
 
             return new HtmlResponse(

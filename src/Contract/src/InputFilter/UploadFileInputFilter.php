@@ -5,6 +5,8 @@ namespace Frontend\Contract\InputFilter;
 
 use Core\App\InputFilter\AbstractInputFilter;
 use Laminas\InputFilter\FileInput;
+use Frontend\Contract\InputFilter\Input\SelectInput;
+use Frontend\Contract\InputFilter\Input\TextInput;
 
 class UploadFileInputFilter extends AbstractInputFilter
 {
@@ -13,6 +15,9 @@ class UploadFileInputFilter extends AbstractInputFilter
         parent::init();
         
         return $this
-            ->add(new FileInput('FILE', true));
+            ->add(new TextInput('contract-number', false))
+            ->add(new FileInput('FILE', true))
+            ->add(new SelectInput('DOCTYPE', true))
+        ;
     }
 }

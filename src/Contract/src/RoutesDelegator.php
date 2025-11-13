@@ -14,14 +14,15 @@ use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
+use Frontend\Contract\Handler\Contract\PostImportContractHandler;
 use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
+use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
+use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
-use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 
 class RoutesDelegator
 {
@@ -43,6 +44,7 @@ class RoutesDelegator
         $routeCollector->group('/contract')
             ->get('/create', GetCreateContractFormHandler::class, 'contract::create-contract-form')
             ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
+            ->post('/import', PostImportContractHandler::class, 'contract::import-contract')
             
             ->get('/delete/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
             ->post('/delete/' . $uuid, PostDeleteContractHandler::class, 'contract::delete-contract')

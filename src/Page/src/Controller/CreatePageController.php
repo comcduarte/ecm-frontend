@@ -4,18 +4,27 @@ namespace Frontend\Page\Controller;
 
 use Dot\Controller\AbstractActionController;
 use Dot\DependencyInjection\Attribute\Inject;
+use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Page\Service\PageServiceInterface;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
-use Laminas\Diactoros\Response\HtmlResponse;
-
 
 class CreatePageController extends AbstractActionController
 {
-    #[Inject(PageServiceInterface::class, RouterInterface::class, TemplateRendererInterface::class)]
-    public function __construct(protected PageServiceInterface $pageService, protected RouterInterface $router, protected TemplateRendererInterface $template)
-    {}
+    #[Inject(
+        PageServiceInterface::class, 
+        RouterInterface::class, 
+        TemplateRendererInterface::class,
+        UploadFileForm::class,
+        )]
+    public function __construct(
+        protected PageServiceInterface $pageService, 
+        protected RouterInterface $router, 
+        protected TemplateRendererInterface $template,
+        protected UploadFileForm $form,
+    ){}
     
     public function formsAction(): ResponseInterface
     {
@@ -24,7 +33,15 @@ class CreatePageController extends AbstractActionController
     
     public function importAction(): ResponseInterface
     {
-        return new HtmlResponse($this->template->render('create::import'));
+        $upload_file_form = $this->form;
+        $upload_file_form->setAttribute('action', $this->router->generateUri('contract::import-contract'));
+        $upload_file_form->prepare();
+        
+        
+        return new HtmlResponse(
+            $this->template->render('create::import',[
+                'form' => $upload_file_form,
+            ]));
     }
     
     public function templatesAction(): ResponseInterface

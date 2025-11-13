@@ -9,6 +9,8 @@ use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\File;
 use Laminas\Form\Element\Submit;
 use Laminas\Session\Container;
+use Laminas\Form\Element\Select;
+use Laminas\Form\Element\Hidden;
 
 class UploadFileForm extends AbstractForm
 {
@@ -27,6 +29,28 @@ class UploadFileForm extends AbstractForm
     
     public function init(): void
     {
+        $this->add([
+            'name' => 'contract-number',
+            'type' => Hidden::class,
+        ]);
+        
+        $this->add([
+            'name' => 'DOCTYPE',
+            'type' => Select::class,
+            'attributes' => [
+                'id' => 'DOCTYPE',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Document Type',
+                'value_options' => [
+                    'Certificate of Insurance' => 'Certificate of Insurance',
+                    'Department Head Certification Page' => 'Department Head Certification Page',
+                    'Certificate of Surety' => 'Certificate of Surety',
+                ],
+            ],
+        ]);
+        
         $this->add([
             'name' => 'FILE',
             'type' => File::class,

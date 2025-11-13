@@ -18,7 +18,27 @@
 {% set tabs = [
 	{
 		'name': 'file',
-		'permission': 'all'
+		'permission': 'all',
+		'groups' : {
+		    'Preferences': {
+		        'name': 'Preferences',
+		        'permission': 'all',
+		        'commands': {
+		            'logout': {
+		                'name': 'Sign Out',
+		                'icon': 'right-to-bracket',
+		                'url': url('user', {action: 'logout'}),
+		                'permission': 'authenticated'
+		            },
+		            'login': {
+		                'name': 'Sign In',
+		                'icon': 'user',
+		                'url': url('user', {action: 'login'}),
+		                'permission': 'unauthenticated'
+		            }
+		        }
+		    }
+		}
 	}, 
 	{
 		'name': 'home',
@@ -78,13 +98,13 @@
 		                'name': 'Workflow',
 		                'icon': 'right-left',
 		                'url': url('workflow::dashboard', {'action': 'index'}),
-		                'permission': 'ECM_DEPARTMENT'
+		                'permission': 'authenticated'
 		            }
 		        },
-		    	'permission': 'ECM_DEPARTMENT'
+		    	'permission': 'authenticated'
 		    }
 		},
-		'permission': 'ECM_DEPARTMENT'
+		'permission': 'authenticated'
 	},  
 	{
 		'name': 'document',
@@ -121,6 +141,12 @@
 		                'icon': 'envelope',
 		                'url': url('route::vendor', {'id': id|default(0) }),
 		                'permission': 'ECM_PURCHASING'
+		            },
+		            'signature': {
+		            	'name': 'Sign Documents',
+		                'icon': 'signature',
+		                'url': url('route::mayor', {'id': id|default(0) }),
+		                'permission': 'ECM_MAYOR'
 		            },
 					'notes': {
 		                'name': 'Add Notes',

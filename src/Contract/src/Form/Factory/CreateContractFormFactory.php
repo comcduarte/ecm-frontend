@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Form\Factory;
 
+use Core\Contract\Enum\QueueFolderEnum;
 use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Template\Service\TemplateServiceInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -15,6 +16,11 @@ class CreateContractFormFactory implements FactoryInterface
         $form = new CreateContractForm();
         
         $templateService = $container->get(TemplateServiceInterface::class);
+        
+        foreach (QueueFolderEnum::cases() as $dept) {
+            $options['value_options'][$dept->value] = $dept->name;
+        }
+        $form->get('DEPARTMENT')->setOptions($options);
         
         $templates = $templateService->getTemplates();
         

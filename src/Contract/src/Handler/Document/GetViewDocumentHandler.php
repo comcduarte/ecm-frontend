@@ -75,10 +75,19 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $instance = new MetadataInstance($access_token);
         $instances = $instance->list_metadata_instances_on_file($file_id);
         
+        $contract_number = '';
+        foreach ($instances->entries as $x) {
+            if ($x['$template'] == 'ecm-application') {
+                $contract_number = $x['contract-number'];
+                break;
+            }
+        }
+        
         /**
          * Upload File Form
          */
         $this->uploadFileForm->setAttribute('action', $this->router->generateUri('document::upload-file', $request->getAttributes()));
+        $this->uploadFileForm->get('contract-number')->setValue($contract_number);
         $this->uploadFileForm->prepare();
         
         return new HtmlResponse(
@@ -89,6 +98,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'metadata_instances' => $instances,
                 'form' => $this->addCommentForm->prepare(),
                 'uploadform' => $this->uploadFileForm,
+                'id' => $contract_number,
             ])
         );
     }

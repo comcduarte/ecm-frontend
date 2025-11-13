@@ -8,6 +8,8 @@ use Frontend\App\Form\AbstractForm;
 use Frontend\Contract\InputFilter\CreateContractInputFilter;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Csrf;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
@@ -44,15 +46,49 @@ class CreateContractForm extends AbstractForm
      */
     public function init(): void
     {
+        $this->add([
+            'name' => 'DOCTYPE',
+            'type' => Select::class,
+            'attributes' => [
+                'id' => 'DOCTYPE',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Document Type',
+                'value_options' => [
+                    'contract' => 'Contract',
+                    'legal-opinion' => 'Legal Opinion',
+                    'amendment' => 'Amendment',
+                ],
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'ENTITY',
+            'type' => Radio::class,
+            'attributes' => [
+                'class' => 'form-check-input',
+            ],
+            'options' => [
+                'value_options' => [
+                    'city' => 'City of Middletown',
+                    'library' => 'Russell Library Company',
+                    'both' => 'City of Middletown & Russell Library Company',
+                ],
+            ],
+        ]);
+        
+        
         /**
          * Entity
          */
         $this->add([
             'name' => 'ENTITY_NAME',
-            'type' => Text::class,
+            'type' => Hidden::class,
             'attributes' => [
                 'id' => 'ENTITY_NAME',
                 'class' => 'form-control',
+                'value' => 'City of Middletown',
             ],
             'options' => [
                 'label' => 'Entity Name',
@@ -61,7 +97,7 @@ class CreateContractForm extends AbstractForm
         
         $this->add([
             'name' => 'ENTITY_LOGO',
-            'type' => Text::class,
+            'type' => Hidden::class,
             'attributes' => [
                 'id' => 'ENTITY_LOGO',
                 'class' => 'form-control',
@@ -73,10 +109,11 @@ class CreateContractForm extends AbstractForm
         
         $this->add([
             'name' => 'ENTITY_ALIAS',
-            'type' => Text::class,
+            'type' => Hidden::class,
             'attributes' => [
                 'id' => 'ENTITY_ALIAS',
                 'class' => 'form-control',
+                'value' => 'the City',
             ],
             'options' => [
                 'label' => 'Entity Alias',
@@ -100,14 +137,26 @@ class CreateContractForm extends AbstractForm
         ]);
         
         $this->add([
-            'name' => 'END_DATE',
+            'name' => 'CONTRACT_END_DATE',
             'type' => Text::class,
             'attributes' => [
-                'id' => 'END_DATE',
+                'id' => 'CONTRACT_END_DATE',
                 'class' => 'form-control',
             ],
             'options' => [
                 'label' => 'End Date',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'CONTRACT_AMOUNT',
+            'type' => Text::class,
+            'attributes' => [
+                'id' => 'CONTRACT_AMOUNT',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Contract Amount',
             ],
         ]);
         
@@ -121,7 +170,7 @@ class CreateContractForm extends AbstractForm
             'type' => Checkbox::class,
             'attributes' => [
                 'id' => 'EXCEEDS_100K',
-                'class' => 'checkbox checkbox-slider--b-flat',
+                'class' => 'checkbox form-check-input checkbox-slider--b-flat',
             ],
             'options' => [
                 'label' => 'Exceeds $100,000.00',
@@ -132,10 +181,10 @@ class CreateContractForm extends AbstractForm
         ]);
         
         $this->add([
-            'name' => 'project-name',
+            'name' => 'PROJECT_NAME',
             'type' => Text::class,
             'attributes' => [
-                'id' => 'project-name',
+                'id' => 'PROJECT_NAME',
                 'class' => 'form-control',
             ],
             'options' => [
@@ -199,10 +248,11 @@ class CreateContractForm extends AbstractForm
          */
         $this->add([
             'name' => 'DEPARTMENT',
-            'type' => Text::class,
+            'type' => Select::class,
             'attributes' => [
                 'id' => 'DEPARTMENT',
                 'class' => 'form-control',
+                'onchange' => 'document.getElementById("parent").value=document.getElementById("DEPARTMENT").value',
             ],
             'options' => [
                 'label' => 'Department',
@@ -211,7 +261,7 @@ class CreateContractForm extends AbstractForm
         
         $this->add([
             'name' => 'parent',
-            'type' => Text::class,
+            'type' => Hidden::class,
             'attributes' => [
                 'id' => 'parent',
                 'class' => 'form-control',
@@ -230,7 +280,7 @@ class CreateContractForm extends AbstractForm
                 'class' => 'form-control',
             ],
             'options' => [
-                'label' => 'Contract Type',
+                'label' => 'Document Template',
             ],
         ],['priority' => 100]);
         

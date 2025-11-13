@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        {% block meta_block %}{% endblock %}
 
         <title>{% block title %}{% endblock %} | DotKernel frontend V5</title>
         {% block canonical %}
@@ -25,20 +26,20 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body class="app {% block body_class %}{% endblock %}">
-        <header class="app-header">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <a href="/" class="navbar-brand">
-                        <img src="{{ asset('images/app/logo.svg') }}"
-                             onerror="this.onerror=null; this.src='{{ asset('images/app/logo.png') }}';"
-                             alt="DotKernel" />
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
-                            aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+        <header class="app-header fixed-top">
+{#             <nav class="navbar navbar-expand-lg navbar-light bg-light">#}
+{#                 <div class="container-fluid">#}
+{#                     <a href="/" class="navbar-brand">#}
+{#                         <img src="{{ asset('images/app/logo.svg') }}"#}
+{#                              onerror="this.onerror=null; this.src='{{ asset('images/app/logo.png') }}';"#}
+{#                              alt="DotKernel" />#}
+{#                     </a>#}
+{#                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"#}
+{#                             aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">#}
+{#                         <span class="navbar-toggler-icon"></span>#}
+{#                     </button>#}
 
-                    <div class="collapse navbar-collapse" id="navbarHeader">
+{#                     <div class="collapse navbar-collapse" id="navbarHeader">#}
 {#                         <ul class="navbar-nav mr-auto">#}
 {#                             <li class="nav-item dropdown">#}
 {#                                 <a class="nav-link dropdown-toggle" href="#" id="pageDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>#}
@@ -59,41 +60,42 @@
 {#                                 <a class="nav-link disabled" href="{{ url('page', {action: 'index'}) }}">Disabled</a>#}
 {#                             </li>#}
 {#                         </ul>#}
-                        <ul class="navbar-nav ms-auto">
-                            {% if hasIdentity() %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('account', {action: 'details'}) }}">Profile</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('user', {action: 'logout'}) }}">Log out</a>
-                                </li>
-                            {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('user', {action: 'login'}) }}">Log in</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+{#                         <ul class="navbar-nav ms-auto">#}
+{#                             {% if hasIdentity() %}#}
+{#                                 <li class="nav-item">#}
+{#                                     <a class="nav-link" href="{{ url('account', {action: 'details'}) }}">Profile</a>#}
+{#                                 </li>#}
+{#                                 <li class="nav-item">#}
+{#                                     <a class="nav-link" href="{{ url('user', {action: 'logout'}) }}">Log out</a>#}
+{#                                 </li>#}
+{#                             {% else %}#}
+{#                             <li class="nav-item">#}
+{#                                 <a class="nav-link" href="{{ url('user', {action: 'login'}) }}">Log in</a>#}
+{#                             </li>#}
+{#                             {% endif %}#}
+{#                         </ul>#}
+{#                     </div>#}
+{#                 </div>#}
+                
+{#             </nav>#}
 
-		{% include('@partial/ribbon.html.twig') with {'active': active|default('home')} %} 
+		    {% include('@partial/ribbon.html.twig') with {'active': active|default('home')} %} 
         </header>
 
-		<main class="app-content h-100">
+		<main class="app-content overflow-y-scroll" style="padding-top: 180px; padding-bottom: 125px;">
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 {% block page_title %}{% endblock %}
             </section>
 
             <!-- Main content -->
-            <section class="content h-100">
+            <section class="content">
             	{{ messagesPartial('partial::alerts') }}
                 {% block content %}{% endblock %}
             </section>
 		</main>
 
-        <footer class="app-footer">
+        <footer class="app-footer fixed-bottom">
             <div class="container">
                 <p class="enjoy">
                     enjoy dotkernel

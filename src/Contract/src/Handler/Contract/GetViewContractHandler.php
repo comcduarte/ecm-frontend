@@ -11,6 +11,8 @@ use Frontend\App\Exception\NotFoundException;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\RedirectResponse;
+use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,11 +21,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 class GetViewContractHandler implements RequestHandlerInterface
 {
     #[Inject(
+        RouterInterface::class,
         ContractServiceInterface::class,
         TemplateRendererInterface::class,
         FlashMessengerInterface::class,
     )]
     public function __construct(
+        protected RouterInterface $router,
         protected ContractServiceInterface $contractService,
         protected TemplateRendererInterface $template,
         protected FlashMessengerInterface $messenger,
@@ -42,6 +46,13 @@ class GetViewContractHandler implements RequestHandlerInterface
         }
 
         $contract_file = $contract->getContract_file();
+        
+        return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $contract_file->getId()]));
+        
+        
+        
+        
+        
         $data = $contract_file->download_file($contract_file->id);
         
         /**

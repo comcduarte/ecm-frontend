@@ -12,20 +12,19 @@
 			</object>
 		</div>
 		<div class="col col-3">
-			<div class="d-flex flex-column p-3 text-bg-dark h-100">
-				<div class="h-50">
+			<div class="d-flex flex-column p-3 text-bg-dark">
+				<div class="">
     				<h3 class="text-bg-dark">Metadata</h3>
     				<hr>
                     {% for instance in metadata_instances.entries %}
-    					<h4 class='text-bg-dark'>Template:</h4><br>
-    					{% for key,value in instance %}
+    					<p class='text-bg-dark text-uppercase text-decoration-underline fw-bold'>{{ instance['$template'] }}</p>    					{% for key,value in instance %}
     						{% if "$" not in key %}
     							- {{ key }}: {{ value }}<br>
     						{% endif %}
     					{% endfor %}
     				{% endfor %}
 				</div>
-				<div class="h-50">
+				<div class="">
     				<h3 class="text-bg-dark">Comments</h3>
     				<hr>
     				{% for comment in comments.entries %}

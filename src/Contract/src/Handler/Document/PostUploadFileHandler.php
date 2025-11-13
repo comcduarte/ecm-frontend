@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Frontend\Contract\Handler\Document;
 
 use Core\Metadata\Instance\EcmApplication;
+use Core\Metadata\Instance\SupportingDocumentation;
 use Dot\DependencyInjection\Attribute\Inject;
 use Dot\FlashMessenger\FlashMessengerInterface;
 use Frontend\App\Service\AccessTokenService;
@@ -72,7 +73,7 @@ class PostUploadFileHandler implements RequestHandlerInterface
                     'id' => $instance->getId(),
                     'queue' => $instance->getQueue(),
                     'contract-number' => $instance->getContractnumber(),
-                    'project-name' => $instance->getProjectName(),
+                    'PROJECT_NAME' => $instance->getProjectName(),
                 ];
                 
                 /**
@@ -141,8 +142,9 @@ class PostUploadFileHandler implements RequestHandlerInterface
                 $upload = new Upload($access_token);
                 
                 
+                $filename = sprintf('%s.%s', $data['DOCTYPE'], pathinfo($data['FILE']->getClientFilename(), PATHINFO_EXTENSION));
                 $attributes = [
-                    'name' => $data['FILE']->getClientFilename(),
+                    'name' => $filename,
                     'parent' => [
                         'id' => $supporting_documentation_folder_id,
                     ],
@@ -158,12 +160,48 @@ class PostUploadFileHandler implements RequestHandlerInterface
                     throw new ClientErrorException($result->message);
                 }
                 
-                $new_file_id = $result->entries[0]['id'];
+                $new_file_id = $result->entries[0]->id;
+                
+                /**
+                 * SUPPORTING DOCUMENTATION
+                 */
+                $scope = 'enterprise';
+                $template_key = 'supporting-documentation';
+                $template_data = [
+                    'document-type' => $data['DOCTYPE'],
+                ];
+                
+                $instance = new SupportingDocumentation($access_token);
+                $result = $instance->create_metadata_instance_on_file($new_file_id, $scope, $template_key, $template_data);
+                
+                if ($result instanceof ClientError) {
+                    throw new ClientErrorException($result->message);
+                }
+                
+                /**
+                 * ECM APPLICATION
+                 */
+                $scope = 'enterprise';
+                $template_key = 'ecm-application';
+                $template_data = [
+                    'contract-number' => $data['contract-number'],
+                ];
+                
+                $instance = new EcmApplication($access_token);
+                $result = $instance->create_metadata_instance_on_file($new_file_id, $scope, $template_key, $template_data);
+                
+                if ($result instanceof ClientError) {
+                    throw new ClientErrorException($result->message);
+                }
+                
+                return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $new_file_id]));
+            } else {
+                throw new ClientErrorException('Form is invalid.');
             }
-            return new RedirectResponse($this->router->generateUri('document::upload-file', ['id' => $new_file_id]));
+            
         } catch (Throwable $e) {
             $this->messenger->addError($e->getMessage());
-            return new RedirectResponse($this->router->generateUri('document::upload-file', $request->getAttributes()));
+            return new RedirectResponse($this->router->generateUri('document::view-document', $request->getAttributes()));
         }
     }
 }

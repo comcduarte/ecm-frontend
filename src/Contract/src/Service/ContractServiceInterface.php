@@ -36,6 +36,8 @@ interface ContractServiceInterface
 
     public function createContract(array $data);
     
+    public function generateContract(array $data, Contract $contract);
+    
     /**
      * @throws NotFoundException
      */

@@ -35,7 +35,20 @@ class WorkflowPageController extends AbstractActionController
             'workflow::dashboard',
             [
                 'active' => 'workflow',
-                'contracts' => $this->search(QueueFolderEnum::ECM_IT),
+                'contracts' => [],
+            ],
+        );
+    }
+    
+    public function deptAction(): ResponseInterface
+    {
+        $dept = $this->request->getAttribute('dept', '');
+        
+        return $this->render(
+            'workflow::dashboard',
+            [
+                'active' => 'workflow',
+                'contracts' => $this->search(QueueFolderEnum::from($dept)),
             ],
         );
     }
@@ -120,7 +133,7 @@ class WorkflowPageController extends AbstractActionController
         
         foreach (QueueFolderEnum::cases() as $queue) {
             if ($this->authorizationService->isGranted($queue->name)) {
-                $queues[] = $queue->name;
+                $queues[$queue->value] = $queue->name;
             }
         }
         
