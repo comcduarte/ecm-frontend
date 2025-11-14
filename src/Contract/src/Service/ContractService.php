@@ -319,17 +319,16 @@ class ContractService implements ContractServiceInterface
     }
     
     /**
-     * @throws NotFoundException
+     * 
+     * {@inheritDoc}
+     * @see \Frontend\Contract\Service\ContractServiceInterface::findContract()
      */
-    public function findContract(
-        string $uuid,
-    ): Contract {
-//         return $this->contractRepository->search($this->accessTokenService->getAccessToken());
-        $contract = $this->contractRepository->find($uuid, $this->accessTokenService->getAccessToken());
+    public function findContract(string $folder_id): Contract 
+    {
+        $contract = $this->contractRepository->find($folder_id, $this->accessTokenService->getAccessToken());
         if (! $contract instanceof Contract) {
             throw new NotFoundException(Message::resourceNotFound('Contract'));
         }
-
         return $contract;
     }
     

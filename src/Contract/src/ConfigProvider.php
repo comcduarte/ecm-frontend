@@ -28,6 +28,7 @@ use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Mezzio\Application;
+use Frontend\Contract\Middleware\NotificationMiddleware;
 
 /**
  * @phpstan-type ConfigType array{
@@ -90,6 +91,8 @@ class ConfigProvider
                 EditContractForm::class     => ElementFactory::class,
                 
                 ContractService::class => AttributedServiceFactory::class,
+                
+                NotificationMiddleware::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
                 ContractServiceInterface::class => ContractService::class,

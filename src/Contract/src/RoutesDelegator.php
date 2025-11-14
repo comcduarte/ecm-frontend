@@ -19,6 +19,7 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Middleware\NotificationMiddleware;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -55,7 +56,7 @@ class RoutesDelegator
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
             ->get('/view/' . $box_id, GetViewContractHandler::class, 'contract::view-contract-form');
 
-        $routeCollector->group('/route')
+        $routeCollector->group('/route')->setMiddleware(NotificationMiddleware::class)
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')

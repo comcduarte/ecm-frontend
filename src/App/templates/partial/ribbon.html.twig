@@ -112,17 +112,17 @@
 		    'tasks': {
 		        'name': 'Tasks',
 		        'commands': {
+		        	'risk': {
+		                'name': 'Route to Risk',
+		                'icon': 'share',
+		                'url': url('route::risk', {'id': id|default(0) }),
+		                'permission': 'ECM_DEPARTMENT'
+		            },
 		            'legal': {
 		                'name': 'Route to Legal',
 		                'icon': 'share',
 		                'url': url('route::legal', {'id': id|default(0) }),
 		                'permission': 'ECM_RISK'
-		            },
-		            'risk': {
-		                'name': 'Route to Risk',
-		                'icon': 'share',
-		                'url': url('route::risk', {'id': id|default(0) }),
-		                'permission': 'ECM_DEPARTMENT'
 		            },
 		            'purchasing': {
 		                'name': 'Route to Purchasing',

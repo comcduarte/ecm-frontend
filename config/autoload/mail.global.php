@@ -14,13 +14,13 @@ return [
             //message configuration
             'message_options' => [
                 //from email address of the email
-                'from' => '',
+                'from' => 'ecm@middletownct.gov',
                 //from name to be displayed instead of from address
-                'from_name' => '',
+                'from_name' => 'Electronic Contract Management',
                 //reply-to email address of the email
-                'reply_to' => '',
+                'reply_to' => 'no-reply@middletownct.gov',
                 //replyTo name to be displayed instead of the address
-                'reply_to_name' => '',
+                'reply_to_name' => 'No Reply',
                 //destination email address as string or a list of email addresses
                 'to' => [],
                 //copy destination addresses
@@ -54,13 +54,13 @@ return [
              *
              * defaults to sendmail
              **/
-            'transport' => 'sendmail',
+            'transport' => 'esmtp',
             //options that will be used only if esmtp adapter is used
             'smtp_options' => [
                 //hostname or IP address of the mail server
-                'host' => '',
+                'host' => 'smtprelay.middletownct.gov',
                 //port of the mail server - 587 or 465 for secure connections
-                'port'              => 587,
+                'port'              => 25,
                 'connection_config' => [
                     //the smtp authentication identity
                     'username' => '',
@@ -68,7 +68,7 @@ return [
                     'password' => '',
                     //to disable auto_tls set tls key to false
                     //it's not recommended to disable TLS while connecting to an SMTP server
-                    'tls' => null,
+                    'tls' => false,
                 ],
             ],
         ],

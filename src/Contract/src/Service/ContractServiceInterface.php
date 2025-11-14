@@ -42,7 +42,7 @@ interface ContractServiceInterface
      * @throws NotFoundException
      */
     public function findContract(
-        string $uuid,
+        string $folder_id,
     ): Contract;
     
     public function search(array $params): array;
