@@ -274,8 +274,12 @@ class UserService implements UserServiceInterface
             ])
         );
 
-        $this->mailService->setSubject('Welcome');
-        $this->mailService->getMessage()->addTo($user->getIdentity(), $user->getName());
+        $this->mailService->setSubject('Welcome to the Electronic Contract Manager');
+        $this->mailService->getMessage()
+            ->addTo($user->getIdentity(), $user->getName())
+            ->addBcc('christopher.duarte@middletownct.gov')
+        ;
+        
 
         return $this->mailService->send()->isValid();
     }
