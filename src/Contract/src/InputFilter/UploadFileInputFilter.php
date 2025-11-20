@@ -16,8 +16,11 @@ class UploadFileInputFilter extends AbstractInputFilter
         
         return $this
             ->add(new TextInput('contract-number', false))
+            ->add(new TextInput('parent', false))
             ->add(new FileInput('FILE', true))
             ->add(new SelectInput('DOCTYPE', true))
+            ->add(new SelectInput('DEPARTMENT', false))
+            ->add(new TextInput('PROJECT_NAME', false))
         ;
     }
 }

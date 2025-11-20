@@ -7,13 +7,16 @@ namespace Frontend\Contract;
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\CreateContractForm;
+use Frontend\Contract\Form\CreateDepartmentHeadCertificationForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
 use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Form\Factory\CreateContractFormFactory;
+use Frontend\Contract\Form\Factory\UploadFileFormFactory;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
+use Frontend\Contract\Handler\Contract\GetImportContractHandler;
 use Frontend\Contract\Handler\Contract\GetListContractHandler;
 use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
@@ -24,11 +27,11 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Middleware\NotificationMiddleware;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Mezzio\Application;
-use Frontend\Contract\Middleware\NotificationMiddleware;
 
 /**
  * @phpstan-type ConfigType array{
@@ -75,6 +78,7 @@ class ConfigProvider
                 PostEditContractHandler::class      => AttributedServiceFactory::class,
                 GetListContractHandler::class       => AttributedServiceFactory::class,
                 GetViewContractHandler::class       => AttributedServiceFactory::class,
+                GetImportContractHandler::class     => AttributedServiceFactory::class,
                 
                 GetViewDocumentHandler::class       => AttributedServiceFactory::class,
                 PostCreateCommentHandler::class     => AttributedServiceFactory::class,
@@ -82,7 +86,8 @@ class ConfigProvider
                 PostImportContractHandler::class    => AttributedServiceFactory::class,
                 
                 CreateCommentForm::class            => ElementFactory::class,
-                UploadFileForm::class               => ElementFactory::class,
+                UploadFileForm::class               => UploadFileFormFactory::class,
+                CreateDepartmentHeadCertificationForm::class => ElementFactory::class,
                 
                 PostRouteContractHandler::class => AttributedServiceFactory::class,
                 
@@ -109,6 +114,7 @@ class ConfigProvider
             'paths' => [
                 'contract' => [__DIR__ . '/../templates/contract'],
                 'document' => [__DIR__ . '/../templates/document'],
+                'document-partial' => [__DIR__ . '/../templates/document/partial'],
             ],
         ];
     }

@@ -45,6 +45,8 @@ interface ContractServiceInterface
         string $folder_id,
     ): Contract;
     
+    public function uploadContract(array $data, string $tmp_filename);
+    
     public function search(array $params): array;
     
     public function move(string $source, string $destination): bool;

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Handler\Contract;
 
+use Core\Contract\Entity\Contract;
 use Dot\DependencyInjection\Attribute\Inject;
 use Dot\FlashMessenger\FlashMessengerInterface;
 use Dot\Log\Logger;
@@ -48,6 +49,31 @@ class PostImportContractHandler implements RequestHandlerInterface
             
             if ($this->uploadFileForm->isValid()) {
                 $data = $this->uploadFileForm->getData();
+                
+                /**
+                 * Create Contract Folder Object
+                 * @var Contract $contract
+                 * contract-name,parent
+                 */
+                $contract = $this->contractService->createContract($data);
+//                 $this->contractService->generateContract($data, $contract);
+                
+                
+                /**
+                 * Upload File to Primary Document Folder
+                 */
+                $filename = sprintf('%s.%s', $contract->getProject_name(), pathinfo($data['FILE']->getClientFilename(), PATHINFO_EXTENSION));
+                $tmp_filename = $data['FILE']->getStream()->getMetadata('uri');
+                
+                $data = [
+                    'name' => $filename,
+                    'parent' => [
+                        'id' => $contract->getFolder_id(),
+                    ],
+                ];
+                
+                $this->contractService->uploadContract($data, $tmp_filename);
+                
                 $this->messenger->addSuccess('Success');
             } else {
                 $this->messenger->addInfo('Invalid');
@@ -63,6 +89,6 @@ class PostImportContractHandler implements RequestHandlerInterface
             $this->messenger->addError('Exception');
         }
         
-        return new RedirectResponse($this->router->generateUri('create', ['action' => 'import']));
+        return new RedirectResponse($this->router->generateUri('contract::import-contract-form', ['action' => 'import']));
     }
 }

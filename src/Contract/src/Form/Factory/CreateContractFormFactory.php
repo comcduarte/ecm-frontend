@@ -20,7 +20,9 @@ class CreateContractFormFactory implements FactoryInterface
         foreach (QueueFolderEnum::cases() as $dept) {
             $options['value_options'][$dept->value] = $dept->name;
         }
+        $options['empty_option'] = 'Choose Department...';
         $form->get('DEPARTMENT')->setOptions($options);
+        
         
         $templates = $templateService->getTemplates();
         

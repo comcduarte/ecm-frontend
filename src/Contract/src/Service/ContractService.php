@@ -7,8 +7,8 @@ namespace Frontend\Contract\Service;
 use Core\App\Message;
 use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
-use Core\Metadata\Instance\EcmApplication;
 use Core\Metadata\Instance\Contract as ContractInstance;
+use Core\Metadata\Instance\EcmApplication;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
 use Frontend\App\Service\AccessTokenService;
@@ -21,6 +21,7 @@ use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Folder;
 use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataInstances;
+use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
 
 class ContractService implements ContractServiceInterface
@@ -157,6 +158,7 @@ class ContractService implements ContractServiceInterface
         $instance = [
             'project-name' => $contract->getProject_name(),
             'queue' => $data['parent'],
+            'contract-number' => $folder_id,
         ];
         $result = $metadata_instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
         
@@ -249,77 +251,32 @@ class ContractService implements ContractServiceInterface
             throw new ClientErrorException('Unable to find file.');
         }
         
-        
-        /**
-         * ECM APPLICATION
-         */
-        $scope = 'enterprise';
-        $template_key = 'ecm-application';
-        $template_data = [
-            'project-name' => $data['PROJECT_NAME'],
-            'queue' => '',
-            'contract-number' => $contract->getFolder_id(),
+        $metadata = [
+            'file_id' => $contract->getContract_file()->getId(),
+            'folder_id' => $contract->getFolder_id(),
+            'approval' => [],
+            'contract' => [
+                'coi-expiration' => '',
+                'contract-amount' => $data['CONTRACT_AMOUNT'],
+                'contract-end-date' => $data['CONTRACT_END_DATE'],
+                'contract-status' => '',
+                'document-type' => $data['DOCTYPE'],
+            ],
+            'ecm-application' => [
+                'project-name' => $data['PROJECT_NAME'],
+                'queue' => '',
+                'contract-number' => $contract->getFolder_id(),
+            ],
+            
         ];
         
-        $instance = new EcmApplication($access_token);
-        $result = $instance->create_metadata_instance_on_file($contract->getContract_file()->getId(), $scope, $template_key, $template_data);
-        
-        if ($result instanceof ClientError) {
-            throw new ClientErrorException($result->message);
-        }
-        
-        /**
-         * CONTRACT
-         */
-        $scope = 'enterprise';
-        $template_key = 'contract';
-        $template_data = [
-            'coi-expiration' => '',
-            'contract-amount' => $data['CONTRACT_AMOUNT'],
-            'contract-end-date' => $data['CONTRACT_END_DATE'],
-            'contract-status' => '',
-            'document-type' => $data['DOCTYPE'],
-        ];
-        
-        $instance = new ContractInstance($access_token);
-        $result = $instance->create_metadata_instance_on_file($contract->getContract_file()->getId(), $scope, $template_key, $template_data);
-        
-        if ($result instanceof ClientError) {
-            throw new ClientErrorException($result->message);
-        }
-        
-        /**
-         * APPROVAL
-         */
-        $scope = 'enterprise';
-        $template_key = 'approval';
-        $template_data = [
-            'department-approver' =>  '',
-            'department-approver-date' =>  '',
-            'legal-approver' =>  '',
-            'legal-approver-date' =>  '',
-            'risk-approver' =>  '',
-            'risk-approver-date' =>  '',
-            'purchasing-approver' =>  '',
-            'purchasing-approver-date' =>  '',
-            'mayor-approver' =>  '',
-            'mayor-approver-date' =>  '',
-            'vendor-approver' =>  '',
-            'vendor-approver-date' =>  '',
-        ];
-        
-        $instance = new ContractInstance($access_token);
-        $result = $instance->create_metadata_instance_on_file($contract->getContract_file()->getId(), $scope, $template_key, $template_data);
-        
-        if ($result instanceof ClientError) {
-            throw new ClientErrorException($result->message);
-        }
+        $this->setMetadata($metadata);
         
         return;
     }
     
     /**
-     * 
+     * $contract->getContract_file()->getId()
      * {@inheritDoc}
      * @see \Frontend\Contract\Service\ContractServiceInterface::findContract()
      */
@@ -330,6 +287,45 @@ class ContractService implements ContractServiceInterface
             throw new NotFoundException(Message::resourceNotFound('Contract'));
         }
         return $contract;
+    }
+    
+    public function uploadContract(array $data, string $tmp_filename)
+    {
+        $access_token = $this->accessTokenService->getAccessToken();
+        $upload = new Upload($access_token);
+        
+        $result = $upload->upload_file($data, $tmp_filename);
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException($result->message);
+        }
+        
+        /**
+         * 
+         * @var File $file
+         */
+        $file = $result->entries[0];
+        
+        $metadata = [
+            'file_id' => $file->getId(),
+            'folder_id' => $file->parent->getId(),
+            'approval' => [],
+            'contract' => [
+                'coi-expiration' => '',
+                'contract-amount' => '',
+                'contract-end-date' => '',
+                'contract-status' => '',
+                'document-type' => '',
+            ],
+            'ecm-application' => [
+                'project-name' => $data['name'],
+                'queue' => '',
+                'contract-number' => $file->parent->getId(),
+            ],
+            
+        ];
+        
+        $this->setMetadata($metadata);
+        return;
     }
     
     public function search(array $params): array
@@ -366,11 +362,81 @@ class ContractService implements ContractServiceInterface
         return $instances;
     }
     
-    public function setMetadata()
+    public function setMetadata(array $metadata)
     {
+        $access_token = $this->accessTokenService->getAccessToken();
+        $file_id = $metadata['file_id'];
+        $folder_id = $metadata['folder_id'];
+        
         /**
-         * Current code is in generate contract.  May move to here for compartmentalization.
+         * ECM APPLICATION
          */
+        $data = $metadata['ecm-application'];
+        $scope = 'enterprise';
+        $template_key = 'ecm-application';
+        $template_data = [
+            'project-name' => $data['project-name'],
+            'queue' => '',
+            'contract-number' => $folder_id,
+        ];
+        
+        $instance = new EcmApplication($access_token);
+        $result = $instance->create_metadata_instance_on_file($file_id, $scope, $template_key, $template_data);
+        
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException($result->message);
+        }
+        
+        /**
+         * CONTRACT
+         */
+        $data = $metadata['contract'];
+        $scope = 'enterprise';
+        $template_key = 'contract';
+        $template_data = [
+            'coi-expiration' => '',
+            'contract-amount' => $data['contract-amount'],
+            'contract-end-date' => $data['contract-end-date'],
+            'contract-status' => '',
+            'document-type' => $data['document-type'],
+        ];
+        
+        $instance = new ContractInstance($access_token);
+        $result = $instance->create_metadata_instance_on_file($file_id, $scope, $template_key, $template_data);
+        
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException($result->message);
+        }
+        
+        /**
+         * APPROVAL
+         */
+        $data = $metadata['approval'];
+        $scope = 'enterprise';
+        $template_key = 'approval';
+        $template_data = [
+            'department-approver' =>  '',
+            'department-approver-date' =>  '',
+            'legal-approver' =>  '',
+            'legal-approver-date' =>  '',
+            'risk-approver' =>  '',
+            'risk-approver-date' =>  '',
+            'purchasing-approver' =>  '',
+            'purchasing-approver-date' =>  '',
+            'mayor-approver' =>  '',
+            'mayor-approver-date' =>  '',
+            'vendor-approver' =>  '',
+            'vendor-approver-date' =>  '',
+        ];
+        
+        $instance = new ContractInstance($access_token);
+        $result = $instance->create_metadata_instance_on_file($file_id, $scope, $template_key, $template_data);
+        
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException($result->message);
+        }
+        
+        return;
     }
     
     /**

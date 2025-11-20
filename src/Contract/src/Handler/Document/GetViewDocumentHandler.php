@@ -8,6 +8,7 @@ use Dot\FlashMessenger\FlashMessengerInterface;
 use Frontend\App\Service\AccessTokenService;
 use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\UploadFileForm;
+use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
@@ -19,6 +20,7 @@ use comcduarte\Box\API\Resource\ClientError;
 use comcduarte\Box\API\Resource\Comment;
 use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\MetadataInstance;
+use comcduarte\Box\API\Resource\Items;
 
 class GetViewDocumentHandler implements RequestHandlerInterface
 {
@@ -29,6 +31,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         CreateCommentForm::class,
         UploadFileForm::class,
         RouterInterface::class,
+        ContractServiceInterface::class,
         )]
     public function __construct(
         protected AccessTokenService $accessTokenService,
@@ -37,6 +40,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         protected CreateCommentForm $addCommentForm,
         protected UploadFileForm $uploadFileForm,
         protected RouterInterface $router,
+        protected ContractServiceInterface $contractService,
         ){}
     
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -49,13 +53,18 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $file = new File($access_token);
         $file->list_all_representations();
         $file->get_file_information($file_id);
+        
         $file->request_desired_representation('pdf');
         $result = $file->download_file_representation();
         
         $pdf_data = '';
-        if ($result instanceof ClientError) {
+        if (!(key_exists(0,$file->representations['entries']))) {
+            $pdf_data = $file->download_file($file_id)->getbody();
         } else {
-            $pdf_data = $result->getBody();
+            if ($result instanceof ClientError) {
+            } else {
+                $pdf_data = $result->getBody();
+            }
         }
         
         /**
@@ -88,7 +97,17 @@ class GetViewDocumentHandler implements RequestHandlerInterface
          */
         $this->uploadFileForm->setAttribute('action', $this->router->generateUri('document::upload-file', $request->getAttributes()));
         $this->uploadFileForm->get('contract-number')->setValue($contract_number);
+        $this->uploadFileForm->remove('DEPARTMENT')->remove('PROJECT_NAME');
         $this->uploadFileForm->prepare();
+        
+        /**
+         * Supporting Documentation
+         */
+        try {
+            $supporting_documentation = $this->contractService->getSupportingDocumentation($contract_number);
+        } catch (ClientErrorException $e) {
+            $supporting_documentation = new Items();
+        }
         
         return new HtmlResponse(
             $this->template->render('document::view-document', [
@@ -99,6 +118,8 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'form' => $this->addCommentForm->prepare(),
                 'uploadform' => $this->uploadFileForm,
                 'id' => $contract_number,
+                'file_id' => $file_id,
+                'supporting_documentation' => $supporting_documentation,
             ])
         );
     }

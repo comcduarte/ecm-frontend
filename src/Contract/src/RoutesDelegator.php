@@ -19,11 +19,11 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
-use Frontend\Contract\Middleware\NotificationMiddleware;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Frontend\Contract\Handler\Contract\GetImportContractHandler;
 
 class RoutesDelegator
 {
@@ -45,6 +45,7 @@ class RoutesDelegator
         $routeCollector->group('/contract')
             ->get('/create', GetCreateContractFormHandler::class, 'contract::create-contract-form')
             ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
+            ->get('/import', GetImportContractHandler::class, 'contract::import-contract-form')
             ->post('/import', PostImportContractHandler::class, 'contract::import-contract')
             
             ->get('/delete/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
@@ -56,12 +57,13 @@ class RoutesDelegator
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
             ->get('/view/' . $box_id, GetViewContractHandler::class, 'contract::view-contract-form');
 
-        $routeCollector->group('/route')->setMiddleware(NotificationMiddleware::class)
+        $routeCollector->group('/route')
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
             ->get('/mayor/' . $box_id , PostRouteContractHandler::class, 'route::mayor')
             ->get('/vendor/' . $box_id , PostRouteContractHandler::class, 'route::vendor')
+            ->get('/sign/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteContractHandler::class, 'route::sign')
             ->get('/reject/' . $box_id , PostRouteContractHandler::class, 'route::reject');
             
         $routeCollector->group('/document')

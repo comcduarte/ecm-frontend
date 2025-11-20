@@ -27,7 +27,8 @@ class HomeController extends AbstractActionController
         public function dashboardAction(): ResponseInterface
         {
             return new HtmlResponse($this->template->render(
-                'home::dashboard',
+//                 'home::dashboard',
+                'app::home', 
                 [
                     'active' => 'home',
                 ],

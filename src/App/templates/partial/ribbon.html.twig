@@ -24,16 +24,22 @@
 		        'name': 'Preferences',
 		        'permission': 'all',
 		        'commands': {
+		            'account': {
+		                'name': 'Account',
+		                'icon': 'user',
+		                'url': url('account', {'action': 'details'}),
+		                'permission': 'authenticated'
+		            },
 		            'logout': {
 		                'name': 'Sign Out',
 		                'icon': 'right-to-bracket',
-		                'url': url('user', {action: 'logout'}),
+		                'url': url('user', {'action': 'logout'}),
 		                'permission': 'authenticated'
 		            },
 		            'login': {
 		                'name': 'Sign In',
 		                'icon': 'user',
-		                'url': url('user', {action: 'login'}),
+		                'url': url('user', {'action': 'login'}),
 		                'permission': 'unauthenticated'
 		            }
 		        }
@@ -73,7 +79,7 @@
                     'import': {
                         'name': 'Import',
                         'icon': 'upload',
-                        'url': url('create', {'action': 'import'}),
+                        'url': url('contract::import-contract', {'action': 'import'}),
                         'permission': 'authenticated'
                     },
                     'template': {
@@ -145,7 +151,7 @@
 		            'signature': {
 		            	'name': 'Sign Documents',
 		                'icon': 'signature',
-		                'url': url('route::mayor', {'id': id|default(0) }),
+		                'url': url('route::sign', {'folder_id': id|default(0), 'file_id': file_id|default(0) }),
 		                'permission': 'ECM_MAYOR'
 		            },
 					'notes': {
@@ -166,13 +172,13 @@
 		                'name': 'Reject',
 		                'icon': 'square-xmark',
 		                'url': url('route::reject', {'id': id|default(0) }),
-		                'permission': 'authenticated'
+		                'permission': 'admin'
 		            }
 		        },
 		    	'permission': 'authenticated'
 		    }
 		},
 		'permission': 'authenticated'
-	}, 
+	},
 ] %}
 {% include '@partial/ribbon/tabs.html.twig' %}

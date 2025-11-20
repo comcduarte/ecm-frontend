@@ -17,6 +17,7 @@ use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Core\Metadata\Instance\EcmApplication;
 
 class GetViewContractHandler implements RequestHandlerInterface
 {
@@ -47,7 +48,30 @@ class GetViewContractHandler implements RequestHandlerInterface
 
         $contract_file = $contract->getContract_file();
         
-        return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $contract_file->getId()]));
+        
+        $instances = $this->contractService->getMetadata($request->getAttribute('id'));
+        
+        /**
+         * 
+         * @var EcmApplication $instance
+         */
+        $instance = $instances->entries[0];
+        
+        if ($instance->getId() != $request->getAttribute('id')) {
+            $file_id = $contract_file->getId();
+            $scope = 'enterprise';
+            $template_key = 'ecm-application';
+            $data = [
+                [
+                    'op' => 'replace',
+                    'path' => '/contract-number',
+                    'value' => $request->getAttribute('id'),
+                ],
+            ];
+            
+            $instance->update_metadata_instance_on_file($file_id, $scope, $template_key, $data);
+        }
+        return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $file_id]));
         
         
         

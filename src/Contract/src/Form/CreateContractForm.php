@@ -6,7 +6,6 @@ namespace Frontend\Contract\Form;
 
 use Frontend\App\Form\AbstractForm;
 use Frontend\Contract\InputFilter\CreateContractInputFilter;
-use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Radio;
@@ -165,20 +164,20 @@ class CreateContractForm extends AbstractForm
          * Exceeds 100K
          * @var \Laminas\Form\Fieldset $exceeds_100k
          */
-        $this->add([
-            'name' => 'EXCEEDS_100K',
-            'type' => Checkbox::class,
-            'attributes' => [
-                'id' => 'EXCEEDS_100K',
-                'class' => 'checkbox form-check-input checkbox-slider--b-flat',
-            ],
-            'options' => [
-                'label' => 'Exceeds $100,000.00',
-                'checked_value' => 'yes',
-                'unchecked_value' => 'no',
-                'use_hidden_element' => true,
-            ],
-        ]);
+//         $this->add([
+//             'name' => 'EXCEEDS_100K',
+//             'type' => Checkbox::class,
+//             'attributes' => [
+//                 'id' => 'EXCEEDS_100K',
+//                 'class' => 'checkbox form-check-input checkbox-slider--b-flat',
+//             ],
+//             'options' => [
+//                 'label' => 'Exceeds $100,000.00',
+//                 'checked_value' => 'yes',
+//                 'unchecked_value' => 'no',
+//                 'use_hidden_element' => true,
+//             ],
+//         ]);
         
         $this->add([
             'name' => 'PROJECT_NAME',
@@ -192,56 +191,56 @@ class CreateContractForm extends AbstractForm
             ],
         ]);
         
-        $this->add([
-            'name' => 'RESOLUTION_NUMBER',
-            'type' => Text::class,
-            'attributes' => [
-                'id' => 'RESOLUTION_NUMBER',
-                'class' => 'form-control',
-            ],
-            'options' => [
-                'label' => 'Resolution Number',
-            ],
-        ]);
+//         $this->add([
+//             'name' => 'RESOLUTION_NUMBER',
+//             'type' => Text::class,
+//             'attributes' => [
+//                 'id' => 'RESOLUTION_NUMBER',
+//                 'class' => 'form-control',
+//             ],
+//             'options' => [
+//                 'label' => 'Resolution Number',
+//             ],
+//         ]);
         
         /**
          * Vendor Information
          */
-        $this->add([
-            'name' => 'VENDOR_NAME',
-            'type' => Text::class,
-            'attributes' => [
-                'id' => 'VENDOR_NAME',
-                'class' => 'form-control',
-            ],
-            'options' => [
-                'label' => 'Vendor Name',
-            ],
-        ]);
+//         $this->add([
+//             'name' => 'VENDOR_NAME',
+//             'type' => Text::class,
+//             'attributes' => [
+//                 'id' => 'VENDOR_NAME',
+//                 'class' => 'form-control',
+//             ],
+//             'options' => [
+//                 'label' => 'Vendor Name',
+//             ],
+//         ]);
         
-        $this->add([
-            'name' => 'VENDOR_SIGNER',
-            'type' => Text::class,
-            'attributes' => [
-                'id' => 'VENDOR_SIGNER',
-                'class' => 'form-control',
-            ],
-            'options' => [
-                'label' => 'Vendor Signer',
-            ],
-        ]);
+//         $this->add([
+//             'name' => 'VENDOR_SIGNER',
+//             'type' => Text::class,
+//             'attributes' => [
+//                 'id' => 'VENDOR_SIGNER',
+//                 'class' => 'form-control',
+//             ],
+//             'options' => [
+//                 'label' => 'Vendor Signer',
+//             ],
+//         ]);
         
-        $this->add([
-            'name' => 'VENDOR_SIGNER_EMAIL',
-            'type' => Text::class,
-            'attributes' => [
-                'id' => 'VENDOR_SIGNER_EMAIL',
-                'class' => 'form-control',
-            ],
-            'options' => [
-                'label' => 'Vendor Signer Email',
-            ],
-        ]);
+//         $this->add([
+//             'name' => 'VENDOR_SIGNER_EMAIL',
+//             'type' => Text::class,
+//             'attributes' => [
+//                 'id' => 'VENDOR_SIGNER_EMAIL',
+//                 'class' => 'form-control',
+//             ],
+//             'options' => [
+//                 'label' => 'Vendor Signer Email',
+//             ],
+//         ]);
         
         /**
          * DEPARTMENT INFORMATION

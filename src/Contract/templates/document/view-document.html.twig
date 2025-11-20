@@ -13,24 +13,55 @@
 		</div>
 		<div class="col col-3">
 			<div class="d-flex flex-column p-3 text-bg-dark">
-				<div class="">
-    				<h3 class="text-bg-dark">Metadata</h3>
-    				<hr>
-                    {% for instance in metadata_instances.entries %}
-    					<p class='text-bg-dark text-uppercase text-decoration-underline fw-bold'>{{ instance['$template'] }}</p>    					{% for key,value in instance %}
-    						{% if "$" not in key %}
-    							- {{ key }}: {{ value }}<br>
-    						{% endif %}
-    					{% endfor %}
-    				{% endfor %}
-				</div>
-				<div class="">
-    				<h3 class="text-bg-dark">Comments</h3>
-    				<hr>
-    				{% for comment in comments.entries %}
-    					- {{ comment.message }}<br>
-    				{% endfor %}
-				</div>
+				<div class="accordion accordion-flush" id="accordionExample">
+					<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCm" aria-expanded="true" aria-controls="collapseCm">
+                				Comments
+                			</button>
+                		</h2>
+                		<div id="collapseCm" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for comment in comments.entries %}
+            					- {{ comment.message }}<br>
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                	<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMd" aria-expanded="true" aria-controls="collapseMd">
+                				Metadata
+                			</button>
+                		</h2>
+                		<div id="collapseMd" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for instance in metadata_instances.entries %}
+            					<p class='text-bg-dark text-uppercase text-decoration-underline fw-bold'>{{ instance['$template'] }}</p>    					
+            					{% for key,value in instance %}
+            						{% if "$" not in key %}
+            							- {{ key }}: {{ value }}<br>
+            						{% endif %}
+            					{% endfor %}
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                	<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSD" aria-expanded="true" aria-controls="collapseSD">
+                				Supporting Documentation
+                			</button>
+                		</h2>
+                		<div id="collapseSD" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for document in supporting_documentation.entries %}
+            					<a href="{{ url('document::view-document', {'id': document.id }) }}" class="button btn btn-primary text-bg-dark">{{ document.name }}</a><br>
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                </div>
 			</div>
 		</div>
 	</div>
