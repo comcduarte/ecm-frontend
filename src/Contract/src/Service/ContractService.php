@@ -58,7 +58,7 @@ class ContractService implements ContractServiceInterface
          * Update Metadata Tag to increment Number
          */
         $folder_id = $this->config['box-config']['application-folder'];
-        $scope = 'enterprise_1328932288';
+        $scope = 'enterprise_' . $this->config['access-token-config']->enterpriseID;
         $template_key = 'ecm-application';
         $integer++;
         $data = [

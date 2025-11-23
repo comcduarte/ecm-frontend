@@ -4,6 +4,7 @@
 {% set workflow_active = '' %}
 {% set home_active = '' %}
 {% set document_active = '' %}
+{% set help_active = '' %}
 
 {% if active == 'workflow' %}
 	{% set workflow_active = active_classes %}
@@ -11,6 +12,8 @@
 	{% set document_active = active_classes %}
 {% elseif active == 'file' %}
 	{% set file_active = active_classes %}
+{% elseif active == 'help' %}
+	{% set help_active = active_classes %}
 {% else %}
 	{% set home_active = active_classes %}
 {% endif %}
@@ -180,5 +183,23 @@
 		},
 		'permission': 'authenticated'
 	},
+	{
+    	'name': 'help',
+    	'permission': 'all',
+		'groups': {
+		    'about': {
+		        'name': 'About',
+		        'permission': 'all',
+		        'commands': {
+		            'version': {
+		                'name': 'Version',
+		                'icon': 'share',
+		                'url': url('user', {'action': 'logout'}),
+		                'permission': 'all'
+		            }
+		        }
+            }
+        }
+    }
 ] %}
 {% include '@partial/ribbon/tabs.html.twig' %}

@@ -20,6 +20,7 @@ class WorkflowPageController extends AbstractActionController
         RouterInterface::class, 
         TemplateRendererInterface::class,
         AuthorizationInterface::class,
+        'config',
     )]
     public function __construct(
         protected ContractServiceInterface $contractService,
@@ -27,6 +28,7 @@ class WorkflowPageController extends AbstractActionController
         protected RouterInterface $router, 
         protected TemplateRendererInterface $template,
         protected AuthorizationInterface $authorizationService,
+        protected array $config,
     ){}
 
     public function indexAction(): ResponseInterface
@@ -111,9 +113,9 @@ class WorkflowPageController extends AbstractActionController
     private function search(QueueFolderEnum $case)
     {
         $contracts = $this->contractService->search([
-            'ancestor_folder_id' => '336171280120',
+            'ancestor_folder_id' => QueueFolderEnum::ECM_ONBASE->value,
             'template_key' => "ecm-application",
-            'scope' => "enterprise_1328932288",
+            'scope' => "enterprise_" . $this->config['access-token-config']->enterpriseID,
             'query' => "queue = :val",
             'query_params' => [
                 'val' => $case->value,
