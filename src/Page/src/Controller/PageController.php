@@ -46,6 +46,13 @@ class PageController extends AbstractActionController
             $this->template->render('page::about')
         );
     }
+    
+    public function helpAction(): ResponseInterface
+    {
+        return new HtmlResponse(
+            $this->template->render('page::help')    
+        );
+    }
 
     public function premiumContentAction(): ResponseInterface
     {
