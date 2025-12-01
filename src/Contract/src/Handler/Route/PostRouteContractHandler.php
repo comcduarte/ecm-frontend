@@ -102,7 +102,7 @@ class PostRouteContractHandler implements RequestHandlerInterface
         /**
          * Sign Metadata
          */
-        $scope = 'enterprise_1328932288';
+        $scope = 'enterprise';
         $template_key = 'approval';
         $data = [
             [
