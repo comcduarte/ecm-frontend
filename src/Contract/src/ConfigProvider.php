@@ -8,16 +8,19 @@ use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Contract\Form\CreateDepartmentHeadCertificationForm;
+use Frontend\Contract\Form\CreateUCLaborForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
 use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Form\Factory\CreateContractFormFactory;
+use Frontend\Contract\Form\Factory\CreateUCLaborFormFactory;
 use Frontend\Contract\Form\Factory\UploadFileFormFactory;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetImportContractHandler;
 use Frontend\Contract\Handler\Contract\GetListContractHandler;
+use Frontend\Contract\Handler\Contract\GetSelectContractHandler;
 use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
@@ -27,6 +30,7 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Frontend\Contract\Middleware\NotificationMiddleware;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
@@ -70,6 +74,7 @@ class ConfigProvider
                 Application::class => [RoutesDelegator::class],
             ],
             'factories' => [
+                GetSelectContractHandler::class     => AttributedServiceFactory::class,
                 GetCreateContractFormHandler::class => AttributedServiceFactory::class,
                 PostCreateContractHandler::class    => AttributedServiceFactory::class,
                 GetDeleteContractFormHandler::class => AttributedServiceFactory::class,
@@ -87,17 +92,21 @@ class ConfigProvider
                 
                 CreateCommentForm::class            => ElementFactory::class,
                 UploadFileForm::class               => UploadFileFormFactory::class,
+                
+                //-- Custom Forms --//
+                CreateUCLaborForm::class            => CreateUCLaborFormFactory::class,
                 CreateDepartmentHeadCertificationForm::class => ElementFactory::class,
+                CreateContractForm::class   => CreateContractFormFactory::class,
                 
                 PostRouteContractHandler::class => AttributedServiceFactory::class,
                 
-                CreateContractForm::class   => CreateContractFormFactory::class,
                 DeleteContractForm::class   => ElementFactory::class,
                 EditContractForm::class     => ElementFactory::class,
                 
                 ContractService::class => AttributedServiceFactory::class,
                 
                 NotificationMiddleware::class => AttributedServiceFactory::class,
+                MetadataCorrectionMiddleware::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
                 ContractServiceInterface::class => ContractService::class,

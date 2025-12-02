@@ -33,7 +33,7 @@ class ContractService implements ContractServiceInterface
     )]
     public function __construct(
         protected ContractRepository $contractRepository,
-        protected AccessTokenService $accessTokenService,
+        public AccessTokenService $accessTokenService,
         protected array $config = [],
     ) {
     }

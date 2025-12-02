@@ -9,7 +9,9 @@ use Dot\Router\RouteCollectorInterface;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
+use Frontend\Contract\Handler\Contract\GetImportContractHandler;
 use Frontend\Contract\Handler\Contract\GetListContractHandler;
+use Frontend\Contract\Handler\Contract\GetSelectContractHandler;
 use Frontend\Contract\Handler\Contract\GetViewContractHandler;
 use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
@@ -19,11 +21,11 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Frontend\Contract\Handler\Contract\GetImportContractHandler;
 
 class RoutesDelegator
 {
@@ -43,8 +45,11 @@ class RoutesDelegator
         $routeCollector = $container->get(RouteCollectorInterface::class);
 
         $routeCollector->group('/contract')
-            ->get('/create', GetCreateContractFormHandler::class, 'contract::create-contract-form')
+            ->get('/select', GetSelectContractHandler::class, 'contract::select-contract')
+            
+            ->get('/create/{form}', GetCreateContractFormHandler::class, 'contract::create-contract-form')
             ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
+            
             ->get('/import', GetImportContractHandler::class, 'contract::import-contract-form')
             ->post('/import', PostImportContractHandler::class, 'contract::import-contract')
             
@@ -55,7 +60,7 @@ class RoutesDelegator
             ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
             
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
-            ->get('/view/' . $box_id, GetViewContractHandler::class, 'contract::view-contract-form');
+            ->get('/view/' . $box_id, [MetadataCorrectionMiddleware::class, GetViewContractHandler::class], 'contract::view-contract-form');
 
         $routeCollector->group('/route')
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
