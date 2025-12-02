@@ -45,8 +45,6 @@ class RoutesDelegator
         $routeCollector = $container->get(RouteCollectorInterface::class);
 
         $routeCollector->group('/contract')
-            ->get('/select', GetSelectContractHandler::class, 'contract::select-contract')
-            
             ->get('/create/{form}', GetCreateContractFormHandler::class, 'contract::create-contract-form')
             ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
             
