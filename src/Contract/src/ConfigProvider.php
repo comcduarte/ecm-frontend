@@ -6,15 +6,18 @@ namespace Frontend\Contract;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\Contract\Form\CreateCommentForm;
-use Frontend\Contract\Form\CreateContractForm;
 use Frontend\Contract\Form\CreateDepartmentHeadCertificationForm;
+use Frontend\Contract\Form\CreateUCGSForm;
+use Frontend\Contract\Form\CreateUCLTSForm;
 use Frontend\Contract\Form\CreateUCLaborForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
 use Frontend\Contract\Form\UploadFileForm;
-use Frontend\Contract\Form\Factory\CreateContractFormFactory;
+use Frontend\Contract\Form\Factory\CreateUCGSFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCLaborFormFactory;
 use Frontend\Contract\Form\Factory\UploadFileFormFactory;
+use Frontend\Contract\Form\Fieldset\DateFieldset;
+use Frontend\Contract\Form\Fieldset\SignatureFieldset;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -30,11 +33,16 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Handler\UCGS\GetCreateUCGSFormHandler;
+use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
+use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
+use Frontend\Contract\Handler\UCLTS\PostCreateUCLTSHandler;
 use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Frontend\Contract\Middleware\NotificationMiddleware;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mezzio\Application;
 
 /**
@@ -60,6 +68,7 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
+            'form_elements' => $this->getFormElements(),
             'templates'    => $this->getTemplates(),
         ];
     }
@@ -96,12 +105,19 @@ class ConfigProvider
                 //-- Custom Forms --//
                 CreateUCLaborForm::class            => CreateUCLaborFormFactory::class,
                 CreateDepartmentHeadCertificationForm::class => ElementFactory::class,
-                CreateContractForm::class   => CreateContractFormFactory::class,
                 
-                PostRouteContractHandler::class => AttributedServiceFactory::class,
+                CreateUCGSForm::class   => CreateUCGSFormFactory::class,
+                GetCreateUCGSFormHandler::class => AttributedServiceFactory::class,
+                PostCreateUCGSHandler::class => AttributedServiceFactory::class,
                 
-                DeleteContractForm::class   => ElementFactory::class,
-                EditContractForm::class     => ElementFactory::class,
+                CreateUCLTSForm::class => ElementFactory::class,
+                GetCreateUCLTSFormHandler::class => AttributedServiceFactory::class,
+                PostCreateUCLTSHandler::class   => AttributedServiceFactory::class,
+                
+                PostRouteContractHandler::class     => AttributedServiceFactory::class,
+                
+                DeleteContractForm::class           => ElementFactory::class,
+                EditContractForm::class             => ElementFactory::class,
                 
                 ContractService::class => AttributedServiceFactory::class,
                 
@@ -114,6 +130,19 @@ class ConfigProvider
         ];
     }
 
+    private function getFormElements(): array
+    {
+        return [
+            'aliases' => [
+                'date_fieldset'             => DateFieldset::class,
+            ],
+            'factories' => [
+                DateFieldset::class                 => InvokableFactory::class,
+                SignatureFieldset::class            => ElementFactory::class,
+            ],
+        ];
+    }
+    
     /**
      * @return TemplatesType
      */

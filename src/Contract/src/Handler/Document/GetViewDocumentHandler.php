@@ -19,8 +19,9 @@ use comcduarte\Box\API\Exception\ClientErrorException;
 use comcduarte\Box\API\Resource\ClientError;
 use comcduarte\Box\API\Resource\Comment;
 use comcduarte\Box\API\Resource\File;
-use comcduarte\Box\API\Resource\MetadataInstance;
 use comcduarte\Box\API\Resource\Items;
+use comcduarte\Box\API\Resource\MetadataInstance;
+use comcduarte\Box\API\Resource\MetadataInstances;
 
 class GetViewDocumentHandler implements RequestHandlerInterface
 {
@@ -85,10 +86,18 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $instances = $instance->list_metadata_instances_on_file($file_id);
         
         $contract_number = '';
-        foreach ($instances->entries as $x) {
+        foreach ($instances->entries as $index => $x) {
             if ($x['$template'] == 'ecm-application') {
                 $contract_number = $x['contract-number'];
-                break;
+                continue;
+            }
+            
+            if (preg_match('/autoClassification/', $x['$template'])) {
+                /**
+                 * Remove viewing of autoClassification Instance
+                 * @var MetadataInstances $instances
+                 */
+                unset($instances->entries[$index]);
             }
         }
         

@@ -17,14 +17,14 @@ class AccessTokenService implements AccessTokenServiceInterface
         )
     {
         $this->access_token = new AccessToken([
-            'client_id' => $config['access-token-config']->boxAppSettings->clientID,
-            'client_secret' => $config['access-token-config']->boxAppSettings->clientSecret,
-            'public_key_id' => $config['access-token-config']->boxAppSettings->appAuth->publicKeyID,
-            'private_key' => $config['access-token-config']->boxAppSettings->appAuth->privateKey,
-            'passphrase' => $config['access-token-config']->boxAppSettings->appAuth->passphrase,
+            'client_id' => $config['box-config']->boxAppSettings->clientID,
+            'client_secret' => $config['box-config']->boxAppSettings->clientSecret,
+            'public_key_id' => $config['box-config']->boxAppSettings->appAuth->publicKeyID,
+            'private_key' => $config['box-config']->boxAppSettings->appAuth->privateKey,
+            'passphrase' => $config['box-config']->boxAppSettings->appAuth->passphrase,
             'grant_type' => "urn:ietf:params:oauth:grant-type:jwt-bearer",
             'box_subject_type' => "enterprise",
-            'box_subject_id' => $config['access-token-config']->enterpriseID,
+            'box_subject_id' => $config['box-config']->enterpriseID,
         ]);
     }
 }

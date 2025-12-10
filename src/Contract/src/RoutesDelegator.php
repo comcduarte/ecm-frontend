@@ -21,6 +21,10 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Handler\UCGS\GetCreateUCGSFormHandler;
+use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
+use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
+use Frontend\Contract\Handler\UCLTS\PostCreateUCLTSHandler;
 use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
@@ -45,6 +49,16 @@ class RoutesDelegator
         $routeCollector = $container->get(RouteCollectorInterface::class);
 
         $routeCollector->group('/contract')
+            ->get('/select', GetSelectContractHandler::class, 'contract::select-contract')
+            
+            ->get('/create/uclts', GetCreateUCLTSFormHandler::class, 'contract::create-uclts-form')
+            ->post('/post/uclts', PostCreateUCLTSHandler::class, 'contract::post-uclts-form')
+            
+            ->get('/create/ucgs', GetCreateUCGSFormHandler::class, 'contract::create-ucgs-form')
+            ->post('/post/ucgs', PostCreateUCGSHandler::class, 'contract::post-ucgs-form')
+            
+            
+        
             ->get('/create/{form}', GetCreateContractFormHandler::class, 'contract::create-contract-form')
             ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
             

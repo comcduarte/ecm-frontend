@@ -115,10 +115,11 @@ class WorkflowPageController extends AbstractActionController
         $contracts = $this->contractService->search([
             'ancestor_folder_id' => QueueFolderEnum::ECM_ONBASE->value,
             'template_key' => "ecm-application",
-            'scope' => "enterprise_" . $this->config['access-token-config']->enterpriseID,
-            'query' => "queue = :val",
+            'scope' => "enterprise_" . $this->config['box-config']->enterpriseID,
+            'query' => "queue = :val AND item.type = :type",
             'query_params' => [
                 'val' => $case->value,
+                'type' => 'folder',
             ],
         ]);
         

@@ -178,22 +178,6 @@ class PostUploadFileHandler implements RequestHandlerInterface
                     throw new ClientErrorException($result->message);
                 }
                 
-                /**
-                 * ECM APPLICATION
-                 */
-                $scope = 'enterprise';
-                $template_key = 'ecm-application';
-                $template_data = [
-                    'contract-number' => $data['contract-number'],
-                ];
-                
-                $instance = new EcmApplication($access_token);
-                $result = $instance->create_metadata_instance_on_file($new_file_id, $scope, $template_key, $template_data);
-                
-                if ($result instanceof ClientError) {
-                    throw new ClientErrorException($result->message);
-                }
-                
                 return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $new_file_id]));
             } else {
                 throw new ClientErrorException('Form is invalid.');

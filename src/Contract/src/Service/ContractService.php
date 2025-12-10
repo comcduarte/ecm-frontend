@@ -20,6 +20,7 @@ use comcduarte\Box\API\Resource\Comments;
 use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Folder;
 use comcduarte\Box\API\Resource\Items;
+use comcduarte\Box\API\Resource\MetadataCascadePolicy;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
@@ -46,7 +47,7 @@ class ContractService implements ContractServiceInterface
     public function getNewContractName(array $params): string
     {
         $access_token = $this->accessTokenService->getAccessToken();
-        $instances = $this->getMetadata($this->config['box-config']['application-folder']);
+        $instances = $this->getMetadata($this->config['box-config']->applicationFolder);
         
         if ($instances instanceof ClientError) {
             //-- Do Something --//
@@ -57,8 +58,8 @@ class ContractService implements ContractServiceInterface
         /**
          * Update Metadata Tag to increment Number
          */
-        $folder_id = $this->config['box-config']['application-folder'];
-        $scope = 'enterprise_' . $this->config['access-token-config']->enterpriseID;
+        $folder_id = $this->config['box-config']->applicationFolder;
+        $scope = 'enterprise_' . $this->config['box-config']->enterpriseID;
         $template_key = 'ecm-application';
         $integer++;
         $data = [
@@ -112,7 +113,7 @@ class ContractService implements ContractServiceInterface
 
 //         return Paginator::wrapper($paginator, $params, $filters);
         $params = [
-            'application-folder' => $this->config['box-config']['application-folder'],
+            'application-folder' => $this->config['box-config']->applicationFolder,
         ];
         
         return $this->contractRepository->getContracts($params, $this->accessTokenService->getAccessToken());
@@ -148,10 +149,30 @@ class ContractService implements ContractServiceInterface
         }
         
         /**
-         * Assign Metadata Tags to Structure
+         * Globals
          */
         $folder_id = $contract->getFolder_id();
         $scope = 'enterprise';
+        $templates = [
+            'ecm-application',
+            'approval',
+            'contract',
+        ];
+        
+        /**
+         * Create Metadata Cascade Policy
+         */
+        $policy = new MetadataCascadePolicy($access_token);
+        foreach ($templates as $template_key) {
+            $result = $policy->create_metadata_cascade_policy($folder_id, $scope, $template_key);
+            if ($result instanceof ClientError) {
+                throw new ClientErrorException("Unable to create metadata cascade policy.");
+            }
+        }
+        
+        /**
+         * Assign Metadata Tags to Structure
+         */
         $template_key = 'ecm-application';
         
         $metadata_instance = new EcmApplication($access_token);
@@ -270,6 +291,7 @@ class ContractService implements ContractServiceInterface
             
         ];
         
+        //-- @todo Do not set metadata Here
         $this->setMetadata($metadata);
         
         return;
@@ -366,26 +388,7 @@ class ContractService implements ContractServiceInterface
     {
         $access_token = $this->accessTokenService->getAccessToken();
         $file_id = $metadata['file_id'];
-        $folder_id = $metadata['folder_id'];
-        
-        /**
-         * ECM APPLICATION
-         */
-        $data = $metadata['ecm-application'];
-        $scope = 'enterprise';
-        $template_key = 'ecm-application';
-        $template_data = [
-            'project-name' => $data['project-name'],
-            'queue' => '',
-            'contract-number' => $folder_id,
-        ];
-        
-        $instance = new EcmApplication($access_token);
-        $result = $instance->create_metadata_instance_on_file($file_id, $scope, $template_key, $template_data);
-        
-        if ($result instanceof ClientError) {
-            throw new ClientErrorException($result->message);
-        }
+//         $folder_id = $metadata['folder_id'];
         
         /**
          * CONTRACT
