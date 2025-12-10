@@ -1,0 +1,205 @@
+{% set active_classes = 'show active ribbon' %}
+
+{% set file_active = '' %}
+{% set workflow_active = '' %}
+{% set home_active = '' %}
+{% set document_active = '' %}
+{% set help_active = '' %}
+
+{% if active == 'workflow' %}
+	{% set workflow_active = active_classes %}
+{% elseif active == 'document' %}
+	{% set document_active = active_classes %}
+{% elseif active == 'file' %}
+	{% set file_active = active_classes %}
+{% elseif active == 'help' %}
+	{% set help_active = active_classes %}
+{% else %}
+	{% set home_active = active_classes %}
+{% endif %}
+
+{% set tabs = [
+	{
+		'name': 'file',
+		'permission': 'all',
+		'groups' : {
+		    'Preferences': {
+		        'name': 'Preferences',
+		        'permission': 'all',
+		        'commands': {
+		            'account': {
+		                'name': 'Account',
+		                'icon': 'user',
+		                'url': url('account', {'action': 'details'}),
+		                'permission': 'authenticated'
+		            },
+		            'logout': {
+		                'name': 'Sign Out',
+		                'icon': 'right-to-bracket',
+		                'url': url('user', {'action': 'logout'}),
+		                'permission': 'authenticated'
+		            },
+		            'login': {
+		                'name': 'Sign In',
+		                'icon': 'user',
+		                'url': url('user', {'action': 'login'}),
+		                'permission': 'unauthenticated'
+		            }
+		        }
+		    }
+		}
+	}, 
+	{
+		'name': 'home',
+		'groups': {
+		    'Favorites': {
+		    	'name': 'Favorites',
+		    	'commands': {
+		    	    'home': {
+		    	        'name': 'Home',
+		    	        'icon': 'house',
+		    			'url': url('home', {'action': 'dashboard'}),
+		    			'permission': 'all'
+		    	    },
+		    	    'search': {
+		    	        'name': 'Search',
+		    	        'icon': 'search',
+		    	        'url': url('contract::list-contract', {'action': 'list'}),
+		    	        'permission': 'authenticated'
+		    	    }
+		    	},
+		    	'permission': 'all'
+            },
+            'create': {
+                'name': 'Create',
+                'commands': {
+                    'forms': {
+                        'name': 'Forms',
+                        'icon': 'file',
+                        'url': url('contract::select-contract'),
+                        'permission': 'authenticated'
+                    },
+                    'import': {
+                        'name': 'Import',
+                        'icon': 'upload',
+                        'url': url('contract::import-contract', {'action': 'import'}),
+                        'permission': 'authenticated'
+                    },
+                    'template': {
+                        'name': 'Templates',
+                        'icon': 'th-list',
+                        'url': url('template', {'action': 'list'}),
+                        'permission': 'admin'
+                    }
+                },
+		    	'permission': 'authenticated'
+            }
+		},
+		'permission': 'all'
+	},  
+	{
+		'name': 'workflow',
+		'groups': {
+		    'workflow': {
+		        'name': 'Workflow',
+		        'commands': {
+		            'workflow': {
+		                'name': 'Workflow',
+		                'icon': 'right-left',
+		                'url': url('workflow::dashboard', {'action': 'index'}),
+		                'permission': 'authenticated'
+		            }
+		        },
+		    	'permission': 'authenticated'
+		    }
+		},
+		'permission': 'authenticated'
+	},  
+	{
+		'name': 'document',
+		'groups': {
+		    'tasks': {
+		        'name': 'Tasks',
+		        'commands': {
+		        	'risk': {
+		                'name': 'Route to Risk',
+		                'icon': 'share',
+		                'url': url('route::risk', {'id': id|default(0) }),
+		                'permission': 'ECM_DEPARTMENT'
+		            },
+		            'legal': {
+		                'name': 'Route to Legal',
+		                'icon': 'share',
+		                'url': url('route::legal', {'id': id|default(0) }),
+		                'permission': 'ECM_RISK'
+		            },
+		            'purchasing': {
+		                'name': 'Route to Purchasing',
+		                'icon': 'share',
+		                'url': url('route::purchasing', {'id': id|default(0) }),
+		                'permission': 'ECM_LEGAL'
+		            },
+		            'mayor': {
+		                'name': 'Route to Mayor',
+		                'icon': 'share',
+		                'url': url('route::mayor', {'id': id|default(0) }),
+		                'permission': 'ECM_PURCHASING'
+		            },
+					'vendor': {
+		                'name': 'Route to Vendor',
+		                'icon': 'envelope',
+		                'url': url('route::vendor', {'id': id|default(0) }),
+		                'permission': 'ECM_PURCHASING'
+		            },
+		            'signature': {
+		            	'name': 'Sign Documents',
+		                'icon': 'signature',
+		                'url': url('route::sign', {'folder_id': id|default(0), 'file_id': file_id|default(0) }),
+		                'permission': 'ECM_MAYOR'
+		            },
+					'notes': {
+		                'name': 'Add Notes',
+		                'icon': 'note-sticky',
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalAddComment ',
+		                'permission': 'authenticated'
+		            },
+					'support_docs': {
+		                'name': 'Add Supporting Documentation',
+		                'icon': 'folder-open',
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalAddSupportingDocumentation ',
+		                'permission': 'authenticated'
+		            },
+					'reject': {
+		                'name': 'Reject',
+		                'icon': 'square-xmark',
+		                'url': url('route::reject', {'id': id|default(0) }),
+		                'permission': 'admin'
+		            }
+		        },
+		    	'permission': 'authenticated'
+		    }
+		},
+		'permission': 'authenticated'
+	},
+	{
+    	'name': 'help',
+    	'permission': 'all',
+		'groups': {
+		    'about': {
+		        'name': 'About',
+		        'permission': 'all',
+		        'commands': {
+		            'version': {
+		                'name': 'Support',
+		                'icon': 'circle-question',
+		                'url': url('page', {'action': 'help'}),
+		                'permission': 'all'
+		            }
+		        }
+            }
+        }
+    }
+] %}
+{% include '@partial/ribbon/tabs.html.twig' %}

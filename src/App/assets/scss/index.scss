@@ -12,3 +12,8 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import "components/user";
 @import "components/pages";
 @import "components/profile";
+@import "components/treeview";
+@import "components/bflat";
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/solid.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/fontawesome.min.css');

@@ -1,0 +1,14 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Import Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-intro">
+	<div class="container">
+		<h1>Create &raquo; Import</h1>
+	</div>
+	<div>
+	{{ form(form, {'method': 'GET'}) }}
+	</div>
+</div>
+{% endblock %}

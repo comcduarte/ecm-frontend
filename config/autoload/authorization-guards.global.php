@@ -29,11 +29,37 @@ return [
                                     'permissions' => ['authenticated'],
                                 ],
                                 [
+                                    'route' => 'contract',
+                                    'actions' => [
+                                        'create',
+                                        'delete',
+                                        'edit',
+                                        'view'
+                                    ],
+                                    'permissions' => ['authenticated'],
+                                ],
+                                [
+                                    'route' => 'route',
+                                    'permissions' => [
+                                        'authenticated',
+                                    ],
+                                ],
+                                [
                                     'route'       => 'page',
                                     'actions'     => [
                                         'premium-content',
                                     ],
                                     'permissions' => ['premium'],
+                                ],
+                                [
+                                    'route' => 'template',
+                                    'actions' => [
+                                        'create',
+                                        'delete',
+                                        'edit',
+                                        'view',
+                                    ],
+                                    'permissions' => ['authenticated'],
                                 ],
                             ],
                         ],

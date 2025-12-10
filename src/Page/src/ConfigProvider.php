@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Frontend\Page;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
+use Frontend\Page\Controller\CreatePageController;
+use Frontend\Page\Controller\HomeController;
 use Frontend\Page\Controller\PageController;
 use Frontend\Page\Service\PageService;
 use Frontend\Page\Service\PageServiceInterface;
@@ -29,6 +31,8 @@ class ConfigProvider
                 ],
             ],
             'factories'  => [
+                CreatePageController::class => AttributedServiceFactory::class,
+                HomeController::class => AttributedServiceFactory::class,
                 PageController::class => AttributedServiceFactory::class,
                 PageService::class    => AttributedServiceFactory::class,
             ],
@@ -43,6 +47,8 @@ class ConfigProvider
         return [
             'paths' => [
                 'page' => [__DIR__ . '/../templates/page'],
+                'home' => [__DIR__ . '/../templates/home'],
+                'create' => [__DIR__ . '/../templates/create'],
             ],
         ];
     }

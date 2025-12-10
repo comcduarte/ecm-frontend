@@ -16,7 +16,7 @@ class RoutesDelegator
         /** @var Application $app */
         $app = $callback();
 
-        $app->get('/', [PageController::class], 'home');
+        $app->get('/', [PageController::class], 'index');
 
         $app->route(
             '/page[/{action}]',
@@ -24,6 +24,20 @@ class RoutesDelegator
             [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_POST],
             'page'
         );
+        
+        $app->route(
+            '/home[/{action}]',
+            [Controller\HomeController::class],
+            [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],
+            'home',
+        );
+        
+        $app->route(
+            '/create[/{action}]',
+            [Controller\CreatePageController::class],
+            [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],
+            'create',
+            );
 
         return $app;
     }

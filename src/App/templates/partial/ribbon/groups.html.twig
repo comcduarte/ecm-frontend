@@ -1,0 +1,21 @@
+{% if group.permission is defined %}
+	{% if isGranted(group.permission) %}
+<!-- {{ group.name }} CARD -->
+<div class="card" style="flex: unset;">
+	{% if group.commands is defined %}
+	<div class="card-body">
+		{% for command in group.commands %}
+		{% include '@partial/ribbon/commands.html.twig' with {'command': command } %}
+		{% endfor %}
+	</div>
+	{% endif %}
+	<div class="d-flex card-footer">
+		<span class="flex-grow-1">{{ group.name }}</span>
+		<div class="d-inline-flex">
+			<i class="fas fa-caret-down"
+				style="color: lightgrey; transform: translateY(50%) translateX(100%) rotate(-45deg);"></i>
+		</div>
+	</div>
+</div>
+	{% endif %}
+{% endif %}

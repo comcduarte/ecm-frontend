@@ -1,0 +1,108 @@
+{% extends '@layout/default.html.twig' %}
+{% block title %}Workflow Dashboard{% endblock %}
+{% block body_class %}d-flex flex-column vh-100{% endblock %}
+
+{% block content %}
+	<div class="container-fluid p-0 h-100">
+		<div class="row h-100">
+			<div class="col col-3">
+				<div class="d-flex flex-column p-3 text-bg-dark h-100">
+					<a href="/"
+						class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+						<svg class="bi pe-none me-2" width="40" height="32"
+							aria-hidden="true">
+						<span class="fs-4">Contract Approval Process</span>
+					</a>
+					<hr>
+					<ul class="nav nav-pills flex-column mb-auto">
+						{% for id,queue in queues %}
+							{% if queue matches '/^ECM_[A-Z]{2}$/i' %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'dept', 'dept': id}) }}" class="nav-link text-white" aria-current="page"> 
+								<i class="fas fa-folder-open"></i>
+{# 								Department Manager Review <span class="badge text-bg-secondary">{{ contracts|length }}</span>#}
+								{{ queue|replace({'ECM_': ''}) }} Department Review
+							</a>
+						</li>
+							{% endif %}
+						{% endfor %}
+					
+						{% if 'ECM_LEGAL' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'legal'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-gavel"></i> 
+								Legal Review
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_RISK' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'risk'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-scale-balanced"></i>
+								Risk Review
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_MAYOR' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'mayor'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-building-columns"></i>
+								Mayors Office Review
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_PURCHASING' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'purchasing'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-money-bill-1-wave"></i>
+								Purchasing Review
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_VENDOR' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'vendor'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-store"></i>
+								Vendor Queue
+							</a>
+						</li>
+						{% endif %}
+						{% if 'ECM_DEPARTMENT' in queues %}
+						<li class="nav-item">
+							<a href="{{ url('workflow::dashboard', {'action': 'reject'}) }}" class="nav-link text-white" aria-current="page">
+								<i class="fas fa-handshake-slash"></i>
+								Department Reject Queue
+							</a>
+						</li>
+						{% endif %}
+					</ul>
+					<hr>
+				</div>
+			</div>
+
+			<div class="bg-white col col-9">
+				<table class="table table-sm table-hover">
+					<thead>
+						<tr>
+							<th scope="col"></td>
+							<th scope="col">Folder Id</td>
+							<th scope="col">Project Name</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% set index = 1 %}
+						{% for contract in contracts %}
+						<tr>
+							<th scope="row">{{ index }}</th>
+							<td><a href="{{ url('contract::view-contract-form', {'id': contract.folder_id}) }}">{{ contract.folder_id }}</a></td>
+							<td>{{ contract.project_name }}</td>
+						</tr>
+						{% set index = index + 1 %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+{% endblock %}

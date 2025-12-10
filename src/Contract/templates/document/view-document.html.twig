@@ -1,0 +1,101 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}View Document{% endblock %}
+{% block body_class %}vh-100{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 h-100">
+	<div class="row h-100">
+		<div class="bg-white col col-9">
+			<object class="vh-100" data="data:application/pdf;base64,{{ image }}" type="application/pdf" width="100%">
+				<p>Your browser will not display PDFs</p>
+			</object>
+		</div>
+		<div class="col col-3">
+			<div class="d-flex flex-column p-3 text-bg-dark">
+				<div class="accordion accordion-flush" id="accordionExample">
+					<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCm" aria-expanded="true" aria-controls="collapseCm">
+                				Comments
+                			</button>
+                		</h2>
+                		<div id="collapseCm" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for comment in comments.entries %}
+            					- {{ comment.message }}<br>
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                	<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMd" aria-expanded="true" aria-controls="collapseMd">
+                				Metadata
+                			</button>
+                		</h2>
+                		<div id="collapseMd" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for instance in metadata_instances.entries %}
+            					<p class='text-bg-dark text-uppercase text-decoration-underline fw-bold'>{{ instance['$template'] }}</p>    					
+            					{% for key,value in instance %}
+            						{% if "$" not in key %}
+            							- {{ key }}: {{ value }}<br>
+            						{% endif %}
+            					{% endfor %}
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                	<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSD" aria-expanded="true" aria-controls="collapseSD">
+                				Supporting Documentation
+                			</button>
+                		</h2>
+                		<div id="collapseSD" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for document in supporting_documentation.entries %}
+            					<a href="{{ url('document::view-document', {'id': document.id }) }}" class="button btn btn-primary text-bg-dark">{{ document.name }}</a><br>
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalAddComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+    		<div class="card mb-4">
+            	<div class="card-header d-flex justify-content-between">
+            		<div>
+            			<b>Add Comment</b>
+            		</div>
+            	</div>
+            	<div class="card-body">
+            	{{ form(form, {'method': 'GET'}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalAddSupportingDocumentation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+    		<div class="card mb-4">
+            	<div class="card-header d-flex justify-content-between">
+            		<div>
+            			<b>Upload Supporting Documentation</b>
+            		</div>
+            	</div>
+            	<div class="card-body">
+            	{{ form(uploadform, {'method': 'GET'}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
