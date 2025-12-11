@@ -73,7 +73,8 @@
 		"comcduarte/laminas-box" : "dev-develop",
 		"dotkernel/dot-form" : "~4.2",
 		"dotkernel/dot-router" : "~1.0",
-		"laminas/laminas-filter" : "*"
+		"laminas/laminas-filter" : "*",
+		"michelf/php-markdown" : "~2.0"
 	},
 	"require-dev" : {
 		"filp/whoops" : "^2.15.4",
