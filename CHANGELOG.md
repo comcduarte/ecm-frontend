@@ -3,7 +3,7 @@
 ## 1.0.2 - TBD
 
 ### Fixed
-* [1](https://github.com/comcduarte/ecm-frontend/issues/1): Cannot add supporting documentation from a supported document view.
+* Issue [#1](https://github.com/comcduarte/ecm-frontend/issues/1): Cannot add supporting documentation from a supported document view.
 
 ## 1.0.1 - 2025-12-11
 
