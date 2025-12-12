@@ -18,7 +18,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use comcduarte\Box\API\Exception\ClientErrorException;
 use comcduarte\Box\API\Resource\ClientError;
-use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Folder;
 use comcduarte\Box\API\Resource\Upload;
 use Throwable;
@@ -76,53 +75,9 @@ class PostUploadFileHandler implements RequestHandlerInterface
                     'PROJECT_NAME' => $instance->getProjectName(),
                 ];
                 
-                /**
-                 * Find contract object folder via file parents
-                 */
-                $file = new File($access_token);
-                $result = $file->get_file_information(preg_replace('/[a-z]*_([0-9]*)/','$1',$instance->parent));
-                
-                $data['file'] = $file->getArrayCopy();
-                
-                if ($result instanceof ClientError) {
-                    throw new ClientErrorException($result->message);
-                }
-                
-                for ($x = $file->path_collection->total_count; --$x; $x >= 0)
-                {
-                    /**
-                     * If no entry exists, move on.
-                     */
-                    if (!isset($file->path_collection->entries[$x]['id'])) {
-                        continue;
-                    }
-                    
-                    $parent = $file->path_collection->entries[$x]['id'];
-                    
-                    /**
-                     * If file is located within a SUPPORTING DOCUMENTATION folder
-                     * look one level higher.
-                     */
-                    if ($file->path_collection->entries[$x]['name'] == 'SUPPORTING DOCUMENTATION') {
-                        continue;
-                    }
-                    
-                    /**
-                     * If file was located within an amendment structure
-                     * look one level higher.
-                     */
-                    if (preg_match('/^AM/',$file->path_collection->entries[$x]['name'])) {
-                        continue;
-                    }
-                    
-                    /**
-                     * Contract Object Found
-                     */
-                    break;
-                }
                 
                 $parent_folder = new Folder($access_token);
-                $result = $parent_folder->get_folder_information($parent);
+                $result = $parent_folder->get_folder_information($data['instance']['contract-number']);
                 
                 if ($result instanceof ClientError) {
                     throw new ClientErrorException($result->message);
@@ -142,7 +97,7 @@ class PostUploadFileHandler implements RequestHandlerInterface
                 $upload = new Upload($access_token);
                 
                 
-                $filename = sprintf('%s.%s', $data['DOCTYPE'], pathinfo($data['FILE']->getClientFilename(), PATHINFO_EXTENSION));
+                $filename = sprintf('%s-%s', $data['DOCTYPE'], $data['FILE']->getClientFilename());
                 $attributes = [
                     'name' => $filename,
                     'parent' => [
