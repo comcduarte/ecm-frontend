@@ -153,6 +153,7 @@ class ConfigProvider
                 'contract' => [__DIR__ . '/../templates/contract'],
                 'document' => [__DIR__ . '/../templates/document'],
                 'document-partial' => [__DIR__ . '/../templates/document/partial'],
+                'notifications' => [__DIR__ . '/../templates/notifications'],
             ],
         ];
     }

@@ -30,6 +30,7 @@ use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Frontend\Contract\Middleware\NotificationMiddleware;
 
 class RoutesDelegator
 {
@@ -74,7 +75,7 @@ class RoutesDelegator
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
             ->get('/view/' . $box_id, [MetadataCorrectionMiddleware::class, GetViewContractHandler::class], 'contract::view-contract-form');
 
-        $routeCollector->group('/route')
+        $routeCollector->group('/route')->setMiddleware(NotificationMiddleware::class)
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')

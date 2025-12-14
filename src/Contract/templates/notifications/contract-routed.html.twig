@@ -1,0 +1,13 @@
+<table style="background-color: #F7F7F7; border-collapse: collapse; width: 600px; margin: auto; font-family: Trebuchet MS; table-layout: fixed;">
+    <tr>
+        <td style="padding: 0 15px 20px">
+            <p style="margin: 0; line-height: 24px;">Please log into the ECM Application to review the document and to execute the appropriate actions.</p>
+
+            <a href="{{ url('contract::view-contract-form', {'id': contract_number }) }}" target="_blank"
+               style="display: block; margin: 25px auto 40px auto; background-color: #C60B31; border: none; color: #fff; border-radius: 5px; padding: 10px 20px; font-size: 14px;
+            cursor: pointer; max-width: 140px; text-align: center; text-decoration: none;">
+                {{ contract_name }}
+            </a>
+        </td>
+    </tr>
+</table>
