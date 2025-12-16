@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Frontend\Contract;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
+use Frontend\Contract\Form\CreateAmendmentForm;
 use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\CreateDepartmentHeadCertificationForm;
 use Frontend\Contract\Form\CreateUCGSForm;
@@ -13,11 +14,14 @@ use Frontend\Contract\Form\CreateUCLaborForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
 use Frontend\Contract\Form\UploadFileForm;
+use Frontend\Contract\Form\Factory\CreateAmendmentFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCGSFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCLaborFormFactory;
 use Frontend\Contract\Form\Factory\UploadFileFormFactory;
 use Frontend\Contract\Form\Fieldset\DateFieldset;
 use Frontend\Contract\Form\Fieldset\SignatureFieldset;
+use Frontend\Contract\Handler\Amendment\GetCreateAmendmentFormHandler;
+use Frontend\Contract\Handler\Amendment\PostCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -39,6 +43,7 @@ use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
 use Frontend\Contract\Handler\UCLTS\PostCreateUCLTSHandler;
 use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Frontend\Contract\Middleware\NotificationMiddleware;
+use Frontend\Contract\Service\AmendmentService;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
@@ -110,6 +115,11 @@ class ConfigProvider
                 GetCreateUCGSFormHandler::class => AttributedServiceFactory::class,
                 PostCreateUCGSHandler::class => AttributedServiceFactory::class,
                 
+                //-- Amendment --//
+                CreateAmendmentForm::class => CreateAmendmentFormFactory::class,
+                GetCreateAmendmentFormHandler::class => AttributedServiceFactory::class,
+                PostCreateAmendmentFormHandler::class => AttributedServiceFactory::class,
+                
                 CreateUCLTSForm::class => ElementFactory::class,
                 GetCreateUCLTSFormHandler::class => AttributedServiceFactory::class,
                 PostCreateUCLTSHandler::class   => AttributedServiceFactory::class,
@@ -120,6 +130,7 @@ class ConfigProvider
                 EditContractForm::class             => ElementFactory::class,
                 
                 ContractService::class => AttributedServiceFactory::class,
+                AmendmentService::class => AttributedServiceFactory::class,
                 
                 NotificationMiddleware::class => AttributedServiceFactory::class,
                 MetadataCorrectionMiddleware::class => AttributedServiceFactory::class,
@@ -151,6 +162,7 @@ class ConfigProvider
         return [
             'paths' => [
                 'contract' => [__DIR__ . '/../templates/contract'],
+                'amendment' => [__DIR__ . '/../templates/amendment'],
                 'document' => [__DIR__ . '/../templates/document'],
                 'document-partial' => [__DIR__ . '/../templates/document/partial'],
                 'notifications' => [__DIR__ . '/../templates/notifications'],
