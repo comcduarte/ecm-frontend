@@ -6,6 +6,8 @@ namespace Frontend\Contract;
 
 use Core\Contract\ConfigProvider;
 use Dot\Router\RouteCollectorInterface;
+use Frontend\Contract\Handler\Amendment\GetCreateAmendmentFormHandler;
+use Frontend\Contract\Handler\Amendment\PostCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -26,6 +28,7 @@ use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
 use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
 use Frontend\Contract\Handler\UCLTS\PostCreateUCLTSHandler;
 use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
+use Frontend\Contract\Middleware\NotificationMiddleware;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -48,6 +51,11 @@ class RoutesDelegator
         /** @var RouteCollectorInterface $routeCollector */
         $routeCollector = $container->get(RouteCollectorInterface::class);
 
+        $routeCollector->group('/amendment')
+            ->get('/create', GetCreateAmendmentFormHandler::class, 'amendment::get-create')
+            ->post('/create', PostCreateAmendmentFormHandler::class, 'amendment::post-create');
+        
+        
         $routeCollector->group('/contract')
             ->get('/select', GetSelectContractHandler::class, 'contract::select-contract')
             
@@ -57,8 +65,6 @@ class RoutesDelegator
             ->get('/create/ucgs', GetCreateUCGSFormHandler::class, 'contract::create-ucgs-form')
             ->post('/post/ucgs', PostCreateUCGSHandler::class, 'contract::post-ucgs-form')
             
-            
-        
             ->get('/create/{form}', GetCreateContractFormHandler::class, 'contract::create-contract-form')
             ->post('/create', PostCreateContractHandler::class, 'contract::create-contract')
             
@@ -74,7 +80,7 @@ class RoutesDelegator
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
             ->get('/view/' . $box_id, [MetadataCorrectionMiddleware::class, GetViewContractHandler::class], 'contract::view-contract-form');
 
-        $routeCollector->group('/route')
+        $routeCollector->group('/route')->setMiddleware(NotificationMiddleware::class)
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
