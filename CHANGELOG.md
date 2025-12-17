@@ -1,10 +1,20 @@
 # Changelog
 
+## 1.0.3 - TBD
+
+* Issue [#6](https://github.com/comcduarte/ecm-frontend/issues/6):Remove SUPPORTING DOCUMENTATION from Workflow view
+
 ## 1.0.2 - 2025-12-12
+
+### Added
+
+* Issue [#3](https://github.com/comcduarte/ecm-frontend/issues/3): Select Contract provides option to upload Amendment
 
 ### Fixed
 
 * Issue [#1](https://github.com/comcduarte/ecm-frontend/issues/1): Cannot add supporting documentation from a supported document view.
+* Issue [#2](https://github.com/comcduarte/ecm-frontend/issues/2): Enable Notification Emails
+* Issue [#4](https://github.com/comcduarte/ecm-frontend/issues/4): Cabinet is not listing all contracts
 
 ## 1.0.1 - 2025-12-11
 
