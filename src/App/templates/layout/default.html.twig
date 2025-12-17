@@ -26,7 +26,7 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body class="app {% block body_class %}{% endblock %}">
-        <header class="app-header fixed-top">
+        <header class="app-header fixed-top text-bg-light">
 		    {% include('@partial/ribbon.html.twig') with {'active': active|default('home')} %} 
         </header>
 
