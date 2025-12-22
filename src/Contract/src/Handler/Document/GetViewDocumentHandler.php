@@ -7,6 +7,7 @@ use Dot\DependencyInjection\Attribute\Inject;
 use Dot\FlashMessenger\FlashMessengerInterface;
 use Frontend\App\Service\AccessTokenService;
 use Frontend\Contract\Form\CreateCommentForm;
+use Frontend\Contract\Form\SignContractModalForm;
 use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -31,6 +32,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         FlashMessengerInterface::class,
         CreateCommentForm::class,
         UploadFileForm::class,
+        SignContractModalForm::class,
         RouterInterface::class,
         ContractServiceInterface::class,
         )]
@@ -40,6 +42,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         protected FlashMessengerInterface $messenger,
         protected CreateCommentForm $addCommentForm,
         protected UploadFileForm $uploadFileForm,
+        protected SignContractModalForm $signForm,
         protected RouterInterface $router,
         protected ContractServiceInterface $contractService,
         ){}
@@ -109,6 +112,8 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $this->uploadFileForm->remove('DEPARTMENT')->remove('PROJECT_NAME');
         $this->uploadFileForm->prepare();
         
+        $this->signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $contract_number, 'file_id' => $file_id]));
+        
         /**
          * Supporting Documentation
          */
@@ -125,6 +130,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'comments' => $comments,
                 'metadata_instances' => $instances,
                 'form' => $this->addCommentForm->prepare(),
+                'signForm' => $this->signForm->prepare(),
                 'uploadform' => $this->uploadFileForm,
                 'id' => $contract_number,
                 'file_id' => $file_id,

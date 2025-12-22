@@ -154,7 +154,8 @@
 		            'signature': {
 		            	'name': 'Sign Documents',
 		                'icon': 'signature',
-		                'url': url('route::sign', {'folder_id': id|default(0), 'file_id': file_id|default(0) }),
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalSignContract',
 		                'permission': 'ECM_MAYOR'
 		            },
 					'notes': {

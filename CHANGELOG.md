@@ -1,8 +1,9 @@
 # Changelog
 
-## 1.0.3 - TBD
+## 1.0.3 - 2025-12-22
 
 * Issue [#6](https://github.com/comcduarte/ecm-frontend/issues/6):Remove SUPPORTING DOCUMENTATION from Workflow view
+* Issue [#8](https://github.com/comcduarte/ecm-frontend/issues/8):Enable Box Sign Requests
 
 ## 1.0.2 - 2025-12-12
 

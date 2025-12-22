@@ -6,6 +6,7 @@ namespace Frontend\Contract;
 
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\Contract\Form\CreateAmendmentForm;
+use Frontend\Contract\Form\CreateCCForm;
 use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\CreateDepartmentHeadCertificationForm;
 use Frontend\Contract\Form\CreateUCGSForm;
@@ -13,15 +14,20 @@ use Frontend\Contract\Form\CreateUCLTSForm;
 use Frontend\Contract\Form\CreateUCLaborForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
+use Frontend\Contract\Form\SignContractModalForm;
 use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Form\Factory\CreateAmendmentFormFactory;
+use Frontend\Contract\Form\Factory\CreateCCFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCGSFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCLaborFormFactory;
+use Frontend\Contract\Form\Factory\SignContractModalFormFactory;
 use Frontend\Contract\Form\Factory\UploadFileFormFactory;
 use Frontend\Contract\Form\Fieldset\DateFieldset;
 use Frontend\Contract\Form\Fieldset\SignatureFieldset;
 use Frontend\Contract\Handler\Amendment\GetCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\Amendment\PostCreateAmendmentFormHandler;
+use Frontend\Contract\Handler\CC\GetCreateCCFormHandler;
+use Frontend\Contract\Handler\CC\PostCreateCCHandler;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -37,6 +43,7 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Handler\Route\PostRouteSignHandler;
 use Frontend\Contract\Handler\UCGS\GetCreateUCGSFormHandler;
 use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
 use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
@@ -107,6 +114,10 @@ class ConfigProvider
                 CreateCommentForm::class            => ElementFactory::class,
                 UploadFileForm::class               => UploadFileFormFactory::class,
                 
+                //-- Sign Contract --//
+                PostRouteSignHandler::class         => AttributedServiceFactory::class,
+                SignContractModalForm::class        => SignContractModalFormFactory::class,
+                
                 //-- Custom Forms --//
                 CreateUCLaborForm::class            => CreateUCLaborFormFactory::class,
                 CreateDepartmentHeadCertificationForm::class => ElementFactory::class,
@@ -119,6 +130,11 @@ class ConfigProvider
                 CreateAmendmentForm::class => CreateAmendmentFormFactory::class,
                 GetCreateAmendmentFormHandler::class => AttributedServiceFactory::class,
                 PostCreateAmendmentFormHandler::class => AttributedServiceFactory::class,
+                
+                //-- Cooperative Contract --//
+                CreateCCForm::class             => CreateCCFormFactory::class,
+                GetCreateCCFormHandler::class   => AttributedServiceFactory::class,
+                PostCreateCCHandler::class      => AttributedServiceFactory::class,
                 
                 CreateUCLTSForm::class => ElementFactory::class,
                 GetCreateUCLTSFormHandler::class => AttributedServiceFactory::class,
