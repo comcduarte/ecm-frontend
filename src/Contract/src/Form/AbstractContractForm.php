@@ -6,10 +6,12 @@ namespace Frontend\Contract\Form;
 use Frontend\App\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\Submit;
+use Laminas\InputFilter\InputFilterProviderInterface;
 use Laminas\Session\Container;
 
-abstract class AbstractContractForm extends AbstractForm
+abstract class AbstractContractForm extends AbstractForm implements InputFilterProviderInterface
 {
+    
     public function __construct(?string $name = null, array $options = [])
     {
         parent::__construct($name, $options);

@@ -13,6 +13,14 @@
 		</div>
 		<div class="col col-3">
 			<div class="d-flex flex-column p-3 text-bg-dark">
+			{% for instance in metadata_instances.entries %}
+				{% if instance['project-name'] is defined %}
+					<a href="{{ url('contract::view-contract-form', {'id': id }) }}" class="button btn btn-light text-bg-light">{{ instance['project-name'] }}</a>
+				{% endif %}
+				
+			{% endfor %}
+			</div>
+			<div class="d-flex flex-column p-3 text-bg-dark">
 				<div class="accordion accordion-flush" id="accordionExample">
 					<div class="accordion-item">
                 		<h2 class="accordion-header">
@@ -77,6 +85,22 @@
             	</div>
             	<div class="card-body">
             	{{ form(form, {'method': 'GET'}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalSignContract" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+    		<div class="card mb-4">
+            	<div class="card-header d-flex justify-content-between">
+            		<div>
+            			<b>Sign Contract</b>
+            		</div>
+            	</div>
+            	<div class="card-body">
+            	{{ form(signForm, {'method': 'GET'}) }}
 				</div>
 			</div>
 		</div>

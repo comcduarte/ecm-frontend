@@ -8,6 +8,8 @@ use Core\Contract\ConfigProvider;
 use Dot\Router\RouteCollectorInterface;
 use Frontend\Contract\Handler\Amendment\GetCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\Amendment\PostCreateAmendmentFormHandler;
+use Frontend\Contract\Handler\CC\GetCreateCCFormHandler;
+use Frontend\Contract\Handler\CC\PostCreateCCHandler;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -23,6 +25,7 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Handler\Route\PostRouteSignHandler;
 use Frontend\Contract\Handler\UCGS\GetCreateUCGSFormHandler;
 use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
 use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
@@ -55,7 +58,10 @@ class RoutesDelegator
             ->get('/create', GetCreateAmendmentFormHandler::class, 'amendment::get-create')
             ->post('/create', PostCreateAmendmentFormHandler::class, 'amendment::post-create');
         
-        
+        $routeCollector->group('/cc')
+            ->get('/create', GetCreateCCFormHandler::class, 'cc::get-create')
+            ->post('/create', PostCreateCCHandler::class, 'cc::post-create');
+            
         $routeCollector->group('/contract')
             ->get('/select', GetSelectContractHandler::class, 'contract::select-contract')
             
@@ -86,9 +92,11 @@ class RoutesDelegator
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
             ->get('/mayor/' . $box_id , PostRouteContractHandler::class, 'route::mayor')
             ->get('/vendor/' . $box_id , PostRouteContractHandler::class, 'route::vendor')
-            ->get('/sign/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteContractHandler::class, 'route::sign')
             ->get('/reject/' . $box_id , PostRouteContractHandler::class, 'route::reject');
-            
+        
+        $routeCollector->group('/sign')
+            ->post('/contract/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteSignHandler::class, 'route::sign');
+        
         $routeCollector->group('/document')
             ->get('/view/' . $box_id, GetViewDocumentHandler::class, 'document::view-document')
             ->post('/view/' . $box_id, PostCreateCommentHandler::class, 'document::create-comment')

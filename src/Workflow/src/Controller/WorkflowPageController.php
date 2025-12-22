@@ -116,10 +116,11 @@ class WorkflowPageController extends AbstractActionController
             'ancestor_folder_id' => QueueFolderEnum::ECM_ONBASE->value,
             'template_key' => "ecm-application",
             'scope' => "enterprise_" . $this->config['box-config']->enterpriseID,
-            'query' => "queue = :val AND item.type = :type",
+            'query' => "(queue = :val AND item.type = :type) AND item.name <> :suppdoc",
             'query_params' => [
                 'val' => $case->value,
                 'type' => 'folder',
+                'suppdoc' => 'SUPPORTING DOCUMENTATION',
             ],
         ]);
         
