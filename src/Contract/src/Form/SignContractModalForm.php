@@ -6,6 +6,7 @@ use Laminas\Filter\StringTrim;
 use Laminas\Filter\StripTags;
 use Laminas\Form\Element\Text;
 use Laminas\Validator\EmailAddress;
+use Laminas\Form\Element\Hidden;
 
 class SignContractModalForm extends AbstractContractForm
 {
@@ -34,15 +35,34 @@ class SignContractModalForm extends AbstractContractForm
             $email->setName("EMAIL_$i");
             $this->add($email);
         }
+        
+        $this->add([
+            'name' => 'NUM_EMAILS',
+            'type' => Hidden::class,
+            'attributes' => [
+                'id' => 'NUM_EMAILS',
+                'class' => 'form-control',
+                'value' => $this->num_emails,
+            ],
+            'options' => [
+                'label' => 'NUM_EMAILS',
+            ],
+        ]);
     }
 
     public function getInputFilterSpecification(): array
     {
         $spec = [];
+        $i = 0;
+        
+        while (true) {
+//         for ($i = 0; $i < $this->num_emails; $i ++) {
+            $key = "EMAIL_" . $i++;
 
-        for ($i = 0; $i < $this->num_emails; $i ++) {
-            $key = "EMAIL_$i";
-
+            if (!isset($this->elements[$key])) {
+                break;
+            }
+            
             $spec[$key] = [
 
                 'required' => true,

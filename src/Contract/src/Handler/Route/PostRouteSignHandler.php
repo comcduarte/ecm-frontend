@@ -49,6 +49,8 @@ class PostRouteSignHandler implements RequestHandlerInterface
         
         try {
             $data = $request->getParsedBody();
+            $this->form->num_emails = $data['NUM_EMAILS'];
+            $this->form->init();
             $this->form->setData($data);
             
             if ($this->form->isValid()) {

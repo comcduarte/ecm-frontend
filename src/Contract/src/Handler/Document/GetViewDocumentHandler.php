@@ -32,7 +32,6 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         FlashMessengerInterface::class,
         CreateCommentForm::class,
         UploadFileForm::class,
-        SignContractModalForm::class,
         RouterInterface::class,
         ContractServiceInterface::class,
         )]
@@ -42,7 +41,6 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         protected FlashMessengerInterface $messenger,
         protected CreateCommentForm $addCommentForm,
         protected UploadFileForm $uploadFileForm,
-        protected SignContractModalForm $signForm,
         protected RouterInterface $router,
         protected ContractServiceInterface $contractService,
         ){}
@@ -51,6 +49,9 @@ class GetViewDocumentHandler implements RequestHandlerInterface
     {
         $access_token = $this->accessTokenService->getAccessToken();
         $file_id = $request->getAttribute('id');
+        
+        $signForm = new SignContractModalForm();
+        
         /**
          * Get Document
          */
@@ -92,6 +93,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         foreach ($instances->entries as $index => $x) {
             if ($x['$template'] == 'ecm-application') {
                 $contract_number = $x['contract-number'];
+                $signForm->num_emails++;
                 continue;
             }
             
@@ -102,7 +104,14 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                  */
                 unset($instances->entries[$index]);
             }
+            
+            if ($x['$template'] == 'vendor') {
+                $signForm->num_emails++;
+                continue;
+            }
         }
+        
+        $signForm->init();
         
         /**
          * Upload File Form
@@ -112,7 +121,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $this->uploadFileForm->remove('DEPARTMENT')->remove('PROJECT_NAME');
         $this->uploadFileForm->prepare();
         
-        $this->signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $contract_number, 'file_id' => $file_id]));
+        $signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $contract_number, 'file_id' => $file_id]));
         
         /**
          * Supporting Documentation
@@ -130,7 +139,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'comments' => $comments,
                 'metadata_instances' => $instances,
                 'form' => $this->addCommentForm->prepare(),
-                'signForm' => $this->signForm->prepare(),
+                'signForm' => $signForm->prepare(),
                 'uploadform' => $this->uploadFileForm,
                 'id' => $contract_number,
                 'file_id' => $file_id,
