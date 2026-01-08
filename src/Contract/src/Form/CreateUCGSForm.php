@@ -4,22 +4,18 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Form;
 
-use Frontend\App\Form\AbstractForm;
-use Frontend\Contract\InputFilter\CreateUCGSInputFilter;
-use Laminas\Form\Element\Csrf;
+use Frontend\Contract\Form\Fieldset\SignatureFieldset;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Select;
-use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\ExceptionInterface;
-use Laminas\Session\Container;
 
 /**
  * @phpstan-import-type CreateUCGSDataType from CreateUCGSInputFilter
  * @extends AbstractForm<CreateUCGSDataType>
  */
-class CreateUCGSForm extends AbstractForm
+class CreateUCGSForm extends AbstractContractForm
 {
     /**
      * @throws ExceptionInterface
@@ -36,8 +32,8 @@ class CreateUCGSForm extends AbstractForm
         $this->setAttribute('class', 'row g-3 needs-validation');
         $this->setAttribute('novalidate', 'novalidate');
 
-        $this->inputFilter = new CreateUCGSInputFilter();
-        $this->inputFilter->init();
+//         $this->inputFilter = new CreateUCGSInputFilter();
+//         $this->inputFilter->init();
     }
 
     /**
@@ -45,20 +41,17 @@ class CreateUCGSForm extends AbstractForm
      */
     public function init(): void
     {
+        parent::init();
+        
         $this->add([
             'name' => 'DOCTYPE',
-            'type' => Select::class,
+            'type' => Hidden::class,
             'attributes' => [
                 'id' => 'DOCTYPE',
                 'class' => 'form-control',
             ],
             'options' => [
                 'label' => 'Document Type',
-                'value_options' => [
-                    'contract' => 'Contract',
-                    'legal-opinion' => 'Legal Opinion',
-                    'amendment' => 'Amendment',
-                ],
             ],
         ]);
         
@@ -167,6 +160,11 @@ class CreateUCGSForm extends AbstractForm
             ],
         ]);
         
+        $vendor = new SignatureFieldset('VENDOR');
+        $vendor->setLabel('Vendor Information');
+        $vendor->init();
+        $this->add($vendor);
+        
         $this->add([
             'name' => 'DEPARTMENT',
             'type' => Select::class,
@@ -195,7 +193,7 @@ class CreateUCGSForm extends AbstractForm
         
         $this->add([
             'name' => 'TYPE',
-            'type' => Select::class,
+            'type' => Hidden::class,
             'attributes' => [
                 'id' => 'TYPE',
                 'class' => 'form-control',
@@ -205,18 +203,5 @@ class CreateUCGSForm extends AbstractForm
             ],
         ],['priority' => 100]);
         
-        $this->add(
-            (new Csrf('createUCGSCsrf'))
-                ->setOptions([
-                    'csrf_options' => ['timeout' => 3600, 'session' => new Container()],
-                ])
-                ->setAttribute('required', true)
-        );
-        $this->add(
-            (new Submit('submit'))
-                ->setAttribute('type', 'submit')
-                ->setAttribute('value', 'Save')
-                ->setAttribute('class', 'btn btn-primary btn-color btn-sm')
-        );
     }
 }

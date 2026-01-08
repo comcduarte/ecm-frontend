@@ -14,6 +14,7 @@ class CreateUCGSFormFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $form = new CreateUCGSForm();
+        $form->init();
         
         $templateService = $container->get(TemplateServiceInterface::class);
         
@@ -24,18 +25,15 @@ class CreateUCGSFormFactory implements FactoryInterface
         $form->get('DEPARTMENT')->setOptions($options);
         
         
+        $templateService = $container->get(TemplateServiceInterface::class);
         $templates = $templateService->getTemplates();
-        
-        $options = [
-            'value_options' => [
-            ],
-        ];
-        foreach ($templates as $template) 
+        foreach ($templates as $template)
         {
-            $options['value_options'][$template['id']] = $template['name'];
+            if ($template['name'] == '2025 Uniform Contract for Goods and Services.docx') {
+                $form->get('TYPE')->setAttribute('value', $template['id']);
+            }
         }
         
-        $form->get('TYPE')->setOptions($options);
         return $form;
     }
 }
