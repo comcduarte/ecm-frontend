@@ -10,6 +10,8 @@ use Frontend\Contract\Form\CreateCommentForm;
 use Frontend\Contract\Form\SignContractModalForm;
 use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Service\ContractServiceInterface;
+use Frontend\User\Entity\UserIdentity;
+use Laminas\Authentication\AuthenticationServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
@@ -34,6 +36,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         UploadFileForm::class,
         RouterInterface::class,
         ContractServiceInterface::class,
+        AuthenticationServiceInterface::class,
         )]
     public function __construct(
         protected AccessTokenService $accessTokenService,
@@ -43,6 +46,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         protected UploadFileForm $uploadFileForm,
         protected RouterInterface $router,
         protected ContractServiceInterface $contractService,
+        protected AuthenticationServiceInterface $authenticationService,
         ){}
     
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -106,12 +110,25 @@ class GetViewDocumentHandler implements RequestHandlerInterface
             }
             
             if ($x['$template'] == 'vendor') {
+                $vendor_email_address = $x['email-address'];
                 $signForm->num_emails++;
                 continue;
             }
         }
         
         $signForm->init();
+        
+        /**
+         * Default email is always the logged in user 
+         * @var  UserIdentity $identity
+         */
+        $identity = $this->authenticationService->getIdentity();
+        $signForm->get('EMAIL_0')->setValue($identity->getIdentity());
+        
+        if (isset($vendor_email_address)) {
+            $field = sprintf('EMAIL_%d', intval($signForm->num_emails - 1));
+            $signForm->get($field)->setValue($vendor_email_address);
+        }
         
         /**
          * Upload File Form
