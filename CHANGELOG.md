@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4
+
+* Issue [#10](https://github.com/comcduarte/ecm-frontend/issues/10) Add vendor(s) to BoxSignRequest
+* Issue [#7](https://github.com/comcduarte/ecm-frontend/issues/7) Add Cooperative Contract Template
+
 ## 1.0.3 - 2025-12-22
 
 * Issue [#6](https://github.com/comcduarte/ecm-frontend/issues/6):Remove SUPPORTING DOCUMENTATION from Workflow view
