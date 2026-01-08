@@ -4,6 +4,7 @@
 
 * Issue [#10](https://github.com/comcduarte/ecm-frontend/issues/10) Add vendor(s) to BoxSignRequest
 * Issue [#7](https://github.com/comcduarte/ecm-frontend/issues/7) Add Cooperative Contract Template
+* Issue [#11](https://github.com/comcduarte/ecm-frontend/issues/11) Add vendor metadata instance to object
 
 ## 1.0.3 - 2025-12-22
 
