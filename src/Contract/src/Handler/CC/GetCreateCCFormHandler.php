@@ -31,10 +31,10 @@ class GetCreateCCFormHandler implements RequestHandlerInterface
         ServerRequestInterface $request,
     ): ResponseInterface {
         $this->createCCForm
-            ->setAttribute('action', $this->router->generateUri('c-c::create-c-c'));
+            ->setAttribute('action', $this->router->generateUri('cc::post-create'));
 
         return new HtmlResponse(
-            $this->template->render('c-c::create-c-c-form', [
+            $this->template->render('contract::create-contract-form', [
                 'form' => $this->createCCForm->prepare(),
             ])
         );

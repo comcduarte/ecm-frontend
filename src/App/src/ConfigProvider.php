@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\App\Factory\EntityListenerResolverFactory;
+use Frontend\App\Form\View\Helper\FormElementErrorsFactory;
 use Frontend\App\Middleware\RememberMeMiddleware;
 use Frontend\App\Resolver\EntityListenerResolver;
 use Frontend\App\Service\AccessTokenService;
@@ -26,6 +27,7 @@ class ConfigProvider
             'dependencies' => $this->getDependencies(),
             'doctrine'     => $this->getDoctrineConfig(),
             'templates'    => $this->getTemplates(),
+            'view_helpers' => $this->getViewHelpers(),
         ];
     }
 
@@ -75,6 +77,20 @@ class ConfigProvider
                 'error'   => [__DIR__ . '/../templates/error'],
                 'layout'  => [__DIR__ . '/../templates/layout'],
                 'partial' => [__DIR__ . '/../templates/partial'],
+            ],
+        ];
+    }
+    
+    public function getViewHelpers(): array
+    {
+        return [
+            'factories' => [
+                \Laminas\Form\View\Helper\FormElementErrors::class => FormElementErrorsFactory::class,
+            ],
+            'config' => [
+                'form_element_errors' => [
+                    'attributes' => ['class' => 'alert alert-danger'],
+                ],
             ],
         ];
     }

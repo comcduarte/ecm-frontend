@@ -53,6 +53,8 @@ class PostCreateUCGSHandler implements RequestHandlerInterface
             if ($this->createUCGSForm->isValid()) {
                 $data = $this->createUCGSForm->getData();
                 
+                $data['DOCTYPE'] = 'Contract';
+                
                 /**
                  * Create Contract
                  */

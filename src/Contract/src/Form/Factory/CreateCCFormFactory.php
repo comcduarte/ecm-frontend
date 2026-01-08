@@ -4,19 +4,17 @@ declare(strict_types=1);
 namespace Frontend\Contract\Form\Factory;
 
 use Core\Contract\Enum\QueueFolderEnum;
-use Frontend\Contract\Form\CreateUCGSForm;
+use Frontend\Contract\Form\CreateCCForm;
 use Frontend\Template\Service\TemplateServiceInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
-class CreateUCGSFormFactory implements FactoryInterface
+class CreateCCFormFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $form = new CreateUCGSForm();
+        $form = new CreateCCForm();
         $form->init();
-        
-        $templateService = $container->get(TemplateServiceInterface::class);
         
         foreach (QueueFolderEnum::cases() as $dept) {
             $options['value_options'][$dept->value] = $dept->name;
@@ -24,12 +22,11 @@ class CreateUCGSFormFactory implements FactoryInterface
         $options['empty_option'] = 'Choose Department...';
         $form->get('DEPARTMENT')->setOptions($options);
         
-        
         $templateService = $container->get(TemplateServiceInterface::class);
         $templates = $templateService->getTemplates();
         foreach ($templates as $template)
         {
-            if ($template['name'] == '2025 Uniform Contract for Goods and Services.docx') {
+            if ($template['name'] == '2025 Cooperative Contract.docx') {
                 $form->get('TYPE')->setAttribute('value', $template['id']);
             }
         }

@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Form;
 
-use Frontend\App\Form\AbstractForm;
+use Laminas\Filter\StringTrim;
+use Laminas\Filter\StripTags;
+use Laminas\Form\Form;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\Submit;
 use Laminas\InputFilter\InputFilterProviderInterface;
 use Laminas\Session\Container;
+use Laminas\Validator\NotEmpty;
 
-abstract class AbstractContractForm extends AbstractForm implements InputFilterProviderInterface
+abstract class AbstractContractForm extends Form implements InputFilterProviderInterface
 {
     
     public function __construct(?string $name = null, array $options = [])
@@ -36,5 +39,22 @@ abstract class AbstractContractForm extends AbstractForm implements InputFilterP
                 'id' => 'SUBMIT',
             ],
         ],['priority' => -100]);
+    }
+    
+    public function getInputFilterSpecification()
+    {
+        
+        return [
+            'createContractCsrf' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+        ];
     }
 }

@@ -2,12 +2,20 @@
 declare(strict_types = 1);
 namespace Frontend\Contract\Form\Fieldset;
 
+use Frontend\Contract\InputFilter\Input\TextInput;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Element\Text;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
-class SignatureFieldset extends Fieldset
+class SignatureFieldset extends Fieldset implements InputFilterProviderInterface
 {
-
+    public function __construct($name = 'SignatureFieldset', $options = [])
+    {
+        parent::__construct($name, $options);
+        
+        $this->setAttribute('class', 'form-control');
+    }
+    
     public function init(): void
     {
         $this->add([
@@ -15,7 +23,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'FNAME',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'First Name'
@@ -27,7 +36,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'LNAME',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'Last Name'
@@ -39,7 +49,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'COMPANY',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'Company'
@@ -51,7 +62,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'ADDRESS',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'Address'
@@ -63,7 +75,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'CITY',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'City'
@@ -75,7 +88,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'STATE',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'State'
@@ -87,7 +101,8 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'ZIP',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => 'Postal Code'
@@ -99,11 +114,37 @@ class SignatureFieldset extends Fieldset
             'type' => Text::class,
             'attributes' => [
                 'id' => 'EMAIL',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => true,
             ],
             'options' => [
                 'label' => ' Email Address'
             ]
         ]);
+    }
+    
+    public function getInputFilterSpecification()
+    {
+        return [
+            'FNAME' => new TextInput('FNAME', true),
+            'LNAME' => new TextInput('LNAME', true),
+            'COMPANY' => new TextInput('COMPANY', true),
+            'ADDRESS' => new TextInput('ADDRESS', true),
+            'CITY' => new TextInput('CITY', true),
+            'STATE' => new TextInput('STATE', true),
+            'ZIP' => new TextInput('ZIP', true),
+            'EMAIL' => [
+                'required' => true,
+                'allow_empty' => false,
+                'filters' => [
+                    ['name' => 'StringTrim'],
+                    ['name' => 'StripTags'],
+                ],
+                'validators' => [
+                    ['name' => 'EmailAddress'],
+                    ['name' => 'NotEmpty'],
+                ],
+            ],
+        ];
     }
 }

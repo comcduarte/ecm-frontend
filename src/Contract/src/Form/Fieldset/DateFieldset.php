@@ -5,8 +5,9 @@ namespace Frontend\Contract\Form\Fieldset;
 
 use Laminas\Form\Fieldset;
 use Laminas\Form\Element\Text;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
-class DateFieldset extends Fieldset
+class DateFieldset extends Fieldset implements InputFilterProviderInterface
 {
     public function init(): void
     {
@@ -45,5 +46,56 @@ class DateFieldset extends Fieldset
                 'label' => 'Execution Date'
             ]
         ]);
+    }
+
+    public function getInputFilterSpecification()
+    {
+        return [
+            'START_DATE' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => 'StringTrim'],
+                    ['name' => 'StripTags'],
+                ],
+                'validators' => [
+                    [
+                        'name' => 'Date',
+                        'options' => [
+                            'format' => 'Y-m-d'
+                        ]
+                    ],
+                ],
+            ],
+            'END_DATE' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => 'StringTrim'],
+                    ['name' => 'StripTags'],
+                ],
+                'validators' => [
+                    [
+                        'name' => 'Date',
+                        'options' => [
+                            'format' => 'Y-m-d'
+                        ]
+                    ],
+                ],
+            ],
+            'EXEC_DATE' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => 'StringTrim'],
+                    ['name' => 'StripTags'],
+                ],
+                'validators' => [
+                    [
+                        'name' => 'Date',
+                        'options' => [
+                            'format' => 'Y-m-d'
+                        ]
+                    ],
+                ],
+            ],
+        ];
     }
 }

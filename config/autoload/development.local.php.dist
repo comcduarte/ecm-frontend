@@ -18,7 +18,19 @@ use Mezzio\Middleware\ErrorResponseGenerator;
 return [
     'application'         => [
         'name' => 'Electronic Contract Manager',
-        'url'  => 'https://api.ecm.dev.local',
+        'url'  => 'https://ecm.dev.local',
+    ],
+    'databases' => [
+        'default' => [
+            'host'     => 'it-webdb02.midnet.cityofmiddletown.com',
+            'dbname'   => 'ecm_dev',
+            'user'     => 'ecm',
+            'password' => 'Lb64z9UivUKPwduFb4ap',
+            'port'     => 3306,
+            'driver'   => 'pdo_mysql',
+            'charset'  => 'utf8mb4',
+            'collate'  => 'utf8mb4_general_ci',
+        ],
     ],
     'box-config' => json_decode(file_get_contents(realpath(__DIR__ . '/../../config/autoload/1328932288_vgguurzc_config.json'))),
     'dependencies' => [
