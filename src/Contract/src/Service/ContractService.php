@@ -192,22 +192,24 @@ class ContractService implements ContractServiceInterface
         /**
          * Vendor Instance
          */
-        $vendor = new Vendor($access_token);
-        $template_key = $vendor::templateKey;
-        $instance = [
-            'first-name'    => $data['VENDOR']['FNAME'],
-            'last-name'     => $data['VENDOR']['LNAME'],
-            'company-name'  => $data['VENDOR']['COMPANY'],
-            'address'       => $data['VENDOR']['ADDRESS'],
-            'city'          => $data['VENDOR']['CITY'],
-            'state'         => $data['VENDOR']['STATE'],
-            'postal-code'   => $data['VENDOR']['ZIP'],
-            'email-address' => $data['VENDOR']['EMAIL'],
-        ];
-        $result = $metadata_instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
-        
-        if ($result instanceof ClientError) {
-            throw new ClientErrorException("Unable to assign $template_key metadata instance to folder.");
+        if (isset($data['VENDOR'])) {
+            $vendor = new Vendor($access_token);
+            $template_key = $vendor::templateKey;
+            $instance = [
+                'first-name'    => $data['VENDOR']['FNAME'],
+                'last-name'     => $data['VENDOR']['LNAME'],
+                'company-name'  => $data['VENDOR']['COMPANY'],
+                'address'       => $data['VENDOR']['ADDRESS'],
+                'city'          => $data['VENDOR']['CITY'],
+                'state'         => $data['VENDOR']['STATE'],
+                'postal-code'   => $data['VENDOR']['ZIP'],
+                'email-address' => $data['VENDOR']['EMAIL'],
+            ];
+            $result = $metadata_instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
+            
+            if ($result instanceof ClientError) {
+                throw new ClientErrorException("Unable to assign $template_key metadata instance to folder.");
+            }
         }
         
         return $contract;
