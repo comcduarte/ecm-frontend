@@ -55,6 +55,22 @@
                 			</div>
                 		</div>
                 	</div>
+                	<!-- BEGIN AMENDMENTS -->
+                	<div class="accordion-item">
+                		<h2 class="accordion-header">
+                			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAD" aria-expanded="true" aria-controls="collapseAD">
+                				Amendments
+                			</button>
+                		</h2>
+                		<div id="collapseAD" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                			<div class="accordion-body">
+                            {% for contract in amendments.entries %}
+            					<a href="{{ url('contract::view-contract-form', {'id': contract.id }) }}" class="button btn btn-primary text-bg-dark">{{ contract.name }}</a><br>
+            				{% endfor %}
+                			</div>
+                		</div>
+                	</div>
+                	<!-- END AMENDMENTS -->
                 	<div class="accordion-item">
                 		<h2 class="accordion-header">
                 			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSD" aria-expanded="true" aria-controls="collapseSD">

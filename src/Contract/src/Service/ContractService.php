@@ -494,4 +494,14 @@ class ContractService implements ContractServiceInterface
         
         return $this->contractRepository->getSupportingDocumentation($params, $access_token);
     }
+    
+    public function getAmendments(string $folder_id): Items
+    {
+        $access_token = $this->accessTokenService->getAccessToken();
+        $params = [
+            'contract-folder' => $folder_id,
+        ];
+        
+        return $this->contractRepository->getAmendments($params, $access_token);
+    }
 }

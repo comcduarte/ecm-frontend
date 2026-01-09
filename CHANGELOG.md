@@ -1,6 +1,9 @@
 # Changelog
 
-## 1.0.4
+## 1.0.5
+* Issue [#12](https://github.com/comcduarte/ecm-frontend/issues/10) Amendments should be listed when viewing contract
+
+## 1.0.4 - 2026-01-08
 
 * Issue [#10](https://github.com/comcduarte/ecm-frontend/issues/10) Add vendor(s) to BoxSignRequest
 * Issue [#7](https://github.com/comcduarte/ecm-frontend/issues/7) Add Cooperative Contract Template
