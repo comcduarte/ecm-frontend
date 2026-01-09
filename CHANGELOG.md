@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.0.5
-* Issue [#12](https://github.com/comcduarte/ecm-frontend/issues/10) Amendments should be listed when viewing contract
+* Issue [#12](https://github.com/comcduarte/ecm-frontend/issues/12) Amendments should be listed when viewing contract
 
 ## 1.0.4 - 2026-01-08
 
