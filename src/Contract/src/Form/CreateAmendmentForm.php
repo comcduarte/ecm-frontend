@@ -3,11 +3,15 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Form;
 
-use Frontend\Contract\InputFilter\CreateAmendmentInputFilter;
+use Laminas\Filter\StringTrim;
+use Laminas\Filter\StripTags;
 use Laminas\Form\Element\File;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
+use Laminas\Validator\NotEmpty;
+use Laminas\Validator\File\Extension;
+use Laminas\Validator\File\Size;
 
 class CreateAmendmentForm extends AbstractContractForm
 {
@@ -22,9 +26,6 @@ class CreateAmendmentForm extends AbstractContractForm
             $this->setAttribute('id', 'u-cgs-form');
             $this->setAttribute('class', 'row g-3 needs-validation');
             $this->setAttribute('novalidate', 'novalidate');
-            
-            $this->inputFilter = new CreateAmendmentInputFilter();
-            $this->inputFilter->init();
     }
     
     public function init(): void
@@ -91,5 +92,73 @@ class CreateAmendmentForm extends AbstractContractForm
                 'label' => 'Department Queue Folder ID',
             ],
         ]);
+    }
+    
+    public function getInputFilterSpecification()
+    {
+        $parentSpec = parent::getInputFilterSpecification() ?: [];
+        
+        $childSpec = [
+            'PROJECT_NAME' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'DEPARTMENT' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'parent' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'CONTRACT_ID' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'FILE' => [
+                'required' => true,
+                'validators' => [
+                    [
+                        'name' => Extension::class,
+                        'options' => [
+                            'extension' => ['docx','pdf','doc'],
+                        ],
+                    ],
+                    [
+                        'name' => Size::class,
+                        'options' => [
+                            'max' => '10MB',
+                        ],
+                    ]
+                ],
+            ],
+        ];
+        
+        $merged = array_replace_recursive($parentSpec, $childSpec);
+        return $merged;
     }
 }
