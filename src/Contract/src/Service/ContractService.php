@@ -25,6 +25,7 @@ use comcduarte\Box\API\Resource\MetadataCascadePolicy;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
+use Core\Metadata\Instance\Permission;
 
 class ContractService implements ContractServiceInterface
 {
@@ -159,6 +160,7 @@ class ContractService implements ContractServiceInterface
             'approval',
             'contract',
             'vendor',
+            'permission',
         ];
         
         /**
@@ -210,6 +212,18 @@ class ContractService implements ContractServiceInterface
             if ($result instanceof ClientError) {
                 throw new ClientErrorException("Unable to assign $template_key metadata instance to folder.");
             }
+        }
+        
+        /**
+         * Permission Instance
+         */
+        if (isset($data['DEPARTMENT'])) {
+            $permission = new Permission($access_token);
+            $template_key = $permission::templateKey;
+            $instance = [
+                'department' => $data['DEPARTMENT'],
+            ];
+            $result = $permission->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
         }
         
         return $contract;
