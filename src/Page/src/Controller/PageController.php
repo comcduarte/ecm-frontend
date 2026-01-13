@@ -29,15 +29,7 @@ class PageController extends AbstractActionController
 
     public function indexAction(): ResponseInterface
     {
-        $parser = new Markdown();
-        $contents = file_get_contents(__DIR__ . '/../../../../CHANGELOG.md');
-        $html = $parser->defaultTransform($contents);
-        
-        return new HtmlResponse(
-            $this->template->render('app::home', [
-                'changelog' => $html,
-            ])
-        );
+        return new HtmlResponse($this->template->render('page::permissions'));
     }
 
     public function homeAction(): ResponseInterface

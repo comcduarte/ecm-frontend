@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.0.5
+* Issue [#14](https://github.com/comcduarte/ecm-frontend/issues/14) Permission Metadata needs to be added to Contracts
 * Issue [#13](https://github.com/comcduarte/ecm-frontend/issues/13) Only add vendor metadata if submitted
 * Issue [#12](https://github.com/comcduarte/ecm-frontend/issues/12) Amendments should be listed when viewing contract
 
