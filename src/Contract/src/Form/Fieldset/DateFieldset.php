@@ -9,6 +9,13 @@ use Laminas\InputFilter\InputFilterProviderInterface;
 
 class DateFieldset extends Fieldset implements InputFilterProviderInterface
 {
+    public function __construct(string $name = 'DateFieldset', array $options = [])
+    {
+        parent::__construct($name, $options);
+        
+        $this->setAttribute('class', 'form-control');
+    }
+    
     public function init(): void
     {
         $this->add([
