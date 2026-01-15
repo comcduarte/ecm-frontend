@@ -79,14 +79,14 @@ class DateFieldset extends Fieldset implements InputFilterProviderInterface
                     ['name' => 'StringTrim'],
                     ['name' => 'StripTags'],
                 ],
-                'validators' => [
-                    [
-                        'name' => 'Date',
-                        'options' => [
-                            'format' => 'Y-m-d'
-                        ]
-                    ],
-                ],
+//                 'validators' => [
+//                     [
+//                         'name' => 'Date',
+//                         'options' => [
+//                             'format' => 'Y-m-d'
+//                         ]
+//                     ],
+//                 ],
             ],
             'EXEC_DATE' => [
                 'required' => true,
