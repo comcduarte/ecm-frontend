@@ -6,6 +6,10 @@
 * Issue [#13](https://github.com/comcduarte/ecm-frontend/issues/13) Only add vendor metadata if submitted
 * Issue [#12](https://github.com/comcduarte/ecm-frontend/issues/12) Amendments should be listed when viewing contract
 
+### Added
+
+Documentation available via Help Menu
+
 ## 1.0.4 - 2026-01-08
 
 * Issue [#10](https://github.com/comcduarte/ecm-frontend/issues/10) Add vendor(s) to BoxSignRequest
