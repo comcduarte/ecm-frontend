@@ -58,7 +58,7 @@ class PostCreateAmendmentFormHandler implements RequestHandlerInterface
                 $data['DEPARTMENT_NAME'] = $ref->getConstant($a);
                 
                 //-- AMENDMENT NUMBER --//
-                $data['AMENDMENT_NUM'] = 12;
+//                 $data['AMENDMENT_NUM'] = 1;
                 
                 //-- COMPLETION_DATE --//
                 $data['COMPLETION_DATE'] = $data['DATE']['END_DATE'];

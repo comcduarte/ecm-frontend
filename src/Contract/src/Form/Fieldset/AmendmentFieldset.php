@@ -7,6 +7,7 @@ use Laminas\Form\Fieldset;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Element\Textarea;
 use Laminas\InputFilter\InputFilterProviderInterface;
+use Laminas\Validator\Digits;
 
 class AmendmentFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -36,6 +37,18 @@ class AmendmentFieldset extends Fieldset implements InputFilterProviderInterface
             ],
             'options' => [
                 'label' => "List of Changes to Contract",
+            ]
+        ]);
+        
+        $this->add([
+            'name' => 'AMENDMENT_NUM',
+            'type' => Text::class,
+            'attributes' => [
+                'id' => 'AMENDMENT_NUM',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => "Amendment Number",
             ]
         ]);
         
@@ -74,6 +87,17 @@ class AmendmentFieldset extends Fieldset implements InputFilterProviderInterface
             'filters' => [
                 ['name' => 'StringTrim'],
                 ['name' => 'StripTags'],
+            ],
+        ];
+        
+        $spec['AMENDMENT_NUM'] = [
+            'required' => true,
+            'filters' => [
+                ['name' => 'StringTrim'],
+                ['name' => 'StripTags'],
+            ],
+            'validators' => [
+                ['name' => Digits::class]
             ],
         ];
         
