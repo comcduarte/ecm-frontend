@@ -9,6 +9,13 @@ use Laminas\InputFilter\InputFilterProviderInterface;
 
 class DateFieldset extends Fieldset implements InputFilterProviderInterface
 {
+    public function __construct(string $name = 'DateFieldset', array $options = [])
+    {
+        parent::__construct($name, $options);
+        
+        $this->setAttribute('class', 'form-control');
+    }
+    
     public function init(): void
     {
         $this->add([
@@ -72,14 +79,14 @@ class DateFieldset extends Fieldset implements InputFilterProviderInterface
                     ['name' => 'StringTrim'],
                     ['name' => 'StripTags'],
                 ],
-                'validators' => [
-                    [
-                        'name' => 'Date',
-                        'options' => [
-                            'format' => 'Y-m-d'
-                        ]
-                    ],
-                ],
+//                 'validators' => [
+//                     [
+//                         'name' => 'Date',
+//                         'options' => [
+//                             'format' => 'Y-m-d'
+//                         ]
+//                     ],
+//                 ],
             ],
             'EXEC_DATE' => [
                 'required' => true,

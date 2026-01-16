@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Handler\Amendment;
 
+use Core\Contract\Enum\QueueFolderEnum;
 use Dot\DependencyInjection\Attribute\Inject;
 use Dot\FlashMessenger\FlashMessengerInterface;
 use Dot\Log\Logger;
 use Fig\Http\Message\StatusCodeInterface;
+use Frontend\App\Common\Department;
 use Frontend\Contract\Form\CreateAmendmentForm;
 use Frontend\Contract\Service\AmendmentService;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -46,20 +48,45 @@ class PostCreateAmendmentFormHandler implements RequestHandlerInterface
             if ($this->form->isValid()) {
                 $data = $this->form->getData();
                 
+                /**
+                 * Data Manipulation
+                 */
+                
+                //-- DEPARTMENT NAME --//
+                $a = QueueFolderEnum::from($data['DEPARTMENT'])->name;
+                $ref = new \ReflectionClass(Department::class);
+                $data['DEPARTMENT_NAME'] = $ref->getConstant($a);
+                
+                //-- AMENDMENT NUMBER --//
+//                 $data['AMENDMENT_NUM'] = 1;
+                
+                //-- COMPLETION_DATE --//
+                $data['COMPLETION_DATE'] = $data['DATE']['END_DATE'];
+                
+                //-- REQUIRED FIELDS --//
+                $data['DOCTYPE'] = 'Contract';
+                $data['CONTRACT_AMOUNT'] = '';
+                $data['CONTRACT_END_DATE'] = '';
+                
                 $contract = $this->contractService->createContract($data);
-                $filename = sprintf('%s.%s', $contract->getProject_name(), pathinfo($data['FILE']->getClientFilename(), PATHINFO_EXTENSION));
                 
+                /**
+                 * Document Generation
+                 */
+                $this->contractService->generateContract($data, $contract);
                 
-                $tmp_filename = $data['FILE']->getStream()->getMetadata('uri');
-                
-                $data = [
-                    'name' => $filename,
-                    'parent' => [
-                        'id' => $contract->getFolder_id(),
-                    ],
-                ];
-                
-                $this->contractService->uploadContract($data, $tmp_filename);
+                /**
+                 * File Upload
+                 */
+//                 $data = [
+//                     'name' => $filename,
+//                     'parent' => [
+//                         'id' => $contract->getFolder_id(),
+//                     ],
+//                 ];
+//                 $tmp_filename = $data['FILE']->getStream()->getMetadata('uri');
+//                 $filename = sprintf('%s.%s', $contract->getProject_name(), pathinfo($data['FILE']->getClientFilename(), PATHINFO_EXTENSION));
+//                 $this->contractService->uploadContract($data, $tmp_filename);
                 
                 $this->messenger->addSuccess('Success');
                 

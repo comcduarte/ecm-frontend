@@ -25,6 +25,7 @@ use comcduarte\Box\API\Resource\MetadataCascadePolicy;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
+use Core\Metadata\Instance\Permission;
 
 class ContractService implements ContractServiceInterface
 {
@@ -159,6 +160,7 @@ class ContractService implements ContractServiceInterface
             'approval',
             'contract',
             'vendor',
+            'permission',
         ];
         
         /**
@@ -192,22 +194,36 @@ class ContractService implements ContractServiceInterface
         /**
          * Vendor Instance
          */
-        $vendor = new Vendor($access_token);
-        $template_key = $vendor::templateKey;
-        $instance = [
-            'first-name'    => $data['VENDOR']['FNAME'],
-            'last-name'     => $data['VENDOR']['LNAME'],
-            'company-name'  => $data['VENDOR']['COMPANY'],
-            'address'       => $data['VENDOR']['ADDRESS'],
-            'city'          => $data['VENDOR']['CITY'],
-            'state'         => $data['VENDOR']['STATE'],
-            'postal-code'   => $data['VENDOR']['ZIP'],
-            'email-address' => $data['VENDOR']['EMAIL'],
-        ];
-        $result = $metadata_instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
+        if (isset($data['VENDOR'])) {
+            $vendor = new Vendor($access_token);
+            $template_key = $vendor::templateKey;
+            $instance = [
+                'first-name'    => $data['VENDOR']['FNAME'],
+                'last-name'     => $data['VENDOR']['LNAME'],
+                'company-name'  => $data['VENDOR']['COMPANY'],
+                'address'       => $data['VENDOR']['ADDRESS'],
+                'city'          => $data['VENDOR']['CITY'],
+                'state'         => $data['VENDOR']['STATE'],
+                'postal-code'   => $data['VENDOR']['ZIP'],
+                'email-address' => $data['VENDOR']['EMAIL'],
+            ];
+            $result = $metadata_instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
+            
+            if ($result instanceof ClientError) {
+                throw new ClientErrorException("Unable to assign $template_key metadata instance to folder.");
+            }
+        }
         
-        if ($result instanceof ClientError) {
-            throw new ClientErrorException("Unable to assign $template_key metadata instance to folder.");
+        /**
+         * Permission Instance
+         */
+        if (isset($data['DEPARTMENT'])) {
+            $permission = new Permission($access_token);
+            $template_key = $permission::templateKey;
+            $instance = [
+                'department' => $data['DEPARTMENT'],
+            ];
+            $result = $permission->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $instance);
         }
         
         return $contract;
@@ -493,5 +509,15 @@ class ContractService implements ContractServiceInterface
         ];
         
         return $this->contractRepository->getSupportingDocumentation($params, $access_token);
+    }
+    
+    public function getAmendments(string $folder_id): Items
+    {
+        $access_token = $this->accessTokenService->getAccessToken();
+        $params = [
+            'contract-folder' => $folder_id,
+        ];
+        
+        return $this->contractRepository->getAmendments($params, $access_token);
     }
 }

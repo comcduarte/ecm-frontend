@@ -149,6 +149,16 @@ class GetViewDocumentHandler implements RequestHandlerInterface
             $supporting_documentation = new Items();
         }
         
+        /**
+         * Amendments
+         */
+        try {
+            $amendments = $this->contractService->getAmendments($contract_number);
+        } catch (ClientErrorException $e) {
+            $amendments = new Items();
+        }
+        
+        
         return new HtmlResponse(
             $this->template->render('document::view-document', [
                 'active' => 'document',
@@ -161,6 +171,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'id' => $contract_number,
                 'file_id' => $file_id,
                 'supporting_documentation' => $supporting_documentation,
+                'amendments' => $amendments,
             ])
         );
     }

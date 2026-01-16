@@ -6,7 +6,7 @@ use Dot\Rbac\Guard\Guard\GuardInterface;
 
 return [
     'dot_authorization' => [
-        'protection_policy'       => GuardInterface::POLICY_ALLOW,
+        'protection_policy'       => GuardInterface::POLICY_DENY,
         'event_listeners'         => [],
         'guards_provider_manager' => [],
         'guard_manager'           => [],
@@ -15,51 +15,60 @@ return [
             'options' => [
                 'guards' => [
                     [
-                        'type'    => 'ControllerPermission',
+                        'type' => 'Route',
+                        'options' => [
+                            'rules' => [
+                                'page' => ['*'],
+                                'index' => ['*'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'Controller',
                         'options' => [
                             'rules' => [
                                 [
-                                    'route'       => 'account',
-                                    'actions'     => [
-                                        'avatar',
-                                        'details',
-                                        'changePassword',
-                                        'deleteAccount',
-                                    ],
-                                    'permissions' => ['authenticated'],
-                                ],
-                                [
-                                    'route' => 'contract',
+                                    'route' => 'user',
+                                    //list of actions to apply, or empty array for all actions
                                     'actions' => [
-                                        'create',
-                                        'delete',
-                                        'edit',
-                                        'view'
+                                        'login','logout'
                                     ],
-                                    'permissions' => ['authenticated'],
+                                    //by default, authorization passes if all permissions are present (AND)
+                                    //list of roles to allow
+                                    'roles' => ['*'],
                                 ],
                                 [
-                                    'route' => 'route',
-                                    'permissions' => [
-                                        'authenticated',
-                                    ],
+                                    'route' => 'home',
+                                    'actions' => ['dashboard'],
+                                    'roles' => ['*'],
                                 ],
                                 [
-                                    'route'       => 'page',
-                                    'actions'     => [
-                                        'premium-content',
-                                    ],
-                                    'permissions' => ['premium'],
+                                    'route' => 'contract::*',
+                                    'roles' => ['user'],
                                 ],
                                 [
-                                    'route' => 'template',
-                                    'actions' => [
-                                        'create',
-                                        'delete',
-                                        'edit',
-                                        'view',
-                                    ],
-                                    'permissions' => ['authenticated'],
+                                    'route' => 'route::*',
+                                    'roles' => ['ECM_DEPARTMENT'],
+                                ],
+                                [
+                                    'route' => 'workflow::dashboard',
+                                    'roles' => ['user'],
+                                ],
+                                [
+                                    'route' => 'document::*',
+                                    'roles' => ['user'],
+                                ],
+                                [
+                                    'route' => 'amendment::*',
+                                    'roles' => ['user'],
+                                ],
+                                [
+                                    'route' => 'cc::*',
+                                    'roles' => ['user'],
+                                ],
+                                [
+                                    'route' => 'account',
+                                    'roles' => ['user'],
                                 ],
                             ],
                         ],

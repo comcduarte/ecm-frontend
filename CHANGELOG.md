@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.0.4
+## 1.0.5
+* Issue [#15](https://github.com/comcduarte/ecm-frontend/issues/15) Amendment Creation Form
+* Issue [#14](https://github.com/comcduarte/ecm-frontend/issues/14) Permission Metadata needs to be added to Contracts
+* Issue [#13](https://github.com/comcduarte/ecm-frontend/issues/13) Only add vendor metadata if submitted
+* Issue [#12](https://github.com/comcduarte/ecm-frontend/issues/12) Amendments should be listed when viewing contract
+
+### Added
+
+Documentation available via Help Menu
+
+## 1.0.4 - 2026-01-08
 
 * Issue [#10](https://github.com/comcduarte/ecm-frontend/issues/10) Add vendor(s) to BoxSignRequest
 * Issue [#7](https://github.com/comcduarte/ecm-frontend/issues/7) Add Cooperative Contract Template

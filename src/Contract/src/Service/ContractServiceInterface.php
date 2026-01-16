@@ -60,4 +60,6 @@ interface ContractServiceInterface
     public function getComments(string $file_id): Comments;
 
     public function getSupportingDocumentation(string $folder_id): Items;
+    
+    public function getAmendments(string $folder_id): Items;
 }
