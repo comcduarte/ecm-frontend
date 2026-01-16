@@ -66,6 +66,10 @@ return [
                                     'route' => 'cc::*',
                                     'roles' => ['user'],
                                 ],
+                                [
+                                    'route' => 'account',
+                                    'roles' => ['user'],
+                                ],
                             ],
                         ],
                     ],
