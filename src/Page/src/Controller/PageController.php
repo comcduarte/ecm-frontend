@@ -10,7 +10,6 @@ use Frontend\Page\Service\PageServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
-use Michelf\Markdown;
 use Psr\Http\Message\ResponseInterface;
 
 class PageController extends AbstractActionController
