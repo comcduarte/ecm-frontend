@@ -20,7 +20,7 @@ class FileInput extends LaminasFileInput
                 'extension' => ['docx','pdf','doc'],
             ])
             ->attachByName(Size::class, [
-                'max' => '2MB',
+                'max' => '49MB',
             ])
         ;
     }
