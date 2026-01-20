@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.0.5
+## 1.0.6 - 2026-01-20
+
+### Added
+- Diagnostics to Help Menu
+
+### Fixed
+- Increased file size uploads
+- Corrected use statement for FileInput
+
+
+## 1.0.5 - 2026-01-16
 * Issue [#15](https://github.com/comcduarte/ecm-frontend/issues/15) Amendment Creation Form
 * Issue [#14](https://github.com/comcduarte/ecm-frontend/issues/14) Permission Metadata needs to be added to Contracts
 * Issue [#13](https://github.com/comcduarte/ecm-frontend/issues/13) Only add vendor metadata if submitted
