@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Frontend\Contract\InputFilter;
 
 use Core\App\InputFilter\AbstractInputFilter;
-use Laminas\InputFilter\FileInput;
+use Frontend\Contract\InputFilter\Input\FileInput;
 use Frontend\Contract\InputFilter\Input\SelectInput;
 use Frontend\Contract\InputFilter\Input\TextInput;
 
