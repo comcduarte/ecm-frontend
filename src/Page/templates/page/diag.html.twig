@@ -1,0 +1,39 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Diagnostics{% endblock %}
+
+{% block page_title %}{% endblock %}
+
+{% block content %}
+<div class="about-list">
+    <div class="container">
+        <div class="row">
+        	<div class="col">
+                <h2>
+                        Diagnostics
+                </h2>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <!-- Use the keys filter on the first item to generate headers dynamically -->
+                            {% for key in diagnostics[0]|keys %}
+                                <th>{{ key|capitalize }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through each sub-array (row) -->
+                        {% for record in diagnostics %}
+                        <tr>
+                            <!-- Loop through each value within the sub-array (cell) -->
+                            <td>{{ record.name }}</td>
+                            <td>{{ record.value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div>
+</div>
+{% endblock %}

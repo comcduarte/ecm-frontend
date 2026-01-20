@@ -51,6 +51,40 @@ class PageController extends AbstractActionController
             $this->template->render('page::help')    
         );
     }
+    
+    public function diagAction(): ResponseInterface
+    {
+        
+        $diagnostics = [
+            
+        ];
+        
+        $ini = [
+            'upload_max_filesize',
+            'post_max_size',
+            'memory_limit',
+            'max_execution_time',
+        ];
+        
+        foreach ($ini as $name) {
+            $diagnostics[] = [
+                'name' => $name,
+                'value' => ini_get($name),
+            ];
+        }
+            
+        
+        
+        return new HtmlResponse(
+            $this->template->render(
+                'page::diag',
+                [
+                    'active' => 'help',
+                    'diagnostics' => $diagnostics,
+                ]
+                )
+            );
+    }
 
     public function premiumContentAction(): ResponseInterface
     {

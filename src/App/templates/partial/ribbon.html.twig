@@ -199,6 +199,18 @@
 		                'permission': 'all'
 		            }
 		        }
+            },
+            'diag': {
+                'name': 'Diagnostics',
+                'permission': 'all',
+                'commands': {
+                    'diagnostics': {
+                        'name': 'Diagnostics',
+		                'icon': 'heart-pulse',
+		                'url': url('page', {'action': 'diag'}),
+		                'permission': 'all'
+                    }
+                }
             }
         }
     }
