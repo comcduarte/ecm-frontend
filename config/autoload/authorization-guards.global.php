@@ -59,6 +59,10 @@ return [
                                     'roles' => ['user'],
                                 ],
                                 [
+                                    'route' => 'dashboard',
+                                    'roles' => ['user'],
+                                ],
+                                [
                                     'route' => 'amendment::*',
                                     'roles' => ['user'],
                                 ],

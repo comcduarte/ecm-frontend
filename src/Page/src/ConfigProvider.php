@@ -11,6 +11,7 @@ use Frontend\Page\Controller\PageController;
 use Frontend\Page\Service\PageService;
 use Frontend\Page\Service\PageServiceInterface;
 use Mezzio\Application;
+use Frontend\Page\Controller\DashboardController;
 
 class ConfigProvider
 {
@@ -32,6 +33,7 @@ class ConfigProvider
             ],
             'factories'  => [
                 CreatePageController::class => AttributedServiceFactory::class,
+                DashboardController::class => AttributedServiceFactory::class,
                 HomeController::class => AttributedServiceFactory::class,
                 PageController::class => AttributedServiceFactory::class,
                 PageService::class    => AttributedServiceFactory::class,
@@ -49,6 +51,7 @@ class ConfigProvider
                 'page' => [__DIR__ . '/../templates/page'],
                 'home' => [__DIR__ . '/../templates/home'],
                 'create' => [__DIR__ . '/../templates/create'],
+                'dashboards' => [__DIR__ . '/../templates/dashboards'],
             ],
         ];
     }

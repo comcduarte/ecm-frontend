@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Frontend\Page;
 
 use Fig\Http\Message\RequestMethodInterface;
+use Frontend\Page\Controller\DashboardController;
 use Frontend\Page\Controller\PageController;
 use Mezzio\Application;
 use Psr\Container\ContainerInterface;
@@ -38,6 +39,8 @@ class RoutesDelegator
             [RequestMethodInterface::METHOD_GET,RequestMethodInterface::METHOD_POST],
             'create',
             );
+        
+        $app->route('/dashboard/{action}', DashboardController::class, [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_PUT], 'dashboard');
 
         return $app;
     }

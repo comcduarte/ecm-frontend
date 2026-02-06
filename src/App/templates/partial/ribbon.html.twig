@@ -111,6 +111,18 @@
 		            }
 		        },
 		    	'permission': 'authenticated'
+		    },
+			'dashboards': {
+		        'name': 'Dashboards',
+		        'commands': {
+		            'workflow': {
+		                'name': 'Department',
+		                'icon': 'gauge-high',
+		                'url': url('dashboard', {'action': 'dept'}),
+		                'permission': 'authenticated'
+		            }
+		        },
+		    	'permission': 'authenticated'
 		    }
 		},
 		'permission': 'authenticated'
