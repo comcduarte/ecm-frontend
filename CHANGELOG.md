@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.7 - 2026-02-06
+* Issue [#19](https://github.com/comcduarte/ecm-frontend/issues/19) Show spinner on page load
+* Issue [#20](https://github.com/comcduarte/ecm-frontend/issues/20) Department Dashboard
+* Issue [#21](https://github.com/comcduarte/ecm-frontend/issues/21) Prevent Permission Denied Error upon logging in
+
 ## 1.0.6 - 2026-01-20
 
 ### Added

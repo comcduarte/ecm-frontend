@@ -31,7 +31,7 @@ return [
                                     'route' => 'user',
                                     //list of actions to apply, or empty array for all actions
                                     'actions' => [
-                                        'login','logout'
+                                        'login','logout','register'
                                     ],
                                     //by default, authorization passes if all permissions are present (AND)
                                     //list of roles to allow
@@ -56,6 +56,10 @@ return [
                                 ],
                                 [
                                     'route' => 'document::*',
+                                    'roles' => ['user'],
+                                ],
+                                [
+                                    'route' => 'dashboard',
                                     'roles' => ['user'],
                                 ],
                                 [
