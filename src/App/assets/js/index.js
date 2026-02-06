@@ -13,3 +13,4 @@ try {
 require('./components/_contact');
 require('./components/_avatar');
 require('./components/_profile');
+require('./components/_spinner');
