@@ -82,7 +82,7 @@ class UserController extends AbstractActionController
                             $this->request->getCookieParams()
                         );
                     }
-                    return new RedirectResponse($this->router->generateUri("page"));
+                    return new RedirectResponse($this->router->generateUri("home", ['action' => 'dashboard']));
                 } else {
                     $this->messenger->addData('shouldRebind', true);
                     $this->forms->saveState($form);
@@ -117,7 +117,7 @@ class UserController extends AbstractActionController
         $this->authenticationService->clearIdentity();
 
         return new RedirectResponse(
-            $this->router->generateUri('page')
+            $this->router->generateUri('home', ['action' => 'dashboard'])
         );
     }
 
