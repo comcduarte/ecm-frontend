@@ -1,11 +1,14 @@
 site_name: Electronic Contract Management Documentation
 site_url: https://ecm.middletownct.gov
 theme:
-   name: material
+   name: readthedocs
 site_dir: ../public/docs/
 use_directory_urls: false
 watch:
    - docs
+exclude_docs: |
+   demo/
+   install/
 markdown_extensions:
    - attr_list
    - pymdownx.highlight:
@@ -19,3 +22,5 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+   - toc:
+      toc_depth: 2
