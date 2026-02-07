@@ -54,11 +54,15 @@ class NotificationMiddleware implements MiddlewareInterface
         $folder_id = $matchedParams['id'];
         
         /**
-         * 
          * @var \Core\Contract\Entity\Contract $contract
          */
         $contract = $this->contractService->findContract($folder_id);
-        
+        if ($rolename == 'ECM_DEPT') {
+            /**
+             * Set rolename to the dept the contract is in.
+             */
+            $rolename = strtoupper(preg_replace('/^.*([A-Za-z]{2})$/', 'ECM_$1', $contract->getContract_folder()->parent->name));
+        }
         $html = $this->template->render('notifications::contract-routed',[
             'contract_number' => $contract->getContract_folder()->getId(),
             'contract_name' => $contract->getContract_folder()->name,

@@ -5,6 +5,7 @@ namespace Frontend\Contract\Handler\Route;
 use Core\Contract\Enum\QueueFolderEnum;
 use Core\Metadata\Instance\Approval;
 use Dot\DependencyInjection\Attribute\Inject;
+use Dot\FlashMessenger\FlashMessengerInterface;
 use Frontend\App\Service\AccessTokenService;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Frontend\User\Entity\UserIdentity;
@@ -25,12 +26,14 @@ class PostRouteContractHandler implements RequestHandlerInterface
         AccessTokenService::class,
         AuthenticationService::class,
         RouterInterface::class,
+        FlashMessengerInterface::class,
     )]
     public function __construct(
         protected ContractServiceInterface $contractService,
         protected AccessTokenService $accessTokenService,
         protected AuthenticationService $authenticationService,
         protected RouterInterface $router,
+        protected FlashMessengerInterface $messenger,
     ){}
     
     
@@ -58,7 +61,8 @@ class PostRouteContractHandler implements RequestHandlerInterface
                 $queue_name = strtolower($queue->name);
                 break;
             default:
-                $queue_name = 'department';
+                $this->messenger->addSuccess('Department has been notified.');
+                return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'dept', 'dept' => $queue->id]));
                 break;
         }
         

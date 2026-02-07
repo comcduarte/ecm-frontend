@@ -87,6 +87,7 @@ class RoutesDelegator
             ->get('/view/' . $box_id, [MetadataCorrectionMiddleware::class, GetViewContractHandler::class], 'contract::view-contract-form');
 
         $routeCollector->group('/route')->setMiddleware(NotificationMiddleware::class)
+            ->get('/dept/' . $box_id, PostRouteContractHandler::class, 'route::dept')
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
