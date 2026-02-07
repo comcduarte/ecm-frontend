@@ -1,6 +1,8 @@
 # Changelog
 ## 1.0.8 - 
 * Issue [#23](https://github.com/comcduarte/ecm-frontend/issues/23) Do not display spinner when click a link with _blank target
+* Issue [#18](https://github.com/comcduarte/ecm-frontend/issues/18) User requires ability to route to Department Head
+
 
 ## 1.0.7 - 2026-02-06
 * Issue [#19](https://github.com/comcduarte/ecm-frontend/issues/19) Show spinner on page load
