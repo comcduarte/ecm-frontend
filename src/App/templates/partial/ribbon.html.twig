@@ -133,6 +133,12 @@
 		    'tasks': {
 		        'name': 'Tasks',
 		        'commands': {
+		            'dept': {
+		                'name': 'Route to Dept Head',
+		                'icon': 'share',
+		                'url': url('route::dept', {'id': id|default(0) }),
+		                'permission': 'ECM_DEPARTMENT'
+		            },
 		        	'risk': {
 		                'name': 'Route to Risk',
 		                'icon': 'share',
