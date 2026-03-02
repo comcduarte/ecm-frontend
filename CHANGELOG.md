@@ -4,6 +4,8 @@
 
 ### Fixed
 * Set Maximum FILE UPLOAD Limit to 50MB
+* Issue [#26](https://github.com/comcduarte/ecm-frontend/issues/26) Routing doesn't actually move documents
+* Updated Contract Templates
 
 ## 1.0.8 - 2026-02-08
 * Issue [#23](https://github.com/comcduarte/ecm-frontend/issues/23) Do not display spinner when click a link with _blank target
