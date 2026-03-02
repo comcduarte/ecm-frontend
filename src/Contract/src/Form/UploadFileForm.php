@@ -2,21 +2,17 @@
 declare(strict_types = 1);
 namespace Frontend\Contract\Form;
 
-use Frontend\App\Form\AbstractForm;
 use Laminas\Filter\StringTrim;
 use Laminas\Filter\StripTags;
-use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\File;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select;
-use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
-use Laminas\Session\Container;
 use Laminas\Validator\NotEmpty;
 use Laminas\Validator\File\Extension;
 use Laminas\Validator\File\Size;
 
-class UploadFileForm extends AbstractForm
+class UploadFileForm extends AbstractContractForm
 {
 
     public function __construct(?string $name = null, array $options = [])
@@ -29,11 +25,13 @@ class UploadFileForm extends AbstractForm
         $this->setAttribute('class', 'row g-3 needs-validation');
 
 //         $this->inputFilter = new UploadFileInputFilter();
-        $this->inputFilter->init();
+//         $this->inputFilter->init();
     }
 
     public function init(): void
     {
+        parent::init();
+        
         $this->add([
             'name' => 'contract-number',
             'type' => Hidden::class
@@ -145,26 +143,6 @@ class UploadFileForm extends AbstractForm
                 'label' => 'Department Queue Folder ID'
             ]
         ]);
-
-        $this->add((new Csrf('createContractCsrf'))->setOptions([
-            'csrf_options' => [
-                'timeout' => 3600,
-                'session' => new Container()
-            ]
-        ])
-            ->setAttribute('required', true));
-
-        $this->add([
-            'name' => 'SUBMIT',
-            'type' => Submit::class,
-            'attributes' => [
-                'value' => 'Submit',
-                'class' => 'btn btn-primary form-control mt-4',
-                'id' => 'SUBMIT'
-            ]
-        ], [
-            'priority' => 0
-        ]);
     }
 
     public function getInputFilterSpecification()
@@ -189,7 +167,7 @@ class UploadFileForm extends AbstractForm
                 ]
             ],
             'contract-number' => [
-                'required' => true,
+//                 'required' => true,
                 'filters' => [
                     [
                         'name' => StringTrim::class
@@ -198,11 +176,11 @@ class UploadFileForm extends AbstractForm
                         'name' => StripTags::class
                     ]
                 ],
-                'validators' => [
-                    [
-                        'name' => NotEmpty::class
-                    ]
-                ]
+//                 'validators' => [
+//                     [
+//                         'name' => NotEmpty::class
+//                     ]
+//                 ]
             ],
             'DOCTYPE' => [
                 'required' => true,
