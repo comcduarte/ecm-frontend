@@ -10,6 +10,7 @@ use Frontend\Page\Service\PageServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
+use Michelf\Markdown;
 use Psr\Http\Message\ResponseInterface;
 
 class PageController extends AbstractActionController
@@ -28,7 +29,19 @@ class PageController extends AbstractActionController
 
     public function indexAction(): ResponseInterface
     {
-        return new HtmlResponse($this->template->render('page::permissions'));
+        
+        $parser = new Markdown();
+        $contents = file_get_contents(__DIR__ . '/../../../../CHANGELOG.md');
+        $html = $parser->defaultTransform($contents);
+        
+        return new HtmlResponse($this->template->render(
+        //                 'home::dashboard',
+            'app::home',
+            [
+                'active' => 'home',
+                'changelog' => $html,
+            ],
+            ));
     }
 
     public function homeAction(): ResponseInterface

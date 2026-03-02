@@ -1,46 +1,48 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 namespace Frontend\Contract\Form;
 
-use Frontend\App\Form\AbstractForm;
-use Frontend\Contract\InputFilter\UploadFileInputFilter;
-use Laminas\Form\Element\Csrf;
+use Laminas\Filter\StringTrim;
+use Laminas\Filter\StripTags;
 use Laminas\Form\Element\File;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select;
-use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
-use Laminas\Session\Container;
+use Laminas\Validator\NotEmpty;
+use Laminas\Validator\File\Extension;
+use Laminas\Validator\File\Size;
 
-class UploadFileForm extends AbstractForm
+class UploadFileForm extends AbstractContractForm
 {
+
     public function __construct(?string $name = null, array $options = [])
     {
         parent::__construct($name, $options);
-        
+
         $this->init();
-        
+
         $this->setAttribute('id', 'upload-file-form');
         $this->setAttribute('class', 'row g-3 needs-validation');
-        
-        $this->inputFilter = new UploadFileInputFilter();
-        $this->inputFilter->init();
+
+//         $this->inputFilter = new UploadFileInputFilter();
+//         $this->inputFilter->init();
     }
-    
+
     public function init(): void
     {
+        parent::init();
+        
         $this->add([
             'name' => 'contract-number',
-            'type' => Hidden::class,
+            'type' => Hidden::class
         ]);
-        
+
         $this->add([
             'name' => 'DOCTYPE',
             'type' => Select::class,
             'attributes' => [
                 'id' => 'DOCTYPE',
-                'class' => 'form-control',
+                'class' => 'form-control'
             ],
             'options' => [
                 'label' => 'Document Type',
@@ -48,7 +50,7 @@ class UploadFileForm extends AbstractForm
                     'Certificate of Insurance' => 'Certificate of Insurance',
                     'Department Head Certification Page' => 'Department Head Certification Page',
                     'Certificate of Surety' => 'Certificate of Surety',
-                    
+
                     'Amendment Supplied by Vendor' => 'Amendment Supplied by Vendor',
                     'City Lease' => 'City Lease',
                     'Contract Amendment' => 'Contract Amendment',
@@ -57,7 +59,7 @@ class UploadFileForm extends AbstractForm
                     'Uniform Artist Contract' => 'Uniform Artist Contract',
                     'Uniform Contract for Goods and Services' => 'Uniform Contract for Goods and Services',
                     'Uniform Library Contract' => 'Uniform Library Contract',
-                    
+
                     'Additional Indemnification Agreement' => 'Additional Indemnification Agreement',
                     'Appendix - Insurance Requirements' => 'Appendix - Insurance Requirements',
                     'Appendix A - Statement of Work' => 'Appendix A - Statement of Work',
@@ -84,28 +86,24 @@ class UploadFileForm extends AbstractForm
                     'Purchase Order' => 'Purchase Order',
                     'Purchasing RFP' => 'Purchasing RFP',
                     'RFP / RFQ' => 'RFP / RFQ',
-                    
-                    'Formal Opinion' => 'Formal Opinion',
-                    
-                    
-                    
-                    
-                ],
-            ],
+
+                    'Formal Opinion' => 'Formal Opinion'
+                ]
+            ]
         ]);
-        
+
         $this->add([
             'name' => 'FILE',
             'type' => File::class,
             'attributes' => [
                 'id' => 'FILE',
-                'class' => 'form-control',
+                'class' => 'form-control'
             ],
             'options' => [
-                'label' => 'Upload File',
-            ],
+                'label' => 'Upload File'
+            ]
         ]);
-        
+
         /**
          * DEPARTMENT INFORMATION
          */
@@ -115,53 +113,146 @@ class UploadFileForm extends AbstractForm
             'attributes' => [
                 'id' => 'DEPARTMENT',
                 'class' => 'form-control',
-                'onchange' => 'document.getElementById("parent").value=document.getElementById("DEPARTMENT").value',
+                'onchange' => 'document.getElementById("parent").value=document.getElementById("DEPARTMENT").value'
             ],
             'options' => [
-                'label' => 'Department',
-            ],
+                'label' => 'Department'
+            ]
         ]);
-        
+
         $this->add([
             'name' => 'PROJECT_NAME',
             'type' => Text::class,
             'attributes' => [
                 'id' => 'PROJECT_NAME',
-                'class' => 'form-control',
+                'class' => 'form-control'
             ],
             'options' => [
-                'label' => 'Project Name',
-            ],
+                'label' => 'Project Name'
+            ]
         ]);
-        
+
         $this->add([
             'name' => 'parent',
             'type' => Hidden::class,
             'attributes' => [
                 'id' => 'parent',
-                'class' => 'form-control',
+                'class' => 'form-control'
             ],
             'options' => [
-                'label' => 'Department Queue Folder ID',
-            ],
+                'label' => 'Department Queue Folder ID'
+            ]
         ]);
-        
-        $this->add(
-            (new Csrf('createContractCsrf'))
-            ->setOptions([
-                'csrf_options' => ['timeout' => 3600, 'session' => new Container()],
-            ])
-            ->setAttribute('required', true)
-            );
-        
-        $this->add([
-            'name' => 'SUBMIT',
-            'type' => Submit::class,
-            'attributes' => [
-                'value' => 'Submit',
-                'class' => 'btn btn-primary form-control mt-4',
-                'id' => 'SUBMIT',
+    }
+
+    public function getInputFilterSpecification()
+    {
+        $parentSpec = parent::getInputFilterSpecification() ?: [];
+
+        $childSpec = [
+            'PROJECT_NAME' => [
+                'required' => true,
+                'filters' => [
+                    [
+                        'name' => StringTrim::class
+                    ],
+                    [
+                        'name' => StripTags::class
+                    ]
+                ],
+                'validators' => [
+                    [
+                        'name' => NotEmpty::class
+                    ]
+                ]
             ],
-        ],['priority' => 0]);
+            'contract-number' => [
+//                 'required' => true,
+                'filters' => [
+                    [
+                        'name' => StringTrim::class
+                    ],
+                    [
+                        'name' => StripTags::class
+                    ]
+                ],
+//                 'validators' => [
+//                     [
+//                         'name' => NotEmpty::class
+//                     ]
+//                 ]
+            ],
+            'DOCTYPE' => [
+                'required' => true,
+                'filters' => [
+                    [
+                        'name' => StringTrim::class
+                    ],
+                    [
+                        'name' => StripTags::class
+                    ]
+                ],
+                'validators' => [
+                    [
+                        'name' => NotEmpty::class
+                    ]
+                ]
+            ],
+            'DEPARTMENT' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'parent' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'FILE' => [
+                'required' => true,
+                'validators' => [
+                    [
+                        'name' => Extension::class,
+                        'options' => [
+                            'extension' => [
+                                'docx',
+                                'pdf',
+                                'doc'
+                            ]
+                        ]
+                    ],
+                    [
+                        'name' => Size::class,
+                        'options' => [
+                            'max' => '50MB'
+                            //-- This is a BOX UPLOAD Limit --//
+                        ]
+                    ]
+                ]
+            ],
+            'createContractCsrf' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+        ];
+
+        $merged = array_replace_recursive($parentSpec, $childSpec);
+        return $merged;
     }
 }

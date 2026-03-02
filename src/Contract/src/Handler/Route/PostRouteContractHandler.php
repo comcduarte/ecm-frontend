@@ -61,9 +61,16 @@ class PostRouteContractHandler implements RequestHandlerInterface
                 $queue_name = strtolower($queue->name);
                 break;
             default:
-                $this->messenger->addSuccess('Department has been notified.');
-                return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'dept', 'dept' => $queue->id]));
+                $queue_name = 'department';
                 break;
+        }
+        
+        /**
+         * Determine the Destination
+         */
+        if ($destination[1] == 'dept') {
+            $this->messenger->addSuccess('Department has been notified.');
+            return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'dept', 'dept' => $queue->id]));
         }
         
         $queue = null;

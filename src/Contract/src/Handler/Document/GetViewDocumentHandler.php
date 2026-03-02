@@ -118,6 +118,9 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         
         $signForm->init();
         
+        $file = new File($access_token);
+        $file->get_file_information($file_id);
+        
         /**
          * Default email is always the logged in user 
          * @var  UserIdentity $identity
@@ -130,6 +133,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
             $signForm->get($field)->setValue($vendor_email_address);
         }
         
+        
         /**
          * Upload File Form
          */
@@ -138,7 +142,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $this->uploadFileForm->remove('DEPARTMENT')->remove('PROJECT_NAME');
         $this->uploadFileForm->prepare();
         
-        $signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $contract_number, 'file_id' => $file_id]));
+        $signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $file->parent->id, 'file_id' => $file_id]));
         
         /**
          * Supporting Documentation
