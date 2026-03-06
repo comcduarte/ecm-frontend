@@ -151,7 +151,7 @@ class UploadFileForm extends AbstractContractForm
 
         $childSpec = [
             'PROJECT_NAME' => [
-                'required' => true,
+                'required' => false,
                 'filters' => [
                     [
                         'name' => StringTrim::class
@@ -160,11 +160,11 @@ class UploadFileForm extends AbstractContractForm
                         'name' => StripTags::class
                     ]
                 ],
-                'validators' => [
-                    [
-                        'name' => NotEmpty::class
-                    ]
-                ]
+//                 'validators' => [
+//                     [
+//                         'name' => NotEmpty::class
+//                     ]
+//                 ]
             ],
             'contract-number' => [
 //                 'required' => true,
@@ -199,24 +199,24 @@ class UploadFileForm extends AbstractContractForm
                 ]
             ],
             'DEPARTMENT' => [
-                'required' => true,
+                'required' => false,
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class],
                 ],
-                'validators' => [
-                    ['name' => NotEmpty::class],
-                ],
+//                 'validators' => [
+//                     ['name' => NotEmpty::class],
+//                 ],
             ],
             'parent' => [
-                'required' => true,
+                'required' => false,
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class],
                 ],
-                'validators' => [
-                    ['name' => NotEmpty::class],
-                ],
+//                 'validators' => [
+//                     ['name' => NotEmpty::class],
+//                 ],
             ],
             'FILE' => [
                 'required' => true,
