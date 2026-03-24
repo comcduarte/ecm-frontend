@@ -39,6 +39,7 @@ use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
 use Frontend\Contract\Handler\Contract\PostImportContractHandler;
+use Frontend\Contract\Handler\Document\GetEditDocumentHandler;
 use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
@@ -106,6 +107,7 @@ class ConfigProvider
                 GetViewContractHandler::class       => AttributedServiceFactory::class,
                 GetImportContractHandler::class     => AttributedServiceFactory::class,
                 
+                GetEditDocumentHandler::class       => AttributedServiceFactory::class,
                 GetViewDocumentHandler::class       => AttributedServiceFactory::class,
                 PostCreateCommentHandler::class     => AttributedServiceFactory::class,
                 PostUploadFileHandler::class        => AttributedServiceFactory::class,

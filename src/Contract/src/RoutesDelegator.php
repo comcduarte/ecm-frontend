@@ -21,6 +21,7 @@ use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
 use Frontend\Contract\Handler\Contract\PostImportContractHandler;
+use Frontend\Contract\Handler\Document\GetEditDocumentHandler;
 use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
@@ -99,6 +100,7 @@ class RoutesDelegator
             ->post('/contract/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteSignHandler::class, 'route::sign');
         
         $routeCollector->group('/document')
+            ->get('/edit/' . $box_id, GetEditDocumentHandler::class, 'document::edit-document')
             ->get('/view/' . $box_id, GetViewDocumentHandler::class, 'document::view-document')
             ->post('/view/' . $box_id, PostCreateCommentHandler::class, 'document::create-comment')
             ->post('/upload/' . $box_id, PostUploadFileHandler::class, 'document::upload-file')
