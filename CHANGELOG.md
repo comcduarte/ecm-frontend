@@ -1,5 +1,8 @@
 # Changelog
-## 1.0.10 - 2026-03
+## 1.0.11 - 2026-03
+* Issue [#16](https://github.com/comcduarte/ecm-frontend/issues/16) Ability to edit/delete contracts
+
+## 1.0.10 - 2026-03-16
 
 ## 1.0.9 - 2026-03-02
 * Issue [#25](https://github.com/comcduarte/ecm-frontend/issues/25) Allow Signing of Supporting Documentation

@@ -195,6 +195,12 @@
 		                'icon': 'square-xmark',
 		                'url': url('route::reject', {'id': id|default(0) }),
 		                'permission': 'admin'
+		            },
+		            'edit': {
+		                'name': 'Edit Document',
+		                'icon': 'pen-to-square',
+		                'url': url('document::edit-document', {'id': file_id|default(0) }),
+		                'permission': 'ECM_LEGAL'
 		            }
 		        },
 		    	'permission': 'authenticated'
