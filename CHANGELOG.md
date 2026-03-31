@@ -1,4 +1,9 @@
 # Changelog
+## 1.0.12 - 2026-03-31
+
+### Fixed
+- Ability to edit contracts (Creation of SharedLinks)
+
 ## 1.0.11 - 2026-03-24
 * Issue [#16](https://github.com/comcduarte/ecm-frontend/issues/16) Ability to edit/delete contracts
 
