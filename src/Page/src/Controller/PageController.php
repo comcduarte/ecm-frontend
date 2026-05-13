@@ -19,11 +19,13 @@ class PageController extends AbstractActionController
         PageServiceInterface::class,
         RouterInterface::class,
         TemplateRendererInterface::class,
+        "config.databases",
     )]
     public function __construct(
         protected PageServiceInterface $pageService,
         protected RouterInterface $router,
-        protected TemplateRendererInterface $template
+        protected TemplateRendererInterface $template,
+        protected array $databasesConfig,
     ) {
     }
 
@@ -85,8 +87,18 @@ class PageController extends AbstractActionController
                 'value' => ini_get($name),
             ];
         }
-            
         
+        foreach ($this->databasesConfig['default'] as $name => $value) {
+            if ($name == 'password') {
+                $value = '******';
+            }
+            
+            $diagnostics[] = [
+                'name'  => $name,
+                'value' => $value            
+                
+            ];
+        }
         
         return new HtmlResponse(
             $this->template->render(
