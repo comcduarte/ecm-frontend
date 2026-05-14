@@ -22,6 +22,7 @@ use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Folder;
 use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataCascadePolicy;
+use comcduarte\Box\API\Resource\MetadataInstance;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
@@ -406,17 +407,32 @@ class ContractService implements ContractServiceInterface
         return true;
     }
     
-    public function getMetadata(string $contract): MetadataInstances
+    /**
+     * Get Metadata Instances on a Main Contract File.
+     * {@inheritDoc}
+     * @see \Frontend\Contract\Service\ContractServiceInterface::getMetadata()
+     */
+    public function getMetadata(string $contract, string $template_key, string $scope = 'enterprise'): MetadataInstances
     {
         $instances = new MetadataInstances();
         $access_token = $this->accessTokenService->getAccessToken();
         
-        $source = $contract;
-        $scope = 'enterprise';
-        $template_key = 'ecm-application';
+        /**
+         * Convert template_key string into class name
+         */
+        $className = str_replace(' ', '', ucwords(str_replace('-', ' ', $template_key)));
+        $class = "\\Core\\Metadata\\Instance\\{$className}";
         
-        $metadata_instance = new EcmApplication($access_token);
-        $metadata_instance->get_metadata_instance_on_folder($source, $scope, $template_key);
+        /**
+         * 
+         * @var MetadataInstance $metadata_instance
+         */
+        $metadata_instance = new $class($access_token);
+        $result = $metadata_instance->get_metadata_instance_on_file($contract, $scope, $template_key);
+        
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException();
+        }
         
         $instances->entries[] = $metadata_instance;
         

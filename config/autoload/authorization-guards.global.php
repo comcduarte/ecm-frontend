@@ -56,7 +56,7 @@ return [
                                 ],
                                 [
                                     'route' => 'document::*',
-                                    'roles' => ['user'],
+                                    'roles' => ['*'],
                                 ],
                                 [
                                     'route' => 'dashboard',

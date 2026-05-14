@@ -73,6 +73,11 @@ class PostRouteContractHandler implements RequestHandlerInterface
             return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'dept', 'dept' => $queue->id]));
         }
         
+        if ($queue_name = 'vendor') {
+            $this->messenger->addSuccess('Vendor has been notified.');
+            return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'dept', 'dept' => $queue->id]));
+        }
+        
         $queue = null;
         foreach (QueueFolderEnum::cases() as $case) {
             if ($case->name === 'ECM_' . strtoupper($destination[1])) {

@@ -51,7 +51,7 @@ interface ContractServiceInterface
     
     public function move(string $source, string $destination): bool;
     
-    public function getMetadata(string $contract): MetadataInstances;
+    public function getMetadata(string $contract, string $template_key, string $scope = 'enterprise'): MetadataInstances;
     
     /**
      * 

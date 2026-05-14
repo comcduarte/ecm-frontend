@@ -2,11 +2,14 @@
 declare(strict_types = 1);
 namespace Frontend\Contract\Middleware;
 
+use Core\Metadata\Instance\Vendor;
 use Doctrine\ORM\EntityManagerInterface;
 use Dot\DependencyInjection\Attribute\Inject;
+use Dot\FlashMessenger\FlashMessengerInterface;
 use Dot\Mail\Service\MailServiceInterface;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Frontend\User\Entity\User;
+use Frontend\User\Entity\UserIdentity;
 use Frontend\User\Entity\UserRole;
 use Frontend\User\Enum\UserStatusEnum;
 use Laminas\Authentication\AuthenticationServiceInterface;
@@ -17,7 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
-use Frontend\User\Entity\UserIdentity;
 
 class NotificationMiddleware implements MiddlewareInterface
 {
@@ -29,6 +31,7 @@ class NotificationMiddleware implements MiddlewareInterface
         MailServiceInterface::class,
         EntityManagerInterface::class,
         AuthenticationServiceInterface::class,
+        FlashMessengerInterface::class,
     )]
     public function __construct(
         protected TemplateRendererInterface $template,
@@ -37,7 +40,7 @@ class NotificationMiddleware implements MiddlewareInterface
         protected MailServiceInterface $mailService,
         protected EntityManagerInterface $entityManager,
         protected AuthenticationServiceInterface $authenticationService,
-        
+        protected FlashMessengerInterface $messenger,
     ){}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -106,6 +109,19 @@ class NotificationMiddleware implements MiddlewareInterface
                 $this->mailService->getMessage()->addTo($user->getIdentity(), $user->getName());
             }
         }
+        
+        if ($rolename == 'ECM_VENDOR') {
+            /**
+             * @var Vendor $vendor
+             */
+            try {
+                $vendor = $this->contractService->getMetadata($contract->getContract_file()->id, 'vendor');
+                $this->mailService->getMessage()->addTo($vendor->entries[0]->emailAddress, $vendor->entries[0]->companyName);
+            } catch (\Throwable $e) {
+                $this->messenger->addError($e->getMessage());
+            }
+        }
+        
         /**
          * 
          * @var UserIdentity $identity
@@ -119,6 +135,7 @@ class NotificationMiddleware implements MiddlewareInterface
             }
             
         } catch (Exception $e) {
+            $this->messenger->addError($e->getMessage());
             throw new Exception ('Email unable to send.');
         }
        
