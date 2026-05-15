@@ -1,5 +1,5 @@
 # Changelog
-## 1.0.12 - 2026-05
+## 1.0.12 - 2026-05-15
 
 ### Added
  - Users can send vendors an email with a link to view the contract and all supporting documentation.
