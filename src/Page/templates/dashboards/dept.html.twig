@@ -26,7 +26,19 @@
 							<div class="progress-bar bg-success" role="progressbar"
 								style="width: {{ record.progress }}%"
 								aria-valuenow="{{ record.progress }}" aria-valuemin="0"
-								aria-valuemax="50"></div>
+								aria-valuemax="50">
+								{% if record.progress == 20 %}
+									<span>Risk</span>
+								{% elseif record.progress == 40 %}
+									<span>Legal</span>
+								{% elseif record.progress == 60 %}
+									<span>Purchasing</span>
+								{% elseif record.progress == 80 %}
+									<span>Mayors Office</span>
+								{% else %}
+									<span>Unknown</span>
+								{% endif %}
+								</div>
 						</div>
 					</div>
 				</div>
