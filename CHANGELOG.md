@@ -4,6 +4,7 @@
 ### Added
  - Users can send vendors an email with a link to view the contract and all supporting documentation.
  * Issue [#32](https://github.com/comcduarte/ecm-frontend/issues/32) Allow users to delete contracts
+ * Issue [#34](https://github.com/comcduarte/ecm-frontend/issues/34) Display description in Dept Dashboard 
 
 ## 1.0.11 - 2026-03-24
 * Issue [#16](https://github.com/comcduarte/ecm-frontend/issues/16) Ability to edit/delete contracts
