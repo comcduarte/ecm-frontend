@@ -78,8 +78,8 @@ class RoutesDelegator
             ->get('/import', GetImportContractHandler::class, 'contract::import-contract-form')
             ->post('/import', PostImportContractHandler::class, 'contract::import-contract')
             
-            ->get('/delete/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
-            ->post('/delete/' . $uuid, PostDeleteContractHandler::class, 'contract::delete-contract')
+            ->get('/delete/' . $box_id, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
+            ->post('/delete/' . $box_id, PostDeleteContractHandler::class, 'contract::delete-contract')
             
             ->get('/edit/' . $uuid, GetEditContractFormHandler::class, 'contract::edit-contract-form')
             ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')

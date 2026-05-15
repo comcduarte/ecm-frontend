@@ -125,8 +125,12 @@ class GetViewDocumentHandler implements RequestHandlerInterface
          * Default email is always the logged in user 
          * @var  UserIdentity $identity
          */
-        $identity = $this->authenticationService->getIdentity();
-        $signForm->get('EMAIL_0')->setValue($identity->getIdentity());
+        try {
+            $identity = $this->authenticationService->getIdentity();
+            $signForm->get('EMAIL_0')->setValue($identity->getIdentity());
+        } catch (\Throwable $e) {
+        }
+        
         
         if (isset($vendor_email_address)) {
             $field = sprintf('EMAIL_%d', intval($signForm->num_emails - 1));

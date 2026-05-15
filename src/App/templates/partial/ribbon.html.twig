@@ -137,7 +137,7 @@
 		                'name': 'Route to Dept Head',
 		                'icon': 'share',
 		                'url': url('route::dept', {'id': id|default(0) }),
-		                'permission': 'ECM_DEPARTMENT'
+		                'permission': 'authenticated'
 		            },
 		        	'risk': {
 		                'name': 'Route to Risk',
@@ -164,7 +164,7 @@
 		                'permission': 'ECM_PURCHASING'
 		            },
 					'vendor': {
-		                'name': 'Route to Vendor',
+		                'name': 'Email Vendor',
 		                'icon': 'envelope',
 		                'url': url('route::vendor', {'id': id|default(0) }),
 		                'permission': 'ECM_PURCHASING'
@@ -174,7 +174,7 @@
 		                'icon': 'signature',
 		                'url': '',
 		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalSignContract',
-		                'permission': 'ECM_MAYOR'
+		                'permission': 'ECM_PURCHASING'
 		            },
 					'notes': {
 		                'name': 'Add Notes',
@@ -201,7 +201,13 @@
 		                'icon': 'pen-to-square',
 		                'url': url('document::edit-document', {'id': file_id|default(0) }),
 		                'permission': 'ECM_LEGAL'
-		            }
+		            },
+		            'delete': {
+		                'name': 'Delete',
+		                'icon': 'square-xmark',
+		                'url': url('contract::delete-contract', {'id': id|default(0) }),
+		                'permission': 'authenticated'
+		            },
 		        },
 		    	'permission': 'authenticated'
 		    }

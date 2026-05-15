@@ -20,6 +20,7 @@ use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Folder;
 use comcduarte\Box\API\Resource\BoxSign\BoxSignRequest;
 use comcduarte\Box\API\Resource\BoxSign\BoxSigner;
+use Throwable;
 
 class PostRouteSignHandler implements RequestHandlerInterface
 {
@@ -65,6 +66,7 @@ class PostRouteSignHandler implements RequestHandlerInterface
                         $box_signer = new BoxSigner();
                         $box_signer->role = 'signer';
                         $box_signer->email = $data["EMAIL_$i"];
+                        $box_signer->order = $i;
                         
                         $signers[] = $box_signer;
                         $i++;
@@ -72,6 +74,17 @@ class PostRouteSignHandler implements RequestHandlerInterface
                         break;
                     }
                 }
+                
+                $box_approver = new BoxSigner();
+                $box_approver->role = 'approver';
+                
+                /**
+                 * @TODO Make a form to allow the BoxSignRequest generator to add multiple emails
+                 * and select their role from a dropdown.  Set defaults as appropriate.
+                 */
+                $box_approver->email = 'developer@middletownct.gov';
+                $box_approver->order = $i;
+                $signers[] = $box_approver;
                 
                 //-- Source Files --//
                 $source_files = [];

@@ -42,6 +42,8 @@ class GetEditDocumentHandler implements RequestHandlerInterface
         $file_id = $request->getAttribute('id');
         
         $file = new File($this->accessTokenService->getAccessToken());
+        $file->getSharedLink()->getPermissions()->can_edit = true;
+        $file->getSharedLink()->getPermissions()->can_upload = true;
         $result = $file->add_shared_link_to_file($file_id);
         
         if ($result instanceof ClientError) {

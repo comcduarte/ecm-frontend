@@ -75,7 +75,7 @@ use Mezzio\Application;
 class ConfigProvider
 {
     /**
-     * @return ConfigType
+     * @phpstan-return ConfigType
      */
     public function __invoke(): array
     {
@@ -87,7 +87,7 @@ class ConfigProvider
     }
 
     /**
-     * @return DependenciesType
+     * @phpstan-return DependenciesType
      */
     private function getDependencies(): array
     {
@@ -173,7 +173,7 @@ class ConfigProvider
     }
     
     /**
-     * @return TemplatesType
+     * @phpstan-return TemplatesType
      */
     private function getTemplates(): array
     {
