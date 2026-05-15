@@ -201,7 +201,13 @@
 		                'icon': 'pen-to-square',
 		                'url': url('document::edit-document', {'id': file_id|default(0) }),
 		                'permission': 'ECM_LEGAL'
-		            }
+		            },
+		            'delete': {
+		                'name': 'Delete',
+		                'icon': 'square-xmark',
+		                'url': url('contract::delete-contract', {'id': id|default(0) }),
+		                'permission': 'authenticated'
+		            },
 		        },
 		    	'permission': 'authenticated'
 		    }

@@ -92,7 +92,8 @@ class ContractService implements ContractServiceInterface
     public function deleteContract(
         Contract $contract,
     ): void {
-        $this->contractRepository->deleteResource($contract);
+        $access_token = $this->accessTokenService->getAccessToken();
+        $this->contractRepository->deleteContract($contract->getContract_folder()->getId(), $access_token);
     }
 
     /**

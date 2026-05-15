@@ -12,6 +12,7 @@ use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -39,18 +40,24 @@ class GetDeleteContractFormHandler implements RequestHandlerInterface
     public function handle(
         ServerRequestInterface $request,
     ): ResponseInterface {
+        if ($request->getAttribute('id') == 0) {
+            $this->messenger->addError('Unable to find contract ID number.');
+            return new EmptyResponse(StatusCodeInterface::STATUS_NOT_FOUND);
+//             return new RedirectResponse($this->router->generateUri('home'));
+        }
+        
         try {
-            $contract = $this->contractService->findContract($request->getAttribute('uuid'));
+            $contract = $this->contractService->findContract($request->getAttribute('id'));
         } catch (NotFoundException $exception) {
             $this->messenger->addError($exception->getMessage());
 
             return new EmptyResponse(StatusCodeInterface::STATUS_NOT_FOUND);
         }
 
-        $this->deleteContractForm->setAttribute(
-            'action',
-            $this->router->generateUri('contract::delete-contract', ['uuid' => $contract->getUuid()->toString()])
-        );
+//         $this->deleteContractForm->setAttribute(
+//             'action',
+//             $this->router->generateUri('contract::delete-contract', ['id' => $contract->getId()->toString()])
+//         );
 
         return new HtmlResponse(
             $this->template->render('contract::delete-contract-form', [
