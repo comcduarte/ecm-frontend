@@ -27,6 +27,7 @@ use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
 use Core\Metadata\Instance\Permission;
+use comcduarte\Box\API\Enum\ResourceType;
 
 class ContractService implements ContractServiceInterface
 {
@@ -50,7 +51,7 @@ class ContractService implements ContractServiceInterface
     public function getNewContractName(array $params): string
     {
         $access_token = $this->accessTokenService->getAccessToken();
-        $instances = $this->getMetadata($this->config['box-config']->applicationFolder);
+        $instances = $this->getMetadata($this->config['box-config']->applicationFolder, 'ecm-application', 'enterprise', ResourceType::Folder);
         
         if ($instances instanceof ClientError) {
             //-- Do Something --//
@@ -413,7 +414,7 @@ class ContractService implements ContractServiceInterface
      * {@inheritDoc}
      * @see \Frontend\Contract\Service\ContractServiceInterface::getMetadata()
      */
-    public function getMetadata(string $contract, string $template_key, string $scope = 'enterprise'): MetadataInstances
+    public function getMetadata(string $contract, string $template_key, string $scope = 'enterprise', ResourceType $type = ResourceType::File): MetadataInstances
     {
         $instances = new MetadataInstances();
         $access_token = $this->accessTokenService->getAccessToken();
@@ -429,7 +430,18 @@ class ContractService implements ContractServiceInterface
          * @var MetadataInstance $metadata_instance
          */
         $metadata_instance = new $class($access_token);
-        $result = $metadata_instance->get_metadata_instance_on_file($contract, $scope, $template_key);
+        switch ($type) {
+            case ResourceType::File:
+                $result = $metadata_instance->get_metadata_instance_on_file($contract, $scope, $template_key);
+                break;
+            case ResourceType::Folder:
+                $result = $metadata_instance->get_metadata_instance_on_folder($contract, $scope, $template_key);
+                break;
+            default:
+                throw new ClientErrorException('Only a File or Folder may be specified.');
+                break;
+        }
+        
         
         if ($result instanceof ClientError) {
             throw new ClientErrorException();

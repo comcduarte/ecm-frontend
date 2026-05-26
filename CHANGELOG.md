@@ -1,4 +1,9 @@
 # Changelog
+## 1.0.14 - 2026-05-26
+
+### Fixed
+  - Issue [#35](https://github.com/comcduarte/ecm-frontend/issues/35) getMetadata only queries Files; needs to query Folders as well.
+
 ## 1.0.13 - 2026-05-15
 
 ### Added
