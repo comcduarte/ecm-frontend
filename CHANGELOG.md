@@ -1,4 +1,10 @@
 # Changelog
+
+## 1.0.15 - 2026-06
+
+### Fixed
+* Issue [#31](https://github.com/comcduarte/ecm-frontend/issues/31) Adjust Signature Workflow to include Approvers
+
 ## 1.0.14 - 2026-05-26
 
 ### Fixed

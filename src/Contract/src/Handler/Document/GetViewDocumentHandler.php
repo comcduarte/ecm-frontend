@@ -126,15 +126,13 @@ class GetViewDocumentHandler implements RequestHandlerInterface
          * @var  UserIdentity $identity
          */
         try {
-            $identity = $this->authenticationService->getIdentity();
-            $signForm->get('EMAIL_0')->setValue($identity->getIdentity());
-        } catch (\Throwable $e) {
-        }
-        
-        
-        if (isset($vendor_email_address)) {
             $field = sprintf('EMAIL_%d', intval($signForm->num_emails - 1));
-            $signForm->get($field)->setValue($vendor_email_address);
+            $signForm->get($field)->setValue('mayor@middletownct.gov');
+            
+            if (isset($vendor_email_address)) {
+                $signForm->get('EMAIL_0')->setValue($vendor_email_address);
+            }
+        } catch (\Throwable $e) {
         }
         
         

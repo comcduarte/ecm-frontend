@@ -82,7 +82,7 @@ class PostRouteSignHandler implements RequestHandlerInterface
                  * @TODO Make a form to allow the BoxSignRequest generator to add multiple emails
                  * and select their role from a dropdown.  Set defaults as appropriate.
                  */
-                $box_approver->email = 'developer@middletownct.gov';
+                $box_approver->email = 'purchasing@middletownct.gov';
                 $box_approver->order = $i;
                 $signers[] = $box_approver;
                 
@@ -107,7 +107,9 @@ class PostRouteSignHandler implements RequestHandlerInterface
                 throw new \Exception('Form was invalid.');
             }
             
-            //-- Update Metadata --//            
+            /*
+             * Do not remove from queue once BoxSign Request is created
+             *
             $folder_id = $parent_folder->getId();
             $scope = 'enterprise';
             $template_key = 'ecm-application';
@@ -124,6 +126,7 @@ class PostRouteSignHandler implements RequestHandlerInterface
             if ($result instanceof ClientError) {
                 throw new ClientErrorException($result->message);
             }
+            */
             
             $this->messenger->addSuccess('Box Sign Request submitted successfully.');
         } catch (\Throwable $e) {
