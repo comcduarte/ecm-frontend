@@ -44,7 +44,7 @@ class CreateUCLTSInputFilter extends AbstractInputFilter
         $infoInputFilter = new InputFilter();
         $infoInputFilter
             ->add(new TextInput('PROJECT_NAME', true))
-            ->add(new TextInput('RESOLUTION_NUMBER', true))
+            ->add(new TextInput('RESOLUTION_NUMBER', false))
             ->add(new CheckboxInput('OPTIONS', true))
             ->add(new TextInput('CONTRACT_AMOUNT', false));
         
