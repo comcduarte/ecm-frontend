@@ -9,10 +9,12 @@ use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
 use Core\Metadata\Instance\Contract as ContractInstance;
 use Core\Metadata\Instance\EcmApplication;
+use Core\Metadata\Instance\Permission;
 use Core\Metadata\Instance\Vendor;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
 use Frontend\App\Service\AccessTokenService;
+use comcduarte\Box\API\Enum\ResourceType;
 use comcduarte\Box\API\Exception\ClientErrorException;
 use comcduarte\Box\API\Resource\BaseResource;
 use comcduarte\Box\API\Resource\ClientError;
@@ -26,8 +28,6 @@ use comcduarte\Box\API\Resource\MetadataInstance;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
-use Core\Metadata\Instance\Permission;
-use comcduarte\Box\API\Enum\ResourceType;
 
 class ContractService implements ContractServiceInterface
 {
@@ -86,8 +86,15 @@ class ContractService implements ContractServiceInterface
             throw new ClientErrorException($result->message);
         }
         
+        if (isset($params['PROJECT_NAME'])) {
+            $project_name = $params['PROJECT_NAME'];
+        } elseif (isset($params['INFO']['PROJECT_NAME'])) {
+            $project_name = $params['INFO']['PROJECT_NAME'];
+        } else {
+            throw new \Exception('Unable to find Project Name');
+        }
         
-        return sprintf('%d-%04d %s', date('Y'), $integer, strtoupper($params['PROJECT_NAME']));
+        return sprintf('%d-%04d %s', date('Y'), $integer, strtoupper($project_name));
     }
 
     public function deleteContract(
@@ -320,13 +327,13 @@ class ContractService implements ContractServiceInterface
             'approval' => [],
             'contract' => [
                 'coi-expiration' => '',
-                'contract-amount' => $data['CONTRACT_AMOUNT'],
-                'contract-end-date' => $data['CONTRACT_END_DATE'],
+                'contract-amount' => $this->find($data,'CONTRACT_AMOUNT'),
+                'contract-end-date' => $this->find($data,'CONTRACT_END_DATE'),
                 'contract-status' => '',
-                'document-type' => $data['DOCTYPE'],
+                'document-type' => $this->find($data,'DOCTYPE'),
             ],
             'ecm-application' => [
-                'project-name' => $data['PROJECT_NAME'],
+                'project-name' => $this->find($data,'PROJECT_NAME'),
                 'queue' => '',
                 'contract-number' => $contract->getFolder_id(),
             ],
@@ -548,5 +555,20 @@ class ContractService implements ContractServiceInterface
         ];
         
         return $this->contractRepository->getAmendments($params, $access_token);
+    }
+    
+    private function find(array $data, string $query): string 
+    {
+        foreach ($data as $key => $value) {
+            if ($key === $query) {
+                return $value;
+            }
+            
+            if (is_array($value)) {
+                $this->find($value, $query);
+            }
+        }
+        
+        return '';
     }
 }

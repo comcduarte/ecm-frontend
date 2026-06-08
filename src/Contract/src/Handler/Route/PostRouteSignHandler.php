@@ -67,6 +67,8 @@ class PostRouteSignHandler implements RequestHandlerInterface
                         $box_signer->role = 'signer';
                         $box_signer->email = $data["EMAIL_$i"];
                         $box_signer->order = $i;
+                        $box_signer->suppress_notifications = true;
+                        $box_signer->embed_url_external_user_id = sprintf('%s', $i);
                         
                         $signers[] = $box_signer;
                         $i++;
@@ -82,7 +84,7 @@ class PostRouteSignHandler implements RequestHandlerInterface
                  * @TODO Make a form to allow the BoxSignRequest generator to add multiple emails
                  * and select their role from a dropdown.  Set defaults as appropriate.
                  */
-                $box_approver->email = 'purchasing@middletownct.gov';
+                $box_approver->email = 'purchase@middletownct.gov';
                 $box_approver->order = $i;
                 $signers[] = $box_approver;
                 

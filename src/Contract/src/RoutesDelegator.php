@@ -37,6 +37,7 @@ use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Frontend\Contract\Handler\Route\PostRouteSignCancelHandler;
 
 class RoutesDelegator
 {
@@ -97,7 +98,9 @@ class RoutesDelegator
             ->get('/reject/' . $box_id , PostRouteContractHandler::class, 'route::reject');
         
         $routeCollector->group('/sign')
-            ->post('/contract/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteSignHandler::class, 'route::sign');
+            ->post('/contract/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteSignHandler::class, 'route::sign')
+            ->post('/cancel/' . $uuid, PostRouteSignCancelHandler::class, 'route::sign-cancel')
+        ;
         
         $routeCollector->group('/document')
             ->get('/edit/' . $box_id, GetEditDocumentHandler::class, 'document::edit-document')

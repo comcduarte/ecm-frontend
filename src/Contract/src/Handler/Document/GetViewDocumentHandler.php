@@ -25,6 +25,8 @@ use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataInstance;
 use comcduarte\Box\API\Resource\MetadataInstances;
+use comcduarte\Box\API\Resource\BoxSign\BoxSignRequest;
+use comcduarte\Box\API\Resource\BoxSign\BoxSigner;
 
 class GetViewDocumentHandler implements RequestHandlerInterface
 {
@@ -93,8 +95,30 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $instance = new MetadataInstance($access_token);
         $instances = $instance->list_metadata_instances_on_file($file_id);
         
+        $sign_request_id = 0;
+        
         $contract_number = '';
         foreach ($instances->entries as $index => $x) {
+            /**
+             * Parse through the templates
+             */
+            switch ($x['$template']) {
+                case 'boxSign':
+                    $boxsign = new BoxSignRequest($access_token);
+                    $result = $boxsign->get_box_sign_request_by_id($x['signId']);
+                    $sign_request_id = $boxsign->getId();
+                    /**
+                     * @var BoxSigner $signer
+                     */
+                    foreach ($boxsign->signers as $signer_id => $signer) {
+                        $i = sprintf('signer_%s_url', $signer_id);
+                        $instances->entries[$index][$i] = $signer['embed_url'];
+                    }
+                    break;
+                default:
+                    break;
+            }
+            
             if ($x['$template'] == 'ecm-application') {
                 $contract_number = $x['contract-number'];
                 $signForm->num_emails++;
@@ -176,6 +200,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'uploadform' => $this->uploadFileForm,
                 'id' => $contract_number,
                 'file_id' => $file_id,
+                'sign_request_id' => $sign_request_id,
                 'supporting_documentation' => $supporting_documentation,
                 'amendments' => $amendments,
             ])
