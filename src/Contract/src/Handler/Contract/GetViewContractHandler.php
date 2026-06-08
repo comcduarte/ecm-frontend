@@ -19,6 +19,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Core\Metadata\Instance\EcmApplication;
 use comcduarte\Box\API\Exception\ClientErrorException;
+use comcduarte\Box\API\Enum\ResourceType;
 
 class GetViewContractHandler implements RequestHandlerInterface
 {
@@ -51,7 +52,7 @@ class GetViewContractHandler implements RequestHandlerInterface
         
         
         try {
-            $instances = $this->contractService->getMetadata($request->getAttribute('id'), 'ecm-application');
+            $instances = $this->contractService->getMetadata($request->getAttribute('id'), 'ecm-application', 'enterprise', ResourceType::Folder);
         } catch (ClientErrorException $exception) {
             $this->messenger->addError($exception->getMessage());
             return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $contract_file->getId()]));

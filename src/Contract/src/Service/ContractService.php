@@ -451,7 +451,7 @@ class ContractService implements ContractServiceInterface
         
         
         if ($result instanceof ClientError) {
-            throw new ClientErrorException();
+            throw new ClientErrorException($result->context_info['errors'][0]['message']);
         }
         
         $instances->entries[] = $metadata_instance;
