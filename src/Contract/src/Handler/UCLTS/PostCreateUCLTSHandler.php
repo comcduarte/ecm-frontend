@@ -58,6 +58,7 @@ class PostCreateUCLTSHandler implements RequestHandlerInterface
                  * Custom Logic
                  */
                 $data['DOCTYPE'] = 'Contract';
+                $data['INFO']['OPTIONS']['CHECK_CHRO'] = 'FALSE';
                 
                 /**
                  * Checkboxes
