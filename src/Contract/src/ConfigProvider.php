@@ -57,6 +57,8 @@ use Frontend\Contract\Service\ContractServiceInterface;
 use Laminas\Form\ElementFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mezzio\Application;
+use Frontend\Contract\Handler\Route\PostRouteSignCancelHandler;
+use Frontend\Contract\Form\Factory\CreateUCLTSFormFactory;
 
 /**
  * @phpstan-type ConfigType array{
@@ -119,6 +121,7 @@ class ConfigProvider
                 //-- Sign Contract --//
                 PostRouteSignHandler::class         => AttributedServiceFactory::class,
                 SignContractModalForm::class        => SignContractModalFormFactory::class,
+                PostRouteSignCancelHandler::class   => AttributedServiceFactory::class,
                 
                 //-- Custom Forms --//
                 CreateUCLaborForm::class            => CreateUCLaborFormFactory::class,
@@ -138,9 +141,9 @@ class ConfigProvider
                 GetCreateCCFormHandler::class   => AttributedServiceFactory::class,
                 PostCreateCCHandler::class      => AttributedServiceFactory::class,
                 
-                CreateUCLTSForm::class => ElementFactory::class,
-                GetCreateUCLTSFormHandler::class => AttributedServiceFactory::class,
-                PostCreateUCLTSHandler::class   => AttributedServiceFactory::class,
+                CreateUCLTSForm::class              => CreateUCLTSFormFactory::class,
+                GetCreateUCLTSFormHandler::class    => AttributedServiceFactory::class,
+                PostCreateUCLTSHandler::class       => AttributedServiceFactory::class,
                 
                 PostRouteContractHandler::class     => AttributedServiceFactory::class,
                 
