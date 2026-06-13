@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Frontend\User\Repository;
 
-use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Dot\DependencyInjection\Attribute\Entity;
-use Exception;
 use Frontend\User\Entity\User;
 use Frontend\User\Entity\UserRememberMe;
+use Frontend\User\Entity\UserRole;
 use Frontend\User\Enum\UserStatusEnum;
 use Ramsey\Uuid\Uuid;
-
-use function is_string;
-use function strlen;
+use DateTimeImmutable;
+use Exception;
 
 /**
  * @extends EntityRepository<object>
@@ -41,6 +39,21 @@ class UserRepository extends EntityRepository
         //ignore deleted users
         $qb->andWhere('user.status != :status')->setParameter('status', UserStatusEnum::Deleted);
         return $qb->getQuery()->useQueryCache(true)->getOneOrNullResult();
+    }
+    
+    public function findUsersByRole(UserRole $role): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('user.identity')
+            ->from(User::class, 'user')
+            ->innerJoin('user.roles', 'r')
+            ->Where('r.name = :role')
+            ->setParameter('role', $role->getName());
+        
+        //ignore deleted users
+        $qb->andWhere('user.status != :status')->setParameter('status', UserStatusEnum::Deleted);
+        return $qb->getQuery()->useQueryCache(true)->getArrayResult();
     }
 
     public function saveUser(User $user): User
