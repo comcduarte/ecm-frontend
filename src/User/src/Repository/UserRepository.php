@@ -52,7 +52,7 @@ class UserRepository extends EntityRepository
             ->setParameter('role', $role->getName());
         
         //ignore deleted users
-        $qb->andWhere('user.status != :status')->setParameter('status', UserStatusEnum::Deleted);
+        $qb->andWhere('user.status = :status')->setParameter('status', UserStatusEnum::Active);
         return $qb->getQuery()->useQueryCache(true)->getArrayResult();
     }
 
