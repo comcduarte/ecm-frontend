@@ -4,6 +4,7 @@
 {% set workflow_active = '' %}
 {% set home_active = '' %}
 {% set document_active = '' %}
+{% set signatures_active = '' %}
 {% set help_active = '' %}
 
 {% if active == 'workflow' %}
@@ -169,13 +170,6 @@
 		                'url': url('route::vendor', {'id': id|default(0) }),
 		                'permission': 'ECM_PURCHASING'
 		            },
-		            'signature': {
-		            	'name': 'Sign Documents',
-		                'icon': 'signature',
-		                'url': '',
-		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalSignContract',
-		                'permission': 'ECM_PURCHASING'
-		            },
 					'notes': {
 		                'name': 'Add Notes',
 		                'icon': 'note-sticky',
@@ -213,6 +207,32 @@
 		    }
 		},
 		'permission': 'authenticated'
+	},
+	{
+		'name': 'signatures',
+    	'permission': 'authenticated',
+		'groups': {
+			'signatures': {
+				'name': 'Signatures',
+				'permission': 'ECM_PURCHASING',
+				'commands': {
+					'sign': {
+		            	'name': 'Sign Documents',
+		                'icon': 'signature',
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalSignContract',
+		                'permission': 'ECM_PURCHASING'
+		            },
+		            
+		            'cancel': {
+		                'name': 'Cancel',
+		                'icon': 'square-xmark',
+		                'url': url('route::sign-cancel', {'id': file_id|default(0) }),
+		                'permission': 'ECM_PURCHASING'
+		            }
+				}
+			}
+		}
 	},
 	{
     	'name': 'help',

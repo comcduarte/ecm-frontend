@@ -31,10 +31,10 @@ class DateFieldset extends Fieldset implements InputFilterProviderInterface
         ]);
         
         $this->add([
-            'name' => 'END_DATE',
+            'name' => 'CONTRACT_END_DATE',
             'type' => Text::class,
             'attributes' => [
-                'id' => 'END_DATE',
+                'id' => 'CONTACT_END_DATE',
                 'class' => 'form-control'
             ],
             'options' => [
@@ -73,7 +73,7 @@ class DateFieldset extends Fieldset implements InputFilterProviderInterface
                     ],
                 ],
             ],
-            'END_DATE' => [
+            'CONTRACT_END_DATE' => [
                 'required' => true,
                 'filters' => [
                     ['name' => 'StringTrim'],

@@ -1,9 +1,21 @@
 # Changelog
 
-## 1.0.15 - 2026-06
+## 1.0.16 - 2026-06-17
+
+### Added
+ * Function to cancel signature requests in order to resubmit.
+ * Version tracking for Document Generation.
+ * Increased Notifications to include responsible departments.
+
+### Fixed
+ * Issue [#36](https://github.com/comcduarte/ecm-frontend/issues/36) Create Custom BoxSign Notification Emails
+
+## 1.0.15 - 2026-06-08
 
 ### Fixed
 * Issue [#31](https://github.com/comcduarte/ecm-frontend/issues/31) Adjust Signature Workflow to include Approvers
+* Issue [#36](https://github.com/comcduarte/ecm-frontend/issues/36) Create Custom BoxSign Notification Emails
+* Issue [#37](https://github.com/comcduarte/ecm-frontend/issues/37) Add Uniform Contract for Labor/Trade Services over $100,000.00 Form
 
 ## 1.0.14 - 2026-05-26
 

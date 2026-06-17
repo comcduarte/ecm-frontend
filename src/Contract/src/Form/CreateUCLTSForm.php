@@ -12,6 +12,7 @@ use Laminas\Form\Fieldset;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\MultiCheckbox;
+use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\ExceptionInterface;
@@ -48,6 +49,18 @@ class CreateUCLTSForm extends AbstractForm
     public function init(): void
     {
         $this->add([
+            'name' => 'DOCTYPE',
+            'type' => Hidden::class,
+            'attributes' => [
+                'id' => 'DOCTYPE',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Document Type',
+            ],
+        ]);
+        
+        $this->add([
             'name' => 'DATES',
             'type' => DateFieldset::class,
             'attributes' => [
@@ -75,6 +88,18 @@ class CreateUCLTSForm extends AbstractForm
         ]);
         
         $options->add([
+            'name' => 'CONTRACT_AMOUNT',
+            'type' => Text::class,
+            'attributes' => [
+                'id' => 'CONTRACT_AMOUNT',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Contract Amount',
+            ],
+        ]);
+        
+        $options->add([
             'name' => 'RESOLUTION_NUMBER',
             'type' => Text::class,
             'attributes' => [
@@ -92,10 +117,11 @@ class CreateUCLTSForm extends AbstractForm
             'options' => [
                 'label' => 'Options',
                 'value_options' => [
-                    '0' => 'Soul Source Purchase',
-                    '1' => 'Emergency Purchase',
-                    '2' => 'Bid Waiver',
-                    '3' => 'Cooperative Contract',
+                    '0' => 'Cooperative Contract',
+                    '1' => 'Bid Waiver',
+                    '2' => 'Emergency Purchase',
+                    '3' => 'Soul Source Purchase',
+                    '4' => 'CHRO',
                 ],
             ],
         ]);
@@ -113,6 +139,31 @@ class CreateUCLTSForm extends AbstractForm
                 'label' => 'Vendor Information',
             ]
         ]);
+        
+        $this->add([
+            'name' => 'DEPARTMENT',
+            'type' => Select::class,
+            'attributes' => [
+                'id' => 'DEPARTMENT',
+                'class' => 'form-control',
+                'onchange' => 'document.getElementById("parent").value=document.getElementById("DEPARTMENT").value',
+            ],
+            'options' => [
+                'label' => 'Department',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'parent',
+            'type' => Hidden::class,
+            'attributes' => [
+                'id' => 'parent',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Department Queue Folder ID',
+            ],
+        ]);
 
         $this->add([
             'name' => 'TYPE',
@@ -125,6 +176,20 @@ class CreateUCLTSForm extends AbstractForm
                 'label' => 'Document Template',
             ],
         ]);
+        
+        $this->add([
+            'name' => 'ENTITY',
+            'type' => Hidden::class,
+            'attributes' => [
+                'id' => 'ENTITY',
+                'class' => 'form-control',
+                'value' => 'City of Middletown',
+            ],
+            'options' => [
+                'label' => 'Document Template',
+            ],
+        ]);
+        
         
         $this->add(
             (new Csrf('createUCLTSCsrf'))
@@ -140,4 +205,5 @@ class CreateUCLTSForm extends AbstractForm
                 ->setAttribute('class', 'btn btn-primary btn-color btn-sm')
         );
     }
+
 }

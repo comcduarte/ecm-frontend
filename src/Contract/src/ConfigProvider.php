@@ -19,6 +19,7 @@ use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Form\Factory\CreateAmendmentFormFactory;
 use Frontend\Contract\Form\Factory\CreateCCFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCGSFormFactory;
+use Frontend\Contract\Form\Factory\CreateUCLTSFormFactory;
 use Frontend\Contract\Form\Factory\CreateUCLaborFormFactory;
 use Frontend\Contract\Form\Factory\SignContractModalFormFactory;
 use Frontend\Contract\Form\Factory\UploadFileFormFactory;
@@ -44,6 +45,7 @@ use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Handler\Route\PostRouteSignCancelHandler;
 use Frontend\Contract\Handler\Route\PostRouteSignHandler;
 use Frontend\Contract\Handler\UCGS\GetCreateUCGSFormHandler;
 use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
@@ -51,6 +53,9 @@ use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
 use Frontend\Contract\Handler\UCLTS\PostCreateUCLTSHandler;
 use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Frontend\Contract\Middleware\NotificationMiddleware;
+use Frontend\Contract\Middleware\PostRouteContractMiddleware;
+use Frontend\Contract\Middleware\PostRouteSignMiddleware;
+use Frontend\Contract\Middleware\SignNotificationMiddleware;
 use Frontend\Contract\Service\AmendmentService;
 use Frontend\Contract\Service\ContractService;
 use Frontend\Contract\Service\ContractServiceInterface;
@@ -119,6 +124,8 @@ class ConfigProvider
                 //-- Sign Contract --//
                 PostRouteSignHandler::class         => AttributedServiceFactory::class,
                 SignContractModalForm::class        => SignContractModalFormFactory::class,
+                PostRouteSignCancelHandler::class   => AttributedServiceFactory::class,
+                PostRouteSignMiddleware::class      => AttributedServiceFactory::class,
                 
                 //-- Custom Forms --//
                 CreateUCLaborForm::class            => CreateUCLaborFormFactory::class,
@@ -138,11 +145,12 @@ class ConfigProvider
                 GetCreateCCFormHandler::class   => AttributedServiceFactory::class,
                 PostCreateCCHandler::class      => AttributedServiceFactory::class,
                 
-                CreateUCLTSForm::class => ElementFactory::class,
-                GetCreateUCLTSFormHandler::class => AttributedServiceFactory::class,
-                PostCreateUCLTSHandler::class   => AttributedServiceFactory::class,
+                CreateUCLTSForm::class              => CreateUCLTSFormFactory::class,
+                GetCreateUCLTSFormHandler::class    => AttributedServiceFactory::class,
+                PostCreateUCLTSHandler::class       => AttributedServiceFactory::class,
                 
-                PostRouteContractHandler::class     => AttributedServiceFactory::class,
+                PostRouteContractHandler::class         => AttributedServiceFactory::class,
+                PostRouteContractMiddleware::class    => AttributedServiceFactory::class,
                 
                 DeleteContractForm::class           => ElementFactory::class,
                 EditContractForm::class             => ElementFactory::class,
@@ -151,6 +159,7 @@ class ConfigProvider
                 AmendmentService::class => AttributedServiceFactory::class,
                 
                 NotificationMiddleware::class => AttributedServiceFactory::class,
+                SignNotificationMiddleware::class   => AttributedServiceFactory::class,
                 MetadataCorrectionMiddleware::class => AttributedServiceFactory::class,
             ],
             'aliases'    => [
