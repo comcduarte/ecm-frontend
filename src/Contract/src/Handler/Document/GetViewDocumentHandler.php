@@ -111,8 +111,11 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                      * @var BoxSigner $signer
                      */
                     foreach ($boxsign->signers as $signer_id => $signer) {
+                        if (!isset($signer['embed_url'])) {
+                            continue;
+                        }
                         $i = sprintf('signer_%s_url', $signer_id);
-                        $instances->entries[$index][$i] = $signer['embed_url'];
+                        $instances->entries[$index][$i] = sprintf('<a class="btn btn-sm btn-primary" href="%s">Sign</a>',$signer['embed_url']);
                     }
                     break;
                 default:

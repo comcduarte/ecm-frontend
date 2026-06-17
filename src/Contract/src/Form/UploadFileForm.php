@@ -63,6 +63,7 @@ class UploadFileForm extends AbstractContractForm
                     'Additional Indemnification Agreement' => 'Additional Indemnification Agreement',
                     'Appendix - Insurance Requirements' => 'Appendix - Insurance Requirements',
                     'Appendix A - Statement of Work' => 'Appendix A - Statement of Work',
+                    'Appendix C - Labor Trade Packet',
                     'Appendix D - Memo' => 'Appendix D - Memo',
                     'Bid Documents' => 'Bid Documents',
                     'Bid Results' => 'Bid Results',
@@ -76,6 +77,7 @@ class UploadFileForm extends AbstractContractForm
                     'City - Standard Insurance Requirements' => 'City - Standard Insurance Requirements',
                     'Contract Award' => 'Contract Award',
                     'Cooperative Contract Agreement' => 'Cooperative Contract Agreement',
+                    'Emergency Purchase Memo' => 'Emergency Purchase Memo',
                     'LIBRARY - Standard Insurance Requirements' => 'LIBRARY - Standard Insurance Requirements',
                     'Mayor Contract Signature Page' => 'Mayor Contract Signature Page',
                     'Misc. Supporting Documentation' => 'Misc. Supporting Documentation',
@@ -86,6 +88,7 @@ class UploadFileForm extends AbstractContractForm
                     'Purchase Order' => 'Purchase Order',
                     'Purchasing RFP' => 'Purchasing RFP',
                     'RFP / RFQ' => 'RFP / RFQ',
+                    'Sole Source Purchase Justification Form' => 'Sole Source Purchase Justification Form',
 
                     'Formal Opinion' => 'Formal Opinion'
                 ]
