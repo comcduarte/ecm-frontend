@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.16 - 2026-06-17
+
+### Added
+ * Function to cancel signature requests in order to resubmit.
+ * Version tracking for Document Generation.
+ * Increased Notifications to include responsible departments.
+
+### Fixed
+ * Issue [#36](https://github.com/comcduarte/ecm-frontend/issues/36) Create Custom BoxSign Notification Emails
+
 ## 1.0.15 - 2026-06-08
 
 ### Fixed
