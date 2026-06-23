@@ -72,7 +72,7 @@ return [
                                 ],
                                 [
                                     'route' => 'account',
-                                    'roles' => ['user'],
+                                    'roles' => ['*'],
                                 ],
                             ],
                         ],
