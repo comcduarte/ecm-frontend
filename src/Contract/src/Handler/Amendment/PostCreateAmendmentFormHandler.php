@@ -61,7 +61,7 @@ class PostCreateAmendmentFormHandler implements RequestHandlerInterface
 //                 $data['AMENDMENT_NUM'] = 1;
                 
                 //-- COMPLETION_DATE --//
-                $data['COMPLETION_DATE'] = $data['DATE']['END_DATE'];
+                $data['COMPLETION_DATE'] = $data['DATE']['CONTRACT_END_DATE'];
                 
                 //-- REQUIRED FIELDS --//
                 $data['DOCTYPE'] = 'Contract';
