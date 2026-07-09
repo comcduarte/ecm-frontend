@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Dot\DependencyInjection\Factory\AttributedServiceFactory;
 use Frontend\App\Factory\EntityListenerResolverFactory;
 use Frontend\App\Form\View\Helper\FormElementErrorsFactory;
+use Frontend\App\Form\View\Helper\FormRow;
 use Frontend\App\Middleware\RememberMeMiddleware;
 use Frontend\App\Resolver\EntityListenerResolver;
 use Frontend\App\Service\AccessTokenService;
@@ -18,6 +19,7 @@ use Frontend\App\Service\CookieService;
 use Frontend\App\Service\CookieServiceInterface;
 use Frontend\App\Service\RecaptchaService;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 class ConfigProvider
 {
@@ -84,8 +86,12 @@ class ConfigProvider
     public function getViewHelpers(): array
     {
         return [
+            'aliases' => [
+                'formRow' => FormRow::class,
+            ],
             'factories' => [
                 \Laminas\Form\View\Helper\FormElementErrors::class => FormElementErrorsFactory::class,
+                FormRow::class => InvokableFactory::class,
             ],
             'config' => [
                 'form_element_errors' => [
