@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.17 - 2026-07
+
+### Added
+ * Additional field validation and error descriptions.
+ * Added support for bootstrap form display.
+ 
+### Fixed
+ * Added label to delete contract form.
+
 ## 1.0.16 - 2026-06-17
 
 ### Added
