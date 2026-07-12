@@ -8,6 +8,7 @@
  
 ### Fixed
  * Added label to delete contract form.
+ * Issue [#27](https://github.com/comcduarte/ecm-frontend/issues/27): Implement getInputFilterSpecification() on Forms
 
 ## 1.0.16 - 2026-06-17
 

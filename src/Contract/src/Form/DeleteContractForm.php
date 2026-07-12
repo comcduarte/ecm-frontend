@@ -45,7 +45,6 @@ class DeleteContractForm extends AbstractForm
         $this->add([
             'name' => 'confirmation',
             'type' => Checkbox::class,
-            'required' => true,
             'attributes' => [
                 'id' => 'confirmation',
                 'class' => 'form-check-input',

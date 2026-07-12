@@ -26,6 +26,7 @@ class ConfirmDeleteContractInput extends Input
                 'message'  => 'Please confirm the Contract deletion.',
                 'haystack' => [
                     'yes',
+                    '1',
                 ],
             ], true);
     }
