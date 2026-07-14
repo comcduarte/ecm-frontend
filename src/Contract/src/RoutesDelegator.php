@@ -96,6 +96,7 @@ class RoutesDelegator
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
             ->get('/mayor/' . $box_id , PostRouteContractHandler::class, 'route::mayor')
+            ->get('/cabinet/' . $box_id, PostRouteContractHandler::class, 'route::cabinet')
             ->get('/vendor/' . $box_id , PostRouteContractHandler::class, 'route::vendor')
             ->get('/reject/' . $box_id , PostRouteContractHandler::class, 'route::reject');
         

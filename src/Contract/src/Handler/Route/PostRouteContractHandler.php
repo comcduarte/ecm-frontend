@@ -81,16 +81,62 @@ class PostRouteContractHandler implements RequestHandlerInterface
         $queue = null;
         foreach (QueueFolderEnum::cases() as $case) {
             if ($case->name === 'ECM_' . strtoupper($destination[1])) {
-                $queue = $case;
+                $queue = $case->value;
                 break;
             }
         }  
+        
+        if ($destination[1] == 'cabinet') {
+            /**
+             * Find Cabinet child folder
+             * Search for folder and change move command to a string when enum is not present
+             */
+            $matches = [];
+            preg_match('/([\d]{4})-([\d]{4})-?([AM\d]{4,6})?/', $folder->name, $matches);
+            $year = $matches[1];
+            $contract_number = $matches[2];
+            
+            $amendment = false;
+            if (isset($matches[3])) {
+                $amendment = true;
+            }
+            
+            
+            $items = $folder->list_items_in_folder(QueueFolderEnum::ECM_CABINET->value);
+            foreach ($items->entries as $item) {
+                if ($item['type'] == 'folder' && $item['name'] = 'Contracts') {
+                    $contracts = $item['id'];
+                    break;
+                }
+            }
+            
+            $items = $folder->list_items_in_folder($contracts);
+            foreach ($items->entries as $item) {
+                if ($item['type'] == 'folder' && $item['name'] == $year) {
+                    $queue = $item['id'];
+                    break;
+                }
+            }
+            
+            if ($amendment) {
+//                 $items = $folder->list_items_in_folder($year);
+//                 foreach ($items->entries as $item) {
+//                     if ($item['type'] == 'folder' && preg_match('//', $item['name'])) {
+//                         $contract = $item['id'];
+//                         break;
+//                     }
+//                 }
+            }
+            
+            
+            
+        }
         
         if (!$queue) {
             throw new \Exception('Queue does not exist');
         }
         
-        $this->contractService->move($id,(string) $queue->value);
+        $this->contractService->move($id,(string) $queue);
         
         /**
          * Determine Contract File ID

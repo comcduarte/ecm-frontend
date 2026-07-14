@@ -5,6 +5,7 @@
 ### Added
  * Additional field validation and error descriptions.
  * Added support for bootstrap form display.
+ * Route to Cabinet
  
 ### Fixed
  * Added label to delete contract form.
