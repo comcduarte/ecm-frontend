@@ -1,0 +1,15 @@
+# Frequently Asked Questions
+   - How do I resend a BoxSign Request?
+   - I need to resend a BoxSign Request to a new email address; the first one was lost.
+      - Policy
+         - You may only resend a BoxSign Request to the existing email address. Purchasing has the permission to do so.  An administrator can also use the following command:
+            - ecm-cli box-sign:list-requests
+            - ecm-cli box-sign:resend-request 035b796c-c391-4d54-99a6-8bd7bab000de
+         - In the event the vendor did receive the email, but clicking on the link reveals that it has expired, they have a small link on the bottom of that page which will allow them to resend the BoxSign Request themselves.
+         - In the event you need to change to whom the email is being sent, you must cancel the original BoxSign Request, delete the Signed files, and Signing Log, and create a new BoxSign Request to the new email address.  You should update the email address in the Vendor Metadata Template before this is done.
+            - ecm-cli box-sign:cancel-request 30f4f149-4396-4df9-b182-9c42e2d6776d --delete-sign-files --delete-signing-log
+            - --delete-sign-files --delete-signing-log are optional arguments
+   - I receive a 500 Error view opening a contract
+      - Review Log File for specific error.
+      - Cabinet Files may not have the proper metadata cascade policies applied
+      - If the File does not contain a ecm-application metadata instance, apply cascade policy to folder instance and force apply to all children.
