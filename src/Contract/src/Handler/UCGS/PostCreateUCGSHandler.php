@@ -20,6 +20,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
+use Core\Contract\Entity\Contract;
 
 class PostCreateUCGSHandler implements RequestHandlerInterface
 {
@@ -57,13 +58,14 @@ class PostCreateUCGSHandler implements RequestHandlerInterface
                 
                 /**
                  * Create Contract
+                 * @var Contract $contract
                  */
                 $contract = $this->contractService->createContract($data);
                 $this->contractService->generateContract($data, $contract);
                 
                 $this->messenger->addSuccess(Message::CONTRACT_CREATED);
 
-                return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'index']));
+                return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'index', 'dept' => $contract->getContract_folder()->parent->id]));
             }
 
             return new HtmlResponse(

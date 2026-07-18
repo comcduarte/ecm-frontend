@@ -3,5 +3,7 @@
 {% block title %}Delete Contract Form{% endblock %}
 
 {% block content %}
-
+<div class="container">
+	{{ form(form, {'method': 'POST'}) }}
+</div>
 {% endblock %}

@@ -56,7 +56,7 @@ return [
                                 ],
                                 [
                                     'route' => 'document::*',
-                                    'roles' => ['user'],
+                                    'roles' => ['*'],
                                 ],
                                 [
                                     'route' => 'dashboard',
@@ -72,7 +72,7 @@ return [
                                 ],
                                 [
                                     'route' => 'account',
-                                    'roles' => ['user'],
+                                    'roles' => ['*'],
                                 ],
                             ],
                         ],

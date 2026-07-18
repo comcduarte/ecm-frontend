@@ -45,12 +45,14 @@
                 		<div id="collapseMd" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 			<div class="accordion-body">
                             {% for instance in metadata_instances.entries %}
-            					<p class='text-bg-dark text-uppercase text-decoration-underline fw-bold'>{{ instance['$template'] }}</p>    					
+            					<p class='text-bg-dark text-uppercase text-decoration-underline fw-bold'>{{ instance['$template'] }}</p>
+            					<ul>    					
             					{% for key,value in instance %}
             						{% if "$" not in key %}
-            							- {{ key }}: {{ value }}<br>
+            							<li>{{ key|raw }}: {{ value|raw }}
             						{% endif %}
             					{% endfor %}
+            					</ul>
             				{% endfor %}
                 			</div>
                 		</div>

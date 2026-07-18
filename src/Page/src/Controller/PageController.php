@@ -10,6 +10,7 @@ use Frontend\Page\Service\PageServiceInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
+use Michelf\Markdown;
 use Psr\Http\Message\ResponseInterface;
 
 class PageController extends AbstractActionController
@@ -18,17 +19,31 @@ class PageController extends AbstractActionController
         PageServiceInterface::class,
         RouterInterface::class,
         TemplateRendererInterface::class,
+        "config.databases",
     )]
     public function __construct(
         protected PageServiceInterface $pageService,
         protected RouterInterface $router,
-        protected TemplateRendererInterface $template
+        protected TemplateRendererInterface $template,
+        protected array $databasesConfig,
     ) {
     }
 
     public function indexAction(): ResponseInterface
     {
-        return new HtmlResponse($this->template->render('page::permissions'));
+        
+        $parser = new Markdown();
+        $contents = file_get_contents(__DIR__ . '/../../../../CHANGELOG.md');
+        $html = $parser->defaultTransform($contents);
+        
+        return new HtmlResponse($this->template->render(
+        //                 'home::dashboard',
+            'app::home',
+            [
+                'active' => 'home',
+                'changelog' => $html,
+            ],
+            ));
     }
 
     public function homeAction(): ResponseInterface
@@ -72,8 +87,18 @@ class PageController extends AbstractActionController
                 'value' => ini_get($name),
             ];
         }
-            
         
+        foreach ($this->databasesConfig['default'] as $name => $value) {
+            if ($name == 'password') {
+                $value = '******';
+            }
+            
+            $diagnostics[] = [
+                'name'  => $name,
+                'value' => $value            
+                
+            ];
+        }
         
         return new HtmlResponse(
             $this->template->render(

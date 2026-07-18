@@ -4,6 +4,7 @@
 {% set workflow_active = '' %}
 {% set home_active = '' %}
 {% set document_active = '' %}
+{% set signatures_active = '' %}
 {% set help_active = '' %}
 
 {% if active == 'workflow' %}
@@ -116,7 +117,7 @@
 		        'name': 'Dashboards',
 		        'commands': {
 		            'workflow': {
-		                'name': 'Department',
+		                'name': 'Dept Dashboard',
 		                'icon': 'gauge-high',
 		                'url': url('dashboard', {'action': 'dept'}),
 		                'permission': 'authenticated'
@@ -133,6 +134,12 @@
 		    'tasks': {
 		        'name': 'Tasks',
 		        'commands': {
+		            'dept': {
+		                'name': 'Route to Dept Head',
+		                'icon': 'share',
+		                'url': url('route::dept', {'id': id|default(0) }),
+		                'permission': 'authenticated'
+		            },
 		        	'risk': {
 		                'name': 'Route to Risk',
 		                'icon': 'share',
@@ -157,18 +164,17 @@
 		                'url': url('route::mayor', {'id': id|default(0) }),
 		                'permission': 'ECM_PURCHASING'
 		            },
+		            'cabinet': {
+		            	'name': 'Route to Cabinet',
+		            	'icon': 'share',
+		            	'url': url('route::cabinet', {'id': id|default(0) }),
+		            	'permission': 'ECM_MAYOR'
+		            },
 					'vendor': {
-		                'name': 'Route to Vendor',
+		                'name': 'Email Vendor',
 		                'icon': 'envelope',
 		                'url': url('route::vendor', {'id': id|default(0) }),
 		                'permission': 'ECM_PURCHASING'
-		            },
-		            'signature': {
-		            	'name': 'Sign Documents',
-		                'icon': 'signature',
-		                'url': '',
-		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalSignContract',
-		                'permission': 'ECM_MAYOR'
 		            },
 					'notes': {
 		                'name': 'Add Notes',
@@ -189,12 +195,50 @@
 		                'icon': 'square-xmark',
 		                'url': url('route::reject', {'id': id|default(0) }),
 		                'permission': 'admin'
-		            }
+		            },
+		            'edit': {
+		                'name': 'Edit Document',
+		                'icon': 'pen-to-square',
+		                'url': url('document::edit-document', {'id': file_id|default(0) }),
+		                'permission': 'ECM_LEGAL'
+		            },
+		            'delete': {
+		                'name': 'Delete',
+		                'icon': 'square-xmark',
+		                'url': url('contract::delete-contract', {'id': id|default(0) }),
+		                'permission': 'authenticated'
+		            },
 		        },
 		    	'permission': 'authenticated'
 		    }
 		},
 		'permission': 'authenticated'
+	},
+	{
+		'name': 'signatures',
+    	'permission': 'authenticated',
+		'groups': {
+			'signatures': {
+				'name': 'Signatures',
+				'permission': 'ECM_PURCHASING',
+				'commands': {
+					'sign': {
+		            	'name': 'Sign Documents',
+		                'icon': 'signature',
+		                'url': '',
+		                'attributes': ' data-bs-toggle=modal data-bs-target=#modalSignContract',
+		                'permission': 'ECM_PURCHASING'
+		            },
+		            
+		            'cancel': {
+		                'name': 'Cancel',
+		                'icon': 'square-xmark',
+		                'url': url('route::sign-cancel', {'id': file_id|default(0) }),
+		                'permission': 'ECM_PURCHASING'
+		            }
+				}
+			}
+		}
 	},
 	{
     	'name': 'help',

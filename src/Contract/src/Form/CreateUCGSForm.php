@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Form;
 
+use Frontend\Contract\Form\Fieldset\DateFieldset;
 use Frontend\Contract\Form\Fieldset\SignatureFieldset;
+use Laminas\Filter\StringTrim;
+use Laminas\Filter\StripTags;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\ExceptionInterface;
+use Laminas\Validator\NotEmpty;
 
 /**
  * @phpstan-import-type CreateUCGSDataType from CreateUCGSInputFilter
@@ -113,27 +117,15 @@ class CreateUCGSForm extends AbstractContractForm
         ]);
         
         $this->add([
-            'name' => 'START_DATE',
-            'type' => Text::class,
+            'name' => 'DATES',
+            'type' => DateFieldset::class,
             'attributes' => [
-                'id' => 'START_DATE',
-                'class' => 'form-control',
+                'id' => 'DATES',
+                'class' => 'form-control'
             ],
             'options' => [
-                'label' => 'Start Date',
-            ],
-        ]);
-        
-        $this->add([
-            'name' => 'CONTRACT_END_DATE',
-            'type' => Text::class,
-            'attributes' => [
-                'id' => 'CONTRACT_END_DATE',
-                'class' => 'form-control',
-            ],
-            'options' => [
-                'label' => 'End Date',
-            ],
+                'label' => 'Dates',
+            ]
         ]);
         
         $this->add([
@@ -203,5 +195,32 @@ class CreateUCGSForm extends AbstractContractForm
             ],
         ],['priority' => 100]);
         
+    }
+    
+    public function getInputFilterSpecification()
+    {
+        
+        return [
+            'CONTRACT_AMOUNT' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+            'PROJECT_NAME' => [
+                'required' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class],
+                ],
+                'validators' => [
+                    ['name' => NotEmpty::class],
+                ],
+            ],
+        ];
     }
 }

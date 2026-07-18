@@ -21,10 +21,12 @@ use Frontend\Contract\Handler\Contract\PostCreateContractHandler;
 use Frontend\Contract\Handler\Contract\PostDeleteContractHandler;
 use Frontend\Contract\Handler\Contract\PostEditContractHandler;
 use Frontend\Contract\Handler\Contract\PostImportContractHandler;
+use Frontend\Contract\Handler\Document\GetEditDocumentHandler;
 use Frontend\Contract\Handler\Document\GetViewDocumentHandler;
 use Frontend\Contract\Handler\Document\PostCreateCommentHandler;
 use Frontend\Contract\Handler\Document\PostUploadFileHandler;
 use Frontend\Contract\Handler\Route\PostRouteContractHandler;
+use Frontend\Contract\Handler\Route\PostRouteSignCancelHandler;
 use Frontend\Contract\Handler\Route\PostRouteSignHandler;
 use Frontend\Contract\Handler\UCGS\GetCreateUCGSFormHandler;
 use Frontend\Contract\Handler\UCGS\PostCreateUCGSHandler;
@@ -32,6 +34,8 @@ use Frontend\Contract\Handler\UCLTS\GetCreateUCLTSFormHandler;
 use Frontend\Contract\Handler\UCLTS\PostCreateUCLTSHandler;
 use Frontend\Contract\Middleware\MetadataCorrectionMiddleware;
 use Frontend\Contract\Middleware\NotificationMiddleware;
+use Frontend\Contract\Middleware\PostRouteContractMiddleware;
+use Frontend\Contract\Middleware\PostRouteSignMiddleware;
 use Mezzio\Application;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -77,8 +81,8 @@ class RoutesDelegator
             ->get('/import', GetImportContractHandler::class, 'contract::import-contract-form')
             ->post('/import', PostImportContractHandler::class, 'contract::import-contract')
             
-            ->get('/delete/' . $uuid, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
-            ->post('/delete/' . $uuid, PostDeleteContractHandler::class, 'contract::delete-contract')
+            ->get('/delete/' . $box_id, GetDeleteContractFormHandler::class, 'contract::delete-contract-form')
+            ->post('/delete/' . $box_id, PostDeleteContractHandler::class, 'contract::delete-contract')
             
             ->get('/edit/' . $uuid, GetEditContractFormHandler::class, 'contract::edit-contract-form')
             ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
@@ -86,18 +90,24 @@ class RoutesDelegator
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
             ->get('/view/' . $box_id, [MetadataCorrectionMiddleware::class, GetViewContractHandler::class], 'contract::view-contract-form');
 
-        $routeCollector->group('/route')->setMiddleware(NotificationMiddleware::class)
+        $routeCollector->group('/route')->setMiddleware([PostRouteContractMiddleware::class, NotificationMiddleware::class])
+            ->get('/dept/' . $box_id, PostRouteContractHandler::class, 'route::dept')
             ->get('/legal/' . $box_id , PostRouteContractHandler::class, 'route::legal')
             ->get('/risk/' . $box_id , PostRouteContractHandler::class, 'route::risk')
             ->get('/purchasing/' . $box_id , PostRouteContractHandler::class, 'route::purchasing')
             ->get('/mayor/' . $box_id , PostRouteContractHandler::class, 'route::mayor')
+            ->get('/cabinet/' . $box_id, PostRouteContractHandler::class, 'route::cabinet')
             ->get('/vendor/' . $box_id , PostRouteContractHandler::class, 'route::vendor')
             ->get('/reject/' . $box_id , PostRouteContractHandler::class, 'route::reject');
         
-        $routeCollector->group('/sign')
-            ->post('/contract/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteSignHandler::class, 'route::sign');
+        $routeCollector->group('/sign')->setMiddleware([PostRouteSignMiddleware::class, NotificationMiddleware::class])
+            ->post('/contract/{folder_id:[0-9-]*}/{file_id:[0-9-]*}', PostRouteSignHandler::class, 'route::sign')
+        ;
+        $routeCollector
+            ->get('/cancel/sign/' . $box_id, PostRouteSignCancelHandler::class, 'route::sign-cancel');
         
         $routeCollector->group('/document')
+            ->get('/edit/' . $box_id, GetEditDocumentHandler::class, 'document::edit-document')
             ->get('/view/' . $box_id, GetViewDocumentHandler::class, 'document::view-document')
             ->post('/view/' . $box_id, PostCreateCommentHandler::class, 'document::create-comment')
             ->post('/upload/' . $box_id, PostUploadFileHandler::class, 'document::upload-file')

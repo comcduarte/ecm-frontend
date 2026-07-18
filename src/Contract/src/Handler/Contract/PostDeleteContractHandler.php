@@ -20,6 +20,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
+use Laminas\Diactoros\Response\RedirectResponse;
 
 class PostDeleteContractHandler implements RequestHandlerInterface
 {
@@ -45,7 +46,7 @@ class PostDeleteContractHandler implements RequestHandlerInterface
         ServerRequestInterface $request,
     ): ResponseInterface {
         try {
-            $contract = $this->contractService->findContract($request->getAttribute('uuid'));
+            $contract = $this->contractService->findContract($request->getAttribute('id'));
         } catch (NotFoundException $exception) {
             $this->messenger->addError($exception->getMessage());
 
@@ -54,7 +55,7 @@ class PostDeleteContractHandler implements RequestHandlerInterface
 
         $this->deleteContractForm->setAttribute(
             'action',
-            $this->router->generateUri('contract::delete-contract', ['uuid' => $contract->getUuid()->toString()])
+            $this->router->generateUri('contract::delete-contract', ['id' => $request->getAttribute('id')])
         );
 
         try {
@@ -62,9 +63,10 @@ class PostDeleteContractHandler implements RequestHandlerInterface
             $this->deleteContractForm->setData($data);
             if ($this->deleteContractForm->isValid()) {
                 $this->contractService->deleteContract($contract);
-                $this->messenger->addSuccess(Message::CONTRACT_DELETED);
+                $this->messenger->addSuccess('Contract deleted successfully.');
 
-                return new EmptyResponse(StatusCodeInterface::STATUS_CREATED);
+//                 return new EmptyResponse(StatusCodeInterface::STATUS_CREATED);
+                return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'index']));
             }
 
             return new HtmlResponse(
@@ -83,7 +85,7 @@ class PostDeleteContractHandler implements RequestHandlerInterface
                 'trace' => $exception->getTraceAsString(),
             ]);
 
-            return new EmptyResponse(StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
+            return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'index']));
         }
     }
 }

@@ -25,6 +25,8 @@ use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataInstance;
 use comcduarte\Box\API\Resource\MetadataInstances;
+use comcduarte\Box\API\Resource\BoxSign\BoxSignRequest;
+use comcduarte\Box\API\Resource\BoxSign\BoxSigner;
 
 class GetViewDocumentHandler implements RequestHandlerInterface
 {
@@ -93,8 +95,33 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $instance = new MetadataInstance($access_token);
         $instances = $instance->list_metadata_instances_on_file($file_id);
         
+        $sign_request_id = 0;
+        
         $contract_number = '';
         foreach ($instances->entries as $index => $x) {
+            /**
+             * Parse through the templates
+             */
+            switch ($x['$template']) {
+                case 'boxSign':
+                    $boxsign = new BoxSignRequest($access_token);
+                    $result = $boxsign->get_box_sign_request_by_id($x['signId']);
+                    $sign_request_id = $boxsign->getId();
+                    /**
+                     * @var BoxSigner $signer
+                     */
+                    foreach ($boxsign->signers as $signer_id => $signer) {
+                        if (!isset($signer['embed_url'])) {
+                            continue;
+                        }
+                        $i = sprintf('signer_%s_url', $signer_id);
+                        $instances->entries[$index][$i] = sprintf('<a class="btn btn-sm btn-primary" href="%s">Sign</a>',$signer['embed_url']);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            
             if ($x['$template'] == 'ecm-application') {
                 $contract_number = $x['contract-number'];
                 $signForm->num_emails++;
@@ -118,17 +145,23 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         
         $signForm->init();
         
+        $file = new File($access_token);
+        $file->get_file_information($file_id);
+        
         /**
          * Default email is always the logged in user 
          * @var  UserIdentity $identity
          */
-        $identity = $this->authenticationService->getIdentity();
-        $signForm->get('EMAIL_0')->setValue($identity->getIdentity());
-        
-        if (isset($vendor_email_address)) {
+        try {
             $field = sprintf('EMAIL_%d', intval($signForm->num_emails - 1));
-            $signForm->get($field)->setValue($vendor_email_address);
+            $signForm->get($field)->setValue('mayor@middletownct.gov');
+            
+            if (isset($vendor_email_address)) {
+                $signForm->get('EMAIL_0')->setValue($vendor_email_address);
+            }
+        } catch (\Throwable $e) {
         }
+        
         
         /**
          * Upload File Form
@@ -138,7 +171,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
         $this->uploadFileForm->remove('DEPARTMENT')->remove('PROJECT_NAME');
         $this->uploadFileForm->prepare();
         
-        $signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $contract_number, 'file_id' => $file_id]));
+        $signForm->setAttribute('action', $this->router->generateUri('route::sign', ['folder_id' => $file->parent->id, 'file_id' => $file_id]));
         
         /**
          * Supporting Documentation
@@ -170,6 +203,7 @@ class GetViewDocumentHandler implements RequestHandlerInterface
                 'uploadform' => $this->uploadFileForm,
                 'id' => $contract_number,
                 'file_id' => $file_id,
+                'sign_request_id' => $sign_request_id,
                 'supporting_documentation' => $supporting_documentation,
                 'amendments' => $amendments,
             ])

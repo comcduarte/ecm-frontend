@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Frontend\Contract\Handler\UCLTS;
 
-use Core\App\Message;
+use Core\Contract\Message;
 use Dot\DependencyInjection\Attribute\Inject;
 use Dot\FlashMessenger\FlashMessengerInterface;
 use Dot\Log\Logger;
@@ -45,7 +45,7 @@ class PostCreateUCLTSHandler implements RequestHandlerInterface
         ServerRequestInterface $request,
     ): ResponseInterface {
         $this->createUCLTSForm
-            ->setAttribute('action', $this->router->generateUri('contract::create-uclts-form'));
+            ->setAttribute('action', $this->router->generateUri('contract::post-uclts-form'));
             
         try {
             $data = (array) $request->getParsedBody();
@@ -54,16 +54,41 @@ class PostCreateUCLTSHandler implements RequestHandlerInterface
             if ($this->createUCLTSForm->isValid()) {
                 $data = $this->createUCLTSForm->getData();
                 
+                /**
+                 * Custom Logic
+                 */
+                $data['DOCTYPE'] = 'Contract';
+                $data['INFO']['OPTIONS']['CHECK_CHRO'] = 'FALSE';
+                
+                /**
+                 * Checkboxes
+                 */
+                for ($i = 0; $i < 5; $i++) {
+                    $data['INFO']['OPTIONS']['CHECK_' . $i] = '[ ]';
+                }
+                
+                for ($i = 0; $i < 5; $i++) {
+                    if (isset($data['INFO']['OPTIONS'][$i])) {
+                        $z = $data['INFO']['OPTIONS'][$i];
+                        $data['INFO']['OPTIONS']['CHECK_' . $z] = '[X]';
+                        
+                        //-- CHRO --//
+                        if ($data['INFO']['OPTIONS'][$i] == 4) {
+                            $data['INFO']['OPTIONS']['CHECK_CHRO'] = 'TRUE';
+                        }
+                    }
+                }
+                
                 $contract = $this->contractService->createContract($data);
                 $this->contractService->generateContract($data, $contract);
                 
-                $this->messenger->addSuccess(Message::U_CLTS_CREATED);
+                $this->messenger->addSuccess(Message::CONTRACT_CREATED);
 
                 return new RedirectResponse($this->router->generateUri('workflow::dashboard', ['action' => 'index']));
             }
 
             return new HtmlResponse(
-                $this->template->render('contract::create-uclts-form', [
+                $this->template->render('contract::create-contract-form', [
                     'form' => $this->createUCLTSForm->prepare(),
                 ]),
                 StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
@@ -83,11 +108,11 @@ class PostCreateUCLTSHandler implements RequestHandlerInterface
                 'error' => $exception->getMessage(),
                 'file'  => $exception->getFile(),
                 'line'  => $exception->getLine(),
-                'trace' => $exception->getTraceAsString(),
+//                 'trace' => $exception->getTraceAsString(),
             ]);
 
             return new HtmlResponse(
-                $this->template->render('contract::create-uclts-form', [
+                $this->template->render('contract::create-contract-form', [
                     'form'     => $this->createUCLTSForm->prepare(),
                     'messages' => [
                         'error' => Message::AN_ERROR_OCCURRED,

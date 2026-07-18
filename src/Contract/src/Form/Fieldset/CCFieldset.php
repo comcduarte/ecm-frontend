@@ -79,6 +79,14 @@ class CCFieldset extends Fieldset implements InputFilterProviderInterface
                     ['name' => 'StringTrim'],
                     ['name' => 'StripTags'],
                 ],
+                'validators' => [
+                    [
+                        'name' => 'Date',
+                        'options' => [
+                            'format' => 'Y-m-d'
+                        ]
+                    ],
+                ],
             ];
         }
         

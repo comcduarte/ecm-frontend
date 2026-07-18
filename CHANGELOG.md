@@ -1,5 +1,67 @@
 # Changelog
 
+## 1.0.17 - 2026-07
+
+### Added
+ * Additional field validation and error descriptions.
+ * Added support for bootstrap form display.
+ * Route to Cabinet
+ 
+### Fixed
+ * Added label to delete contract form.
+ * Issue [#27](https://github.com/comcduarte/ecm-frontend/issues/27): Implement getInputFilterSpecification() on Forms
+
+## 1.0.16 - 2026-06-17
+
+### Added
+ * Function to cancel signature requests in order to resubmit.
+ * Version tracking for Document Generation.
+ * Increased Notifications to include responsible departments.
+
+### Fixed
+ * Issue [#36](https://github.com/comcduarte/ecm-frontend/issues/36) Create Custom BoxSign Notification Emails
+
+## 1.0.15 - 2026-06-08
+
+### Fixed
+* Issue [#31](https://github.com/comcduarte/ecm-frontend/issues/31) Adjust Signature Workflow to include Approvers
+* Issue [#36](https://github.com/comcduarte/ecm-frontend/issues/36) Create Custom BoxSign Notification Emails
+* Issue [#37](https://github.com/comcduarte/ecm-frontend/issues/37) Add Uniform Contract for Labor/Trade Services over $100,000.00 Form
+
+## 1.0.14 - 2026-05-26
+
+### Fixed
+  - Issue [#35](https://github.com/comcduarte/ecm-frontend/issues/35) getMetadata only queries Files; needs to query Folders as well.
+
+## 1.0.13 - 2026-05-15
+
+### Added
+ - Users can send vendors an email with a link to view the contract and all supporting documentation.
+ * Issue [#32](https://github.com/comcduarte/ecm-frontend/issues/32) Allow users to delete contracts
+ * Issue [#34](https://github.com/comcduarte/ecm-frontend/issues/34) Display description in Dept Dashboard
+ 
+## 1.0.12 - 2026-03-31
+
+### Fixed
+- Ability to edit contracts (Creation of SharedLinks)
+
+## 1.0.11 - 2026-03-24
+* Issue [#16](https://github.com/comcduarte/ecm-frontend/issues/16) Ability to edit/delete contracts
+
+## 1.0.10 - 2026-03-16
+
+## 1.0.9 - 2026-03-02
+* Issue [#25](https://github.com/comcduarte/ecm-frontend/issues/25) Allow Signing of Supporting Documentation
+
+### Fixed
+* Set Maximum FILE UPLOAD Limit to 50MB
+* Issue [#26](https://github.com/comcduarte/ecm-frontend/issues/26) Routing doesn't actually move documents
+* Updated Contract Templates
+
+## 1.0.8 - 2026-02-08
+* Issue [#23](https://github.com/comcduarte/ecm-frontend/issues/23) Do not display spinner when click a link with _blank target
+* Issue [#18](https://github.com/comcduarte/ecm-frontend/issues/18) User requires ability to route to Department Head
+
 ## 1.0.7 - 2026-02-06
 * Issue [#19](https://github.com/comcduarte/ecm-frontend/issues/19) Show spinner on page load
 * Issue [#20](https://github.com/comcduarte/ecm-frontend/issues/20) Department Dashboard
@@ -13,7 +75,6 @@
 ### Fixed
 - Increased file size uploads
 - Corrected use statement for FileInput
-
 
 ## 1.0.5 - 2026-01-16
 * Issue [#15](https://github.com/comcduarte/ecm-frontend/issues/15) Amendment Creation Form

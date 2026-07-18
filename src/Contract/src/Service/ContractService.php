@@ -9,10 +9,12 @@ use Core\Contract\Entity\Contract;
 use Core\Contract\Repository\ContractRepository;
 use Core\Metadata\Instance\Contract as ContractInstance;
 use Core\Metadata\Instance\EcmApplication;
+use Core\Metadata\Instance\Permission;
 use Core\Metadata\Instance\Vendor;
 use Dot\DependencyInjection\Attribute\Inject;
 use Frontend\App\Exception\NotFoundException;
 use Frontend\App\Service\AccessTokenService;
+use comcduarte\Box\API\Enum\ResourceType;
 use comcduarte\Box\API\Exception\ClientErrorException;
 use comcduarte\Box\API\Resource\BaseResource;
 use comcduarte\Box\API\Resource\ClientError;
@@ -22,10 +24,10 @@ use comcduarte\Box\API\Resource\File;
 use comcduarte\Box\API\Resource\Folder;
 use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataCascadePolicy;
+use comcduarte\Box\API\Resource\MetadataInstance;
 use comcduarte\Box\API\Resource\MetadataInstances;
 use comcduarte\Box\API\Resource\Upload;
 use comcduarte\Box\API\Resource\DocGen\BoxDocGenJob;
-use Core\Metadata\Instance\Permission;
 
 class ContractService implements ContractServiceInterface
 {
@@ -49,7 +51,7 @@ class ContractService implements ContractServiceInterface
     public function getNewContractName(array $params): string
     {
         $access_token = $this->accessTokenService->getAccessToken();
-        $instances = $this->getMetadata($this->config['box-config']->applicationFolder);
+        $instances = $this->getMetadata($this->config['box-config']->applicationFolder, 'ecm-application', 'enterprise', ResourceType::Folder);
         
         if ($instances instanceof ClientError) {
             //-- Do Something --//
@@ -84,14 +86,22 @@ class ContractService implements ContractServiceInterface
             throw new ClientErrorException($result->message);
         }
         
+        if (isset($params['PROJECT_NAME'])) {
+            $project_name = $params['PROJECT_NAME'];
+        } elseif (isset($params['INFO']['PROJECT_NAME'])) {
+            $project_name = $params['INFO']['PROJECT_NAME'];
+        } else {
+            throw new \Exception('Unable to find Project Name');
+        }
         
-        return sprintf('%d-%04d %s', date('Y'), $integer, strtoupper($params['PROJECT_NAME']));
+        return sprintf('%d-%04d %s', date('Y'), $integer, strtoupper($project_name));
     }
 
     public function deleteContract(
         Contract $contract,
     ): void {
-        $this->contractRepository->deleteResource($contract);
+        $access_token = $this->accessTokenService->getAccessToken();
+        $this->contractRepository->deleteContract($contract->getContract_folder()->getId(), $access_token);
     }
 
     /**
@@ -317,13 +327,13 @@ class ContractService implements ContractServiceInterface
             'approval' => [],
             'contract' => [
                 'coi-expiration' => '',
-                'contract-amount' => $data['CONTRACT_AMOUNT'],
-                'contract-end-date' => $data['CONTRACT_END_DATE'],
+                'contract-amount' => $this->find($data,'CONTRACT_AMOUNT'),
+                'contract-end-date' => $this->find($data,'CONTRACT_END_DATE'),
                 'contract-status' => '',
-                'document-type' => $data['DOCTYPE'],
+                'document-type' => $this->find($data,'DOCTYPE'),
             ],
             'ecm-application' => [
-                'project-name' => $data['PROJECT_NAME'],
+                'project-name' => $this->find($data,'PROJECT_NAME'),
                 'queue' => '',
                 'contract-number' => $contract->getFolder_id(),
             ],
@@ -406,17 +416,43 @@ class ContractService implements ContractServiceInterface
         return true;
     }
     
-    public function getMetadata(string $contract): MetadataInstances
+    /**
+     * Get Metadata Instances on a Main Contract File.
+     * {@inheritDoc}
+     * @see \Frontend\Contract\Service\ContractServiceInterface::getMetadata()
+     */
+    public function getMetadata(string $contract, string $template_key, string $scope = 'enterprise', ResourceType $type = ResourceType::File): MetadataInstances
     {
         $instances = new MetadataInstances();
         $access_token = $this->accessTokenService->getAccessToken();
         
-        $source = $contract;
-        $scope = 'enterprise';
-        $template_key = 'ecm-application';
+        /**
+         * Convert template_key string into class name
+         */
+        $className = str_replace(' ', '', ucwords(str_replace('-', ' ', $template_key)));
+        $class = "\\Core\\Metadata\\Instance\\{$className}";
         
-        $metadata_instance = new EcmApplication($access_token);
-        $metadata_instance->get_metadata_instance_on_folder($source, $scope, $template_key);
+        /**
+         * 
+         * @var MetadataInstance $metadata_instance
+         */
+        $metadata_instance = new $class($access_token);
+        switch ($type) {
+            case ResourceType::File:
+                $result = $metadata_instance->get_metadata_instance_on_file($contract, $scope, $template_key);
+                break;
+            case ResourceType::Folder:
+                $result = $metadata_instance->get_metadata_instance_on_folder($contract, $scope, $template_key);
+                break;
+            default:
+                throw new ClientErrorException('Only a File or Folder may be specified.');
+                break;
+        }
+        
+        
+        if ($result instanceof ClientError) {
+            throw new ClientErrorException($result->context_info['errors'][0]['message']);
+        }
         
         $instances->entries[] = $metadata_instance;
         
@@ -519,5 +555,20 @@ class ContractService implements ContractServiceInterface
         ];
         
         return $this->contractRepository->getAmendments($params, $access_token);
+    }
+    
+    private function find(array $data, string $query): string 
+    {
+        foreach ($data as $key => $value) {
+            if ($key === $query) {
+                return $value;
+            }
+            
+            if (is_array($value)) {
+                $this->find($value, $query);
+            }
+        }
+        
+        return '';
     }
 }

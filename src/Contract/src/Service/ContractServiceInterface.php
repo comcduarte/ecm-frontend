@@ -10,6 +10,7 @@ use Frontend\App\Exception\NotFoundException;
 use comcduarte\Box\API\Resource\Comments;
 use comcduarte\Box\API\Resource\Items;
 use comcduarte\Box\API\Resource\MetadataInstances;
+use comcduarte\Box\API\Enum\ResourceType;
 
 interface ContractServiceInterface
 {
@@ -51,7 +52,7 @@ interface ContractServiceInterface
     
     public function move(string $source, string $destination): bool;
     
-    public function getMetadata(string $contract): MetadataInstances;
+    public function getMetadata(string $contract, string $template_key, string $scope = 'enterprise', ResourceType $type = ResourceType::File): MetadataInstances;
     
     /**
      * 

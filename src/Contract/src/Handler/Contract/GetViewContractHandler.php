@@ -18,6 +18,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Core\Metadata\Instance\EcmApplication;
+use comcduarte\Box\API\Exception\ClientErrorException;
+use comcduarte\Box\API\Enum\ResourceType;
 
 class GetViewContractHandler implements RequestHandlerInterface
 {
@@ -49,7 +51,12 @@ class GetViewContractHandler implements RequestHandlerInterface
         $contract_file = $contract->getContract_file();
         
         
-        $instances = $this->contractService->getMetadata($request->getAttribute('id'));
+        try {
+            $instances = $this->contractService->getMetadata($request->getAttribute('id'), 'ecm-application', 'enterprise', ResourceType::Folder);
+        } catch (ClientErrorException $exception) {
+            $this->messenger->addError($exception->getMessage());
+            return new RedirectResponse($this->router->generateUri('document::view-document', ['id' => $contract_file->getId()]));
+        }
         
         /**
          * 
@@ -82,7 +89,11 @@ class GetViewContractHandler implements RequestHandlerInterface
         /**
          * Populate Metadata
          */
-        $metadata_instances = $this->contractService->getMetadata($contract->getContract_folder()->id);
+        try {
+            $metadata_instances = $this->contractService->getMetadata($contract->getContract_folder()->id, 'ecm-application');
+        } catch (ClientErrorException $exception) {
+            $this->messenger->addError($exception->getMessage());
+        }
         //-- parse instances and display with PDF
         
 //         $metadata = [
