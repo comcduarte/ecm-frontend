@@ -164,6 +164,12 @@
 		                'url': url('route::mayor', {'id': id|default(0) }),
 		                'permission': 'ECM_PURCHASING'
 		            },
+		            'cabinet': {
+		            	'name': 'Route to Cabinet',
+		            	'icon': 'share',
+		            	'url': url('route::cabinet', {'id': id|default(0) }),
+		            	'permission': 'ECM_MAYOR'
+		            },
 					'vendor': {
 		                'name': 'Email Vendor',
 		                'icon': 'envelope',

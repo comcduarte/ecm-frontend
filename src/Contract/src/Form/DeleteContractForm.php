@@ -42,17 +42,17 @@ class DeleteContractForm extends AbstractForm
      */
     public function init(): void
     {
-        // add more form elements
-
-        $this->add(
-            (new Checkbox('confirmation'))
-                ->setCheckedValue('yes')
-                ->setUncheckedValue('no')
-                ->setAttribute('id', 'confirmation')
-                ->setAttribute('class', 'form-check-input')
-                ->setAttribute('required', true)
-                ->setValue('no')
-        );
+        $this->add([
+            'name' => 'confirmation',
+            'type' => Checkbox::class,
+            'attributes' => [
+                'id' => 'confirmation',
+                'class' => 'form-check-input',
+            ],
+            'options' => [
+                'label' => 'Are you sure you want to delete this contract?',
+            ],
+        ]);
         $this->add(
             (new Csrf('deleteContractCsrf'))
                 ->setOptions([

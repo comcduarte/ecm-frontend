@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.17 - 2026-07-19
+
+### Added
+ * Additional field validation and error descriptions.
+ * Added support for bootstrap form display.
+ * Route to Cabinet
+ 
+### Fixed
+ * Added label to delete contract form.
+ * Issue [#27](https://github.com/comcduarte/ecm-frontend/issues/27): Implement getInputFilterSpecification() on Forms
+
 ## 1.0.16 - 2026-06-17
 
 ### Added

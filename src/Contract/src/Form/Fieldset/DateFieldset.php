@@ -6,6 +6,7 @@ namespace Frontend\Contract\Form\Fieldset;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Element\Text;
 use Laminas\InputFilter\InputFilterProviderInterface;
+use Laminas\Validator\Date;
 
 class DateFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -57,52 +58,34 @@ class DateFieldset extends Fieldset implements InputFilterProviderInterface
 
     public function getInputFilterSpecification()
     {
-        return [
-            'START_DATE' => [
-                'required' => true,
+        $spec = [];
+        
+        $dates = ['START', 'CONTRACT_END', 'EXEC'];
+        
+        foreach ($dates as $prefix) {
+            $name = $prefix . '_DATE';
+            $spec[$name] = [
+                'required' => false,
                 'filters' => [
-                    ['name' => 'StringTrim'],
+                    ['name' => 'StringTrim'], 
                     ['name' => 'StripTags'],
                 ],
                 'validators' => [
                     [
                         'name' => 'Date',
                         'options' => [
-                            'format' => 'Y-m-d'
+                            'format' => 'Y-m-d',
+                            'messages' => [
+                                Date::INVALID_DATE => 'The date must be in the format YYYY-MM-DD.',
+                                Date::FALSEFORMAT => 'The date must be in the format YYYY-MM-DD.',
+                            ],
+                            
                         ]
                     ],
                 ],
-            ],
-            'CONTRACT_END_DATE' => [
-                'required' => true,
-                'filters' => [
-                    ['name' => 'StringTrim'],
-                    ['name' => 'StripTags'],
-                ],
-//                 'validators' => [
-//                     [
-//                         'name' => 'Date',
-//                         'options' => [
-//                             'format' => 'Y-m-d'
-//                         ]
-//                     ],
-//                 ],
-            ],
-            'EXEC_DATE' => [
-                'required' => true,
-                'filters' => [
-                    ['name' => 'StringTrim'],
-                    ['name' => 'StripTags'],
-                ],
-                'validators' => [
-                    [
-                        'name' => 'Date',
-                        'options' => [
-                            'format' => 'Y-m-d'
-                        ]
-                    ],
-                ],
-            ],
-        ];
+            ];
+            
+        }
+        return $spec;
     }
 }

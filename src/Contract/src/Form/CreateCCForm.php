@@ -13,6 +13,7 @@ use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\ExceptionInterface;
+use Laminas\Validator\InArray;
 use Laminas\Validator\NotEmpty;
 
 class CreateCCForm extends AbstractContractForm
@@ -193,13 +194,22 @@ class CreateCCForm extends AbstractContractForm
                 ],
             ],
             'GOV_USE' => [
-                'required' => false,
+                'required' => true,
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class],
                 ],
                 'validators' => [
                     ['name' => NotEmpty::class],
+                    [
+                        'name' => InArray::class,
+                        'options' => [
+                            'haystack' => ['1'],
+                            'messages' => [
+                                InArray::NOT_IN_ARRAY => 'You must check this box.',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'ENTITY' => [

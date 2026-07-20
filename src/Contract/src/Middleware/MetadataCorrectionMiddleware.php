@@ -15,6 +15,7 @@ use comcduarte\Box\API\Resource\Items;
 use Core\Metadata\Instance\EcmApplication;
 use comcduarte\Box\API\Resource\ClientError;
 use Laminas\Validator\Identical;
+use Dot\Log\Logger;
 
 class MetadataCorrectionMiddleware implements MiddlewareInterface
 {
@@ -22,24 +23,48 @@ class MetadataCorrectionMiddleware implements MiddlewareInterface
         ContractServiceInterface::class,
         RouterInterface::class,
         EntityManagerInterface::class,
+        'dot-log.default_logger',
     )]
     public function __construct(
         protected ContractServiceInterface $contractService,
         protected RouterInterface $router,
         protected EntityManagerInterface $entityManager,
+        protected Logger $logger,
     ){}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $routeResult = $this->router->match($request);
         $folder_id = $routeResult->getMatchedParams()['id'];
+        $scope = 'enterprise';
 
         try {
             $supporting_documentation = $this->contractService->getSupportingDocumentation($folder_id);
-            $instance = new EcmApplication($this->contractService->accessTokenService->getAccessToken());
         } catch (ClientErrorException $e) {
             $supporting_documentation = new Items();
         }
+        
+        /**
+         * Required instances on contract folder
+         */
+        $instance = new EcmApplication($this->contractService->accessTokenService->getAccessToken());
+        $template_key = 'ecm-application';
+        $result = $instance->get_metadata_instance_on_folder($folder_id, $scope, $template_key);
+        if ($result instanceof ClientError) {
+            $this->logger->err($result->message);
+            $data = [
+                'contract-number' => $folder_id,
+                'project-name' => '',
+                
+            ];
+            $result = $instance->create_metadata_instance_on_folder($folder_id, $scope, $template_key, $data);
+            if ($result instanceof ClientError) {
+                $this->logger->err($result->message);
+                throw new ClientErrorException($result->message);
+            }
+        }
+        
+        
         
         foreach ($supporting_documentation->entries as $file) {
             $result = $instance->get_metadata_instance_on_file($file['id'], 'enterprise', 'ecm-application');

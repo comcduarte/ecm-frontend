@@ -3,6 +3,11 @@ site_url: https://ecm.middletownct.gov
 theme:
    name: readthedocs
 site_dir: ../public/docs/
+extra_javascript:
+   - https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js
+   - js/mermaid-init.js
+extra_css:
+   - css/custom.css
 use_directory_urls: false
 watch:
    - docs

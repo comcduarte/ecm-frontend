@@ -34,7 +34,10 @@ class UploadFileForm extends AbstractContractForm
         
         $this->add([
             'name' => 'contract-number',
-            'type' => Hidden::class
+            'type' => Hidden::class,
+            'attributes' => [
+                'value' => '1',
+            ],
         ]);
 
         $this->add([
