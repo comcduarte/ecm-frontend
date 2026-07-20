@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.17 - 2026-07
+## 1.0.17 - 2026-07-19
 
 ### Added
  * Additional field validation and error descriptions.
