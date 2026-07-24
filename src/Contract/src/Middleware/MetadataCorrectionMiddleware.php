@@ -16,6 +16,8 @@ use Core\Metadata\Instance\EcmApplication;
 use comcduarte\Box\API\Resource\ClientError;
 use Laminas\Validator\Identical;
 use Dot\Log\Logger;
+use comcduarte\Box\API\Resource\MetadataCascadePolicy;
+use comcduarte\Box\API\Enum\ConflictResolutionType;
 
 class MetadataCorrectionMiddleware implements MiddlewareInterface
 {
@@ -37,6 +39,7 @@ class MetadataCorrectionMiddleware implements MiddlewareInterface
         $routeResult = $this->router->match($request);
         $folder_id = $routeResult->getMatchedParams()['id'];
         $scope = 'enterprise';
+        $accessToken = $this->contractService->accessTokenService->getAccessToken();
 
         try {
             $supporting_documentation = $this->contractService->getSupportingDocumentation($folder_id);
@@ -47,7 +50,7 @@ class MetadataCorrectionMiddleware implements MiddlewareInterface
         /**
          * Required instances on contract folder
          */
-        $instance = new EcmApplication($this->contractService->accessTokenService->getAccessToken());
+        $instance = new EcmApplication($accessToken);
         $template_key = 'ecm-application';
         $result = $instance->get_metadata_instance_on_folder($folder_id, $scope, $template_key);
         if ($result instanceof ClientError) {
@@ -64,8 +67,48 @@ class MetadataCorrectionMiddleware implements MiddlewareInterface
             }
         }
         
+        /**
+         * Format of Contract Number
+         */
+        $identical = new Identical($folder_id);
         
+        if(!$identical->isValid($instance->getContractnumber())) {
+            $instance->setContractnumber($folder_id);
+        }
         
+        /**
+         * Metadata Cascade Policy
+         */
+        $metadata_cascade_policy = new MetadataCascadePolicy($accessToken);
+        $policies = $metadata_cascade_policy->list_metadata_cascade_policies($folder_id);
+        
+        $create_policy = true;
+        $identical = new Identical($template_key);
+        /**
+         * @var MetadataCascadePolicy $policy
+         */
+        foreach ($policies->entries as $policy) {
+            if ($policy && $identical->isValid($policy['templateKey'])) {
+                $create_policy = false;
+            }
+        }
+        
+        if ($create_policy) {
+            $result = $metadata_cascade_policy->create_metadata_cascade_policy($folder_id, $scope, $template_key);
+            if ($result instanceof ClientError) {
+                throw new ClientErrorException($result->message);
+            }
+            
+            $conflict_resolution = ConflictResolutionType::Overwrite;
+            $result = $metadata_cascade_policy->force_apply_metadata_cascade_policy_to_folder($metadata_cascade_policy->getId(), $conflict_resolution);
+            if ($result instanceof ClientError) {
+                throw new ClientErrorException($result->message);
+            }
+        }
+        
+        /**
+         * Process all supporting documentation
+         */
         foreach ($supporting_documentation->entries as $file) {
             $result = $instance->get_metadata_instance_on_file($file['id'], 'enterprise', 'ecm-application');
             
