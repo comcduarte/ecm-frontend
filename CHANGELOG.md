@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.17.001 - 2026-07-24
+
+### Hotfix
+* MetadataCascadePolicy Enforcement in Middleware Correction.
+
 ## 1.0.17 - 2026-07-19
 
 ### Added
