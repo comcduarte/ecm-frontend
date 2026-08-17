@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.17.002 - 2026-08-17
+
+### Hotfix
+* Email Vendor replicates the Route to Vendor function.  Sends out email notification but does not move contract to vendor queue; remains in original location.
+
 ## 1.0.17.001 - 2026-07-24
 
 ### Hotfix
