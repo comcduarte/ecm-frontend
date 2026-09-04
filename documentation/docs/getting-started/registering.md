@@ -13,8 +13,7 @@ department manually.  to do so, follow the steps below.
 
 3. Fill out the Registration Form, including entering in your own password, twice.
 
-* This password is specific to the ECM application.  It is NOT linked to your MIDNET credential, the account you use to log
-into your workstation.
+* This password is specific to the ECM application.  It is NOT linked to your MIDNET credential, the account you use to log into your workstation.
 
 ![Screenshot of Registration Form](../img/registration-form.png) 
 
