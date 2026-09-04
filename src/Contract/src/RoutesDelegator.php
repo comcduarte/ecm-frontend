@@ -10,6 +10,7 @@ use Frontend\Contract\Handler\Amendment\GetCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\Amendment\PostCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\CC\GetCreateCCFormHandler;
 use Frontend\Contract\Handler\CC\PostCreateCCHandler;
+use Frontend\Contract\Handler\Contract\ContractSearchHandler;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -88,6 +89,8 @@ class RoutesDelegator
             ->post('/edit/' . $uuid, PostEditContractHandler::class, 'contract::edit-contract')
             
             ->get('/list', GetListContractHandler::class, 'contract::list-contract')
+            ->get('/search', ContractSearchHandler::class, 'contract::contract-search')
+            
             ->get('/view/' . $box_id, [MetadataCorrectionMiddleware::class, GetViewContractHandler::class], 'contract::view-contract-form');
 
         $routeCollector->group('/route')->setMiddleware([PostRouteContractMiddleware::class, NotificationMiddleware::class])

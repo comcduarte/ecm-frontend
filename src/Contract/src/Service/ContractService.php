@@ -124,9 +124,7 @@ class ContractService implements ContractServiceInterface
 //         $paginator = new DoctrinePaginator($this->contractRepository->getContracts($params, $filters)->getQuery());
 
 //         return Paginator::wrapper($paginator, $params, $filters);
-        $params = [
-            'application-folder' => $this->config['box-config']->applicationFolder,
-        ];
+        $params['application-folder'] = $this->config['box-config']->applicationFolder;
         
         return $this->contractRepository->getContracts($params, $this->accessTokenService->getAccessToken());
     }
