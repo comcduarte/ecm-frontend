@@ -14,6 +14,7 @@ use Frontend\Contract\Form\CreateUCLTSForm;
 use Frontend\Contract\Form\CreateUCLaborForm;
 use Frontend\Contract\Form\DeleteContractForm;
 use Frontend\Contract\Form\EditContractForm;
+use Frontend\Contract\Form\SearchContractForm;
 use Frontend\Contract\Form\SignContractModalForm;
 use Frontend\Contract\Form\UploadFileForm;
 use Frontend\Contract\Form\Factory\CreateAmendmentFormFactory;
@@ -29,6 +30,7 @@ use Frontend\Contract\Handler\Amendment\GetCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\Amendment\PostCreateAmendmentFormHandler;
 use Frontend\Contract\Handler\CC\GetCreateCCFormHandler;
 use Frontend\Contract\Handler\CC\PostCreateCCHandler;
+use Frontend\Contract\Handler\Contract\ContractSearchHandler;
 use Frontend\Contract\Handler\Contract\GetCreateContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetDeleteContractFormHandler;
 use Frontend\Contract\Handler\Contract\GetEditContractFormHandler;
@@ -111,6 +113,10 @@ class ConfigProvider
                 GetListContractHandler::class       => AttributedServiceFactory::class,
                 GetViewContractHandler::class       => AttributedServiceFactory::class,
                 GetImportContractHandler::class     => AttributedServiceFactory::class,
+                
+                //-- Search Contracts --//
+                ContractSearchHandler::class        => AttributedServiceFactory::class,
+                SearchContractForm::class           => ElementFactory::class,
                 
                 GetEditDocumentHandler::class       => AttributedServiceFactory::class,
                 GetViewDocumentHandler::class       => AttributedServiceFactory::class,

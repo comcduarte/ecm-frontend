@@ -1,0 +1,28 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}List Contracts{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 h-100">
+	<div class="row h-100">
+		<div class="col col-3">			
+			<div class="d-flex flex-column p-3 text-bg-dark">
+				<div class="container">
+					{{ form(form, {'method': 'GET'}) }}
+				</div>
+			</div>
+		</div>
+		<div class="bg-white col col-9">
+			<ul class="tree"></ul>
+			{% for index, object in cabinet %}
+				<li>
+				<details>
+					<summary>{{ object.name }}</summary>
+					<li>id: <a href="{{ url('contract::view-contract-form', {'id': object.id}) }}">{{ object.id }}</a></li>
+				</details>
+			{% endfor %}
+			</ul>
+		</div>		
+	</div>
+</div>
+{% endblock %}
