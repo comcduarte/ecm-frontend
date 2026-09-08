@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.18 - 2026-09-03
+
+### Added
+  * Issue [#4](https://github.com/comcduarte/ecm-frontend/issues/4): User have the ability to search for existing contracts by number and/or name
+
 ## 1.0.17.002 - 2026-08-17
 
 ### Hotfix
